@@ -26,9 +26,10 @@ export default {
   meteor: {
     // Subscriptions
     subscribe: {
-      // Here we subscribe to the subscription called 'posts'
+      // We subscribe to the subscription called 'posts'
       // with the 'thread_id' parameter passed in an array of parameters
       'posts': function() {
+        // Here you can use Vue reactive properties
         return [this.id] // Subscription params
       }
     },
