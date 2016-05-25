@@ -1,1 +1,82 @@
-/* CSS declarations go here */
+body, input {
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
+body {
+    max-width: 400px;
+    margin: auto;
+    padding: 24px;
+}
+
+a {
+  color: #40b883;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #a0ddc4;
+}
+
+h1, h2 {
+    margin: 0;
+    text-align: center;
+}
+
+h1 {
+    color: #40b883;
+    font-weight: lighter;
+}
+
+h2 {
+    color: #999;
+    font-weight: lighter;
+}
+
+input {
+    padding: 6px 12px;
+    border: solid 1px #ccc;
+    border-radius: 3px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+form {
+    margin: 12px 0;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: #40b883;
+}
+
+.thread-item, .post {
+    padding: 6px 12px;
+}
+
+.thread-item {
+  cursor: default;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.thread-item:hover {
+    color: #40b883;
+}
+
+.thread-item.selected {
+    background: #caecde;
+    border-radius: 3px;
+}
+
+.thread .actions {
+  padding: 0 12px;
+}
+
+.post .action {
+  float: right;
+}
