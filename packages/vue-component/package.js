@@ -10,10 +10,28 @@ Package.describe({
   documentation: 'README.md'
 });
 
+Package.registerBuildPlugin({
+  name: "compileVueComponents",
+  use: [
+    'ecmascript',
+    'caching-compiler',
+    'babel-compiler'
+  ],
+  sources: [
+    'plugin/throw-compile-error.js',
+    'plugin/tag-scanner.js',
+    'plugin/tag-handler.js',
+    'plugin/vue-compiler.js',
+    'plugin/plugin.js'
+  ],
+  npmDependencies: {
+    "source-map": "0.5.3",
+    "multi-stage-sourcemap": "0.2.1"
+  }
+});
+
 Package.onUse(function(api) {
-  api.versionsFrom('1.3.2.4');
-  api.use('ecmascript');
-  api.mainModule('vue-component.js');
+  api.use('isobuild:compiler-plugin@1.0.0');
 });
 
 Package.onTest(function(api) {

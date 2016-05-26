@@ -72,6 +72,9 @@ export default {
     selectThread (id) {
       this.selectedThreadId = id;
     }
+  },
+  ready () {
+    console.log('hello world!');
   }
 }
 </script>

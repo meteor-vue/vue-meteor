@@ -1,4 +1,4 @@
-import {Lib} from './vue';
+import {Lib} from './install';
 
 export const name = 'vue';
 export const Vue = Lib;
