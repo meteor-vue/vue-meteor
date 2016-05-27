@@ -9,7 +9,7 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
  - [Features](#features)
  - [Usage](#usage)
    - [New Meteor project](#new-meteor-project)
-	 - [Example project](#example-project)
+   - [Example project](#example-project)
  - [Meteor data integration](#meteor-data-integration)
 	 - [Subscriptions](#subscriptions)
 	 - [Reactive data](#reactive-data)
