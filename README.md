@@ -6,15 +6,15 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 
 ## Table of Contents
 
- - [Features](#)
- - [Usage](#)
-   - [New Meteor project](#)
-	 - [Example project](#)
-	 - [Meteor data integration](#)
-		 - [Subscriptions](#)
-		 - [Reactive data](#)
-	 - [Single-file component](#)
- - [Get involved](#)
+ - [Features](#features)
+ - [Usage](#usage)
+   - [New Meteor project](#new-meteor-project)
+	 - [Example project](#example-project)
+	 - [Meteor data integration](#meteor-data-integration)
+		 - [Subscriptions](#subscriptions)
+		 - [Reactive data](#reactive-data)
+	 - [Single-file component](#single-file-component)
+ - [Get involved](#get-involved)
 
 ## Features
 
