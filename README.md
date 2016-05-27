@@ -30,16 +30,20 @@ In the project directory, open a terminal and type:
 In your Vue component, add a `meteor` object :
 
 
+```javascript
     new Vue({
         meteor: {
             // Meteor specific options
         }
     );
+```
+
 
 #### Subscriptions
 
 Add an object for each subscription in a `subscribe` object. The object key is the name of the publication and the value is either an array of parameters or a function returning an array of parameters. These subscription will be stopped when the component is destroyed.
 
+```javascript
     meteor: {
         // Subscriptions
         subscribe: {
@@ -55,18 +59,24 @@ Add an object for each subscription in a `subscribe` object. The object key is t
             }
         }
     }
+```
+
 
 You can also use the `$subscribe(name, ...params)` method in you component code:
 
 
+```javascript
     ready () {
         // Subscribes to the 'threads' publication with two parameters
         this.$subscribe('thread', 'new', 10);
     }
+```
+
 
 You can also change the default subcription method be defining the `Vue.config.meteor.subscribe` function:
 
 
+```javascript
     // You can replace the default subcription function with our own
     // Here we replace the native subscribe() with a cached one
     // with the ccorcos:subs-cache package
@@ -78,6 +88,8 @@ You can also change the default subcription method be defining the `Vue.config.m
       args.unshift(subsCache.expireAfter); // First arg
       return subsCache.subscribeFor.apply(subsCache, args);
     };
+```
+
 
 #### Reactive data
 
@@ -87,6 +99,7 @@ You can make your component `data` properties update from any Meteor reactive so
  - `update([params])`, a function with optionnal `params` argument, that returns the value to update the corresponding `data` property of the component. Here you can use *Meteor* reactive sources, but **no Vue reactive property getters**. The `params` argument is the object returned by the `params()` function described above.
 
 
+ ```javascript
     new Vue({
         data() {
             return {
@@ -143,23 +156,31 @@ You can make your component `data` properties update from any Meteor reactive so
             }
         }
     });
+```
+
 
 You can then use the reactive data in the template since it's standard Vue component properties:
 
 
+```html
     <!-- Thread list -->
     <thread-item v-for="thread in threads" :data="thread" :selected="thread._id === selectedThreadId" @select="selectThread(thread._id)"></thread-item>
 
     <!-- Selected thread -->
     <thread v-if="selectedThread" :id="selectedThreadId"></thread>
+```
+
 
 Or anywhere else in you Vue component:
 
+```javascript
     computed: {
         count () {
             return this.threads.length;
         }
     }
+```
+
 
 The complete example is in the `imports/ui/App.vue` file.
 
@@ -179,6 +200,7 @@ The component file must include:
 You must export your code with the ES2015 statement `export default` in your `<script>` tag:
 
 
+```html
     <script>
     // ES2015 Javascript with support for import statements
     // See the 'ecmascript' meteor package for more info
@@ -188,24 +210,32 @@ You must export your code with the ES2015 statement `export default` in your `<s
         }
     }
     </script>
+```
+
 
 By default, You can add the `scoped` attribute to any `<style>` tag in your component file so that the css is only applied to this specific component.
 
 
+```html
     <style scoped>
     /* Will only be applied to this component <a> elements */
     a {
         color: red;
     }
     </style>
+```
+
 
 
 You can then import your .vue component files in your meteor code:
 
 
+```javascript
     // Post
     import Post from '/imports/ui/Post.vue';
     Vue.component('post', Post);
+```
+
 
 
 ## Get involved

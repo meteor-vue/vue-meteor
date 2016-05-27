@@ -3,6 +3,7 @@
 ## Usage
 
 
+```javascript
     import * as Postcss from 'meteor/akryum:postcss';
 
     let plugins = [];
@@ -30,3 +31,4 @@
 
     // Postcss result
     let result = Postcss.postcss(plugins).process(css, postcssOptions);
+```
