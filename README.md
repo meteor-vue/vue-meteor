@@ -191,12 +191,22 @@ You must export your code with the ES2015 statement `export default` in your `<s
 
 By default, You can add the `scoped` attribute to any `<style>` tag in your component file so that the css is only applied to this specific component.
 
+
     <style scoped>
     /* Will only be applied to this component <a> elements */
     a {
         color: red;
     }
     </style>
+
+
+You can then import your .vue component files in your meteor code:
+
+
+    // Post
+    import Post from '/imports/ui/Post.vue';
+    Vue.component('post', Post);
+
 
 ## Get involved
 
@@ -205,4 +215,4 @@ Feel free to contribute by opening a PR or an issue (but check before if the top
 
 ---
 
-LICENCE MIT - Created by Guillaume CHAU (Akryum)
+LICENCE MIT - Created by Guillaume CHAU (@Akryum)
