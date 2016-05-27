@@ -37,7 +37,7 @@ export default {
                     vueParams = options.params.bind(this)
                   }
                 } else {
-                  throw Error('You must provide either a function or an object with the data() method.')
+                  throw Error('You must provide either a function or an object with the update() method.')
                 }
 
                 let computation
