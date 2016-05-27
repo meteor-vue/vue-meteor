@@ -29,6 +29,7 @@ Currently supported and possible future features are:
  - [ ] *Easy translation with vue i18n out-of-the-box integration*
  - [ ] *Jade integration in .vue file*
  - [ ] *Easy state manangement with vueex integration (needs discussion, suggestions welcomed)*
+ - [ ] *Hot-reloading of components*
 
 ## Usage
 
