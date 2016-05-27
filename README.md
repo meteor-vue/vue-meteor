@@ -207,7 +207,7 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 The component file must include:
 
  - Maximum one `<template>` tag containing the template html of your component,
- - Maximum on `<script>` tag containing the component options object in javascript,
+ - Maximum one `<script>` tag containing the component options object in javascript,
  - And as many `<style>` tags as you wish.
 
 You must export your code with the ES2015 statement `export default` in your `<script>` tag:
