@@ -22,36 +22,36 @@ The component file must include:
 You must export your code with the ES2015 statement `export default` in your `<script>` tag:
 
 ```javascript
-    <script>
-    // ES2015 Javascript with support for import statements
-    // See the 'ecmascript' meteor package for more info
-    export default {
-        ready() {
-            console.log('Hello world!');
-        }
+<script>
+// ES2015 Javascript with support for import statements
+// See the 'ecmascript' meteor package for more info
+export default {
+    ready() {
+        console.log('Hello world!');
     }
-    </script>
+}
+</script>
 ```
 
 By default, You can add the `scoped` attribute to any `<style>` tag in your component file so that the css is only applied to this specific component.
 
 
 ```html
-    <style scoped>
-    /* Will only be applied to this component <a> elements */
-    a {
-        color: red;
-    }
-    </style>
+<style scoped>
+/* Will only be applied to this component <a> elements */
+a {
+    color: red;
+}
+</style>
 ```
 
 You can then import your .vue component files in your meteor code:
 
 
 ```javascript
-    // Post
-    import Post from '/imports/ui/Post.vue';
-    Vue.component('post', Post);
+// Post
+import Post from '/imports/ui/Post.vue';
+Vue.component('post', Post);
 ```
 
 
