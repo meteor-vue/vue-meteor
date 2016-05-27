@@ -110,7 +110,7 @@ You can make your component `data` properties update from any Meteor reactive so
  - `params()` (optionnal), a function returning an object, which can use any *Vue* reactive property,
  - `update([params])`, a function with optionnal `params` argument, that returns the value to update the corresponding `data` property of the component. Here you can use *Meteor* reactive sources, but **no Vue reactive property getters**. The `params` argument is the object returned by the `params()` function described above.
 
-
+Here is an example:
 
  ```javascript
 new Vue({
