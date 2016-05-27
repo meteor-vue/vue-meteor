@@ -16,3 +16,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+a {
+  text-decoration: underline;
+}
+</style>
+
+<style>
+.message {
+  color: grey;
+}
+</style>

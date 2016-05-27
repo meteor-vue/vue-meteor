@@ -15,7 +15,8 @@ Package.registerBuildPlugin({
   use: [
     'ecmascript',
     'caching-compiler',
-    'babel-compiler'
+    'babel-compiler',
+    'akryum:postcss'
   ],
   sources: [
     'plugin/throw-compile-error.js',
@@ -25,8 +26,6 @@ Package.registerBuildPlugin({
     'plugin/plugin.js'
   ],
   npmDependencies: {
-    "source-map": "0.5.3",
-    "multi-stage-sourcemap": "0.2.1"
   }
 });
 

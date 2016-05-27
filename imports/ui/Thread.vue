@@ -1,10 +1,19 @@
 <template>
   <div class="thread">
+    <!-- Thread title -->
     <h2>{{data.name}}</h2>
+
+    <!-- Actions -->
     <div class="actions">
-    <a @click="removeThread">Delete thread</a>
+      <a @click="removeThread">Delete thread</a>
     </div>
-    <form @submit.prevent="createPost"><input v-model="newPostMessage" placeholder="Type new message" required/></form>
+
+    <!-- New post form -->
+    <form @submit.prevent="createPost">
+      <input v-model="newPostMessage" placeholder="Type new message" required/>
+    </form>
+
+    <!-- Posts -->
     <post v-for="post in posts" :data="post"></post>
   </div>
 </template>
@@ -12,7 +21,6 @@
 <script>
 import {Meteor} from 'meteor/meteor';
 import {Threads, Posts} from '/imports/api/collections';
-
 export default {
   props: ['id'],
   data () {

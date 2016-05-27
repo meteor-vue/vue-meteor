@@ -1,9 +1,13 @@
-import sourcemap from "source-map";
-import mss from "multi-stage-sourcemap";
+import * as Postcss from 'meteor/akryum:postcss';
 
 const jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
 const jsExportDefaultReg = /export\s+default/g;
+const quoteReg = /'/g;
+const lineReg = /\r?\n|\r/g;
+const tagReg = /<([\w\d-]+)(\s+.*?)?\/?>/ig;
+const classAttrReg = /\s+class=(['"])(.*?)\1/gi;
 
+// Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
   constructor(inputFile, babelOptions) {
     this.inputFile = inputFile;
@@ -53,53 +57,102 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
   getResults() {
 
+    let map = '';
     let source = this.inputFile.getContentsAsString();
     let packageName = this.inputFile.getPackageName();
     let inputFilePath = this.inputFile.getPathInPackage();
+    let hash = '__v' + this.inputFile.getSourceHash();
 
-    let mapGenerator = new sourcemap.SourceMapGenerator({
-      file: inputFilePath + '.js'
-    });
-
-    let js = 'var __vue_script__, __vue_template__;\n';
+    let js = 'exports.__esModule = true;var __vue_script__, __vue_template__;';
+    let styles = [];
 
     // Script
 
     if (this.component.script) {
       let tag = this.component.script;
       let script = tag.contents;
-      let startLine = source.substr(0, tag.contentsStartIndex).split('\n').length;
-
-      // Imports
-      let imports = '';
-      script = script.replace(jsImportsReg, (match) => {
-        imports += match + '\n';
-        return '//' + match;
-      });
 
       // Export
       script = script.replace(jsExportDefaultReg, 'return');
 
-      // Sourcemap
-      let lines = script.split('\n');
-      lines.forEach((line, index) => {
-        mapGenerator.addMapping({
-          source: inputFilePath,
-          original: {line: index+1+startLine, column: 0},
-          generated: {line: index+3, column: 0}
-        })
-      });
+      // Babel options
+      this.babelOptions.sourceMap = true;
+      this.babelOptions.filename =
+        this.babelOptions.sourceFileName = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+      this.babelOptions.sourceMapTarget = this.babelOptions.filename + ".map";
 
-      js += '__vue_script__ = (function(){' + script + '\n})();';
-      js += imports;
+      // Babel
+      let output = Babel.compile(script, this.babelOptions);
+
+      js += '__vue_script__ = (function(){' + output.code + '\n})();';
+      //js += imports;
+      map = output.map;
     }
 
     // Template
     if (this.component.template) {
       let template = this.component.template.contents;
 
-      js += '__vue_template__ = `' + template + '`;';
+      // Tag hash (for scoping)
+      let result;
+      template = template.replace(tagReg, (match, p1, p2, offset) => {
+        let attributes = p2;
+        if(!attributes) {
+          return match.replace(p1, p1 + ` ${hash}`);
+        } else {
+          attributes += ` ${hash}`;
+          return match.replace(p2, attributes);
+        }
+      });
 
+      template = template.replace(quoteReg, "\\'").replace(lineReg, '');
+      js += "__vue_template__ = '" + template + "';";
+
+    }
+
+    // Styles
+    for (let styleTag of this.component.styles) {
+      let css = styleTag.contents;
+      let cssMap = null;
+
+      // Lang
+      if (styleTag.attribs.lang !== null) {
+        // TODO
+      }
+
+      // Postcss
+      let plugins = [];
+      let postcssOptions = {
+        form: inputFilePath,
+        to: inputFilePath,
+        map: {
+          inline: false,
+          annotation: false,
+          prev: cssMap
+        }
+      }
+
+      // Scoped
+      if (styleTag.attribs.scoped) {
+        plugins.push(Postcss.addHash({
+          hash
+        }));
+      }
+
+      // Autoprefixer
+      if (styleTag.attribs.autoprefix !== 'off') {
+        plugins.push(Postcss.autoprefixer());
+      }
+
+      // Postcss result
+      let result = Postcss.postcss(plugins).process(css, postcssOptions);
+      css = result.css;
+      cssMap = result.map;
+
+      styles.push({
+        css,
+        map: cssMap
+      })
     }
 
     // Output
@@ -109,39 +162,12 @@ VueComponentTagHandler = class VueComponentTagHandler {
       (__vue_script__.options || (__vue_script__.options = {}))
       : __vue_script__).template = __vue_template__;
     }
-    export default __vue_script__;`;
-
-    // Babel options
-    this.babelOptions.sourceMap = true;
-    /*this.babelOptions.filename =
-    this.babelOptions.sourceFileName = packageName
-      ? "/packages/" + packageName + "/" + inputFilePath
-      : "/" + inputFilePath;
-    this.babelOptions.sourceMapTarget = this.babelOptions.filename + ".map";*/
-
-    // Babel
-    let output = Babel.compile(js, this.babelOptions);
-    //console.log('---code:', output.code, '---map:', output.map);
-
-    // Source Map
-    /*var consumer = new sourcemap.SourceMapConsumer(output.map);
-    var generator = sourcemap.SourceMapGenerator.fromSourceMap(consumer);
-    generator.setSourceContent(this.inputFile.getSourceHash(), this.inputFile.getContentsAsString());
-    var map = generator.toJSON();*/
-    //var map = output.map;
-    var map = mss.transfer({
-      fromSourceMap: output.map,
-      toSourceMap: mapGenerator.toJSON()
-    });
-    map.file = inputFilePath + '.map';
-    map.sources = [inputFilePath];
-    map.sourcesContent = [source];
-
-    //console.log('---map2:', map);
+    exports.default = __vue_script__;`;
 
     return {
-      code: output.code,
-      map
+      code: js,
+      map,
+      styles
     };
   }
 

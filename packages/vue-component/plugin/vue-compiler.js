@@ -2,7 +2,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   constructor() {
     super({
       compilerName: 'vuecomponent',
-      defaultCacheSize: 1024*1024*10,
+      defaultCacheSize: 1024 * 1024 * 10,
     });
 
     this.babelOptions = Babel.getDefaultOptions();
@@ -38,6 +38,18 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     }
   }
   addCompileResult(inputFile, compileResult) {
+
+    if (compileResult.styles.length !== 0) {
+      let css = '';
+      for (let style of compileResult.styles) {
+        css += style.css;
+      }
+      addStylesheet(inputFile, {
+        data: css
+      });
+    }
+
+
     inputFile.addJavaScript({
       path: inputFile.getPathInPackage() + '.js',
       sourcePath: inputFile.getPathInPackage(),
@@ -47,7 +59,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   }
 }
 
-function compileTags (inputFile, tags, babelOptions) {
+function compileTags(inputFile, tags, babelOptions) {
   var handler = new VueComponentTagHandler(inputFile, babelOptions);
 
   tags.forEach((tag) => {
@@ -55,4 +67,21 @@ function compileTags (inputFile, tags, babelOptions) {
   });
 
   return handler.getResults();
+}
+
+function addStylesheet(inputFile, options) {
+  const self = inputFile._resourceSlot;
+
+  const data = options.data.replace(new RegExp("\r\n", "g"), "\n").replace(new RegExp("\r", "g"), "\n");
+  inputFile.addJavaScript({
+    path: inputFile.getPathInPackage() + '.style.js',
+    sourcePath: inputFile.getPathInPackage(),
+    data: cssToCommonJS(data),
+    sourceMap: options.map
+  });
+}
+
+function cssToCommonJS(css) {
+  css = css.replace(/\n/g, '"+\n"');
+  return 'module.exports = require("meteor/modules").addStyles("' + css + '");';
 }
