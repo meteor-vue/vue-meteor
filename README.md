@@ -4,6 +4,18 @@
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 
+## Table of Contents
+
+ - [Features](#)
+ - [Usage](#)
+   - [New Meteor project](#)
+	 - [Example project](#)
+	 - [Meteor data integration](#)
+		 - [Subscriptions](#)
+		 - [Reactive data](#)
+	 - [Single-file component](#)
+ - [Get involved](#)
+
 ## Features
 
 Currently supported and possible future features are:
