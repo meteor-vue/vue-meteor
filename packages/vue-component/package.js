@@ -9,10 +9,10 @@ Package.describe({
 Package.registerBuildPlugin({
   name: "compileVueComponents",
   use: [
-    'ecmascript',
-    'caching-compiler',
-    'babel-compiler',
-    'akryum:postcss'
+    'ecmascript@0.4.3',
+    'caching-compiler@1.0.4',
+    'babel-compiler@6.6.4',
+    'akryum:postcss@0.0.1'
   ],
   sources: [
     'plugin/throw-compile-error.js',
