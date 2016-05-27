@@ -1,4 +1,4 @@
-# Vue single-file components for Meteor
+# Vue integration for Meteor
 
 **This project is experimental.**
 
@@ -20,10 +20,22 @@ Currently supported and possible future features are:
 
 ## Usage
 
-In the project directory, open a terminal and type:
+### New Meteor project
 
+Open a terminal and type:
+
+    meteor create my-app
+    cd ./my-app
+    meteor remove blaze-html-templates
+    meteor add static-html akryum:vue akryum:vue-component
+    meteor
+
+### Example project
+
+In the project directory:
 
     meteor
+
 
 ### Meteor data integration
 
