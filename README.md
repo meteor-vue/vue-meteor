@@ -225,8 +225,7 @@ export default {
 </script>
 ```
 
-
-By default, You can add the `scoped` attribute to any `<style>` tag in your component file so that the css is only applied to this specific component.
+By default, the css added with `<style>` tags will be applied for all your app. But you can add the `scoped` attribute to any `<style>` tag in your component file so that the css is only applied to this specific component:
 
 
 ```html
