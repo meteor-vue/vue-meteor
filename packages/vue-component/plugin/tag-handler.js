@@ -117,8 +117,14 @@ VueComponentTagHandler = class VueComponentTagHandler {
       let cssMap = null;
 
       // Lang
-      if (styleTag.attribs.lang !== null) {
+      if (styleTag.attribs.lang !== undefined) {
+        let lang = styleTag.attribs.lang;
         // TODO
+        try {
+
+        } catch(e) {
+            console.error(e);
+        }
       }
 
       // Postcss

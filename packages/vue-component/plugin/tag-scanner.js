@@ -49,8 +49,11 @@ class HtmlScan {
         let attr;
         while(attr = attrsRegex.exec(attrs)) {
           let attrValue;
-          if(attr.length === 4) {
+          if(attr.length === 5) {
             attrValue = attr[4];
+            if(attrValue === undefined) {
+                attrValue = true;
+            }
           } else {
             attrValue = true;
           }
