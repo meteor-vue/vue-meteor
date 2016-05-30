@@ -270,4 +270,4 @@ Feel free to contribute by opening a PR or an issue (but check before if the top
 
 ---
 
-LICENCE MIT - Created by Guillaume CHAU (@Akryum)
+LICENCE ISC - Created by Guillaume CHAU (@Akryum)

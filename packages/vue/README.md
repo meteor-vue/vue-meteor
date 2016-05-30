@@ -165,4 +165,4 @@ computed: {
 
 ---
 
-LICENCE MIT - Created by Guillaume CHAU (@Akryum)
+LICENCE ISC - Created by Guillaume CHAU (@Akryum)
