@@ -1,14 +1,7 @@
-import postcssLib from 'postcss'
-import selectorParserLib from 'postcss-selector-parser'
-import autoprefixerLib from 'autoprefixer'
+import postcss from 'postcss';
+import selectorParser from 'postcss-selector-parser';
 
-export const name = 'postcss';
-
-export const postcss = postcssLib;
-export const selectorParser = selectorParserLib;
-export const autoprefixer = autoprefixerLib;
-
-export const addHash = postcss.plugin('add-hash', function (opts) {
+addHash = postcss.plugin('add-hash', function (opts) {
   return function (root) {
     root.each(function rewriteSelector (node) {
       if (!node.selector) {

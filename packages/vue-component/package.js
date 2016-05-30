@@ -11,17 +11,19 @@ Package.registerBuildPlugin({
   use: [
     'ecmascript@0.4.3',
     'caching-compiler@1.0.4',
-    'babel-compiler@6.6.4',
-    'akryum:postcss@0.0.1'
+    'babel-compiler@6.6.4'
   ],
   sources: [
     'plugin/throw-compile-error.js',
+    'plugin/post-css.js',
     'plugin/tag-scanner.js',
     'plugin/tag-handler.js',
     'plugin/vue-compiler.js',
     'plugin/plugin.js'
   ],
   npmDependencies: {
+    'postcss': '5.0.21',
+    'postcss-selector-parser': '2.0.0'
   }
 });
 

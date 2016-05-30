@@ -1,4 +1,5 @@
-import * as Postcss from 'meteor/akryum:postcss';
+import postcss from 'postcss';
+//import autoprefixer from 'autoprefixer';
 
 const jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
 const jsExportDefaultReg = /export\s+default/g;
@@ -134,18 +135,19 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
       // Scoped
       if (styleTag.attribs.scoped) {
-        plugins.push(Postcss.addHash({
+        plugins.push(addHash({
           hash
         }));
       }
 
       // Autoprefixer
       if (styleTag.attribs.autoprefix !== 'off') {
-        plugins.push(Postcss.autoprefixer());
+          // Removed - Performance issue while loading the plugin
+        //plugins.push(autoprefixer());
       }
 
       // Postcss result
-      let result = Postcss.postcss(plugins).process(css, postcssOptions);
+      let result = postcss(plugins).process(css, postcssOptions);
       css = result.css;
       cssMap = result.map;
 
