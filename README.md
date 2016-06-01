@@ -22,8 +22,9 @@ Currently supported and possible future features are:
 
  - [x] Declarative subscriptions and meteor rective data
  - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optionnal `scoped` attribute)
- - [ ] Less/Sass integration in .vue files (soon)
+ - [x] Less integration in .vue files
  - [ ] Apollo client integration (soon)
+ - [ ] *Sass integration in .vue files*
  - [ ] *Auto register components with file name ending with .global.vue*
  - [ ] *Easy routing with vue-router out-of-the-box integration*
  - [ ] *Easy translation with vue i18n out-of-the-box integration*
@@ -215,7 +216,11 @@ The complete example is in the `imports/ui/App.vue` file.
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components):
 ![screenshot](http://blog.evanyou.me/images/vue-component.png)
 
-**Warning: the `lang` attribute on `<template>` and `<style>` tags is not supported yet!**
+**Warning: the `lang` attribute on `<template>` tags is not supported yet!**
+
+Official lang packages for `<style>` tag:
+
+ - akryum:vue-less
 
 The component file must include:
 
