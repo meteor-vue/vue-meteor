@@ -1,4 +1,4 @@
-VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
+VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompiler {
   constructor() {
     super({
       compilerName: 'vuecomponent',
@@ -13,7 +13,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   compileResultSize(compileResult) {
     return compileResult.code.length + compileResult.map.length;
   }
-  compileOneFile(inputFile) {
+  compileOneFile(inputFile, allFiles) {
     const contents = inputFile.getContentsAsString();
     const inputPath = inputFile.getPathInPackage();
 
@@ -24,7 +24,10 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
         tagNames: ['template', 'script', 'style']
       });
 
-      return compileTags(inputFile, tags, this.babelOptions);
+      return {
+        compileResult: compileTags(inputFile, tags, this.babelOptions),
+        referencedImportPaths: []
+      };
     } catch (e) {
       if (e instanceof CompileError) {
         inputFile.error({
@@ -60,7 +63,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 }
 
 function compileTags(inputFile, tags, babelOptions) {
-  var handler = new VueComponentTagHandler(inputFile, babelOptions);
+  var handler = new VueComponentTagHandler({ inputFile, babelOptions });
 
   tags.forEach((tag) => {
     handler.addTagToResults(tag);
@@ -70,13 +73,11 @@ function compileTags(inputFile, tags, babelOptions) {
 }
 
 function addStylesheet(inputFile, options) {
-  const self = inputFile._resourceSlot;
-
   const data = options.data.replace(new RegExp("\r\n", "g"), "\n").replace(new RegExp("\r", "g"), "\n");
-  inputFile.addJavaScript({
-    path: inputFile.getPathInPackage() + '.style.js',
+  inputFile.addStylesheet({
+    path: inputFile.getPathInPackage() + '.css',
     sourcePath: inputFile.getPathInPackage(),
-    data: cssToCommonJS(data),
+    data: data,
     sourceMap: options.map
   });
 }

@@ -10,10 +10,22 @@ Package.describe({
   documentation: 'README.md'
 });
 
+Package.registerBuildPlugin({
+  name: "vue-component-less",
+  use: [
+    'ecmascript@0.4.3',
+    'akryum:vue-component@0.0.3'
+  ],
+  sources: [
+      'vue-less.js'
+  ],
+  npmDependencies: {
+    'less': '2.7.1'
+  }
+});
+
 Package.onUse(function(api) {
-  api.versionsFrom('1.3.2.4');
-  api.use('ecmascript');
-  api.mainModule('vue-less.js');
+  api.use('isobuild:compiler-plugin@1.0.0');
 });
 
 Package.onTest(function(api) {

@@ -10,8 +10,9 @@ const classAttrReg = /\s+class=(['"])(.*?)\1/gi;
 
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
-  constructor(inputFile, babelOptions) {
+  constructor({inputFile, allFiles, babelOptions}) {
     this.inputFile = inputFile;
+    this.allFiles = allFiles;
     this.babelOptions = babelOptions;
 
     this.component = {
@@ -121,9 +122,21 @@ VueComponentTagHandler = class VueComponentTagHandler {
         let lang = styleTag.attribs.lang;
         // TODO
         try {
+            let compile = global.vue.lang[lang];
+            if(!compile) {
+                this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath}. Did you install it?`);
+            } else {
+                let result = compile({
+                    source: css,
+                    inputFile: this.inputFile
+                });
+                css = result.css;
+                cssMap = result.map;
 
+                console.log("css result", css);
+            }
         } catch(e) {
-            console.error(e);
+            console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath}`, e);
         }
       }
 
@@ -172,11 +185,13 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
     exports.default = __vue_script__;`;
 
-    return {
+    let compileResult = {
       code: js,
       map,
       styles
     };
+
+    return compileResult;
   }
 
   throwCompileError(message, overrideIndex) {

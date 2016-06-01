@@ -17,9 +17,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+// Import
+@import "~imports/ui/mixins.import.less";
+
 a {
   text-decoration: underline;
+}
+
+.post {
+    .message {
+        // Mixin
+        .padding(12px);
+    }
 }
 </style>
 
