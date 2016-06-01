@@ -220,7 +220,7 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 Official lang packages for `<style>` tag:
 
- - akryum:vue-less
+ - [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)
 
 The component file must include:
 
