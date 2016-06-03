@@ -1,5 +1,7 @@
 # Vue integration for Meteor
 
+Declarative subscriptions and meteor reactive data
+
 ## Installation
 
 
