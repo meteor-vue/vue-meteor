@@ -44,7 +44,7 @@ In the project directory:
 
 [See akryum:vue package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue#usage)
 
-The complete example is in the `imports/ui/App.vue` file.
+The complete example is in the `imports/ui/App.vue` [file](https://github.com/Akryum/meteor-vue-component/blob/master/imports/ui/App.vue#L11).
 
 ### Single-file component
 
