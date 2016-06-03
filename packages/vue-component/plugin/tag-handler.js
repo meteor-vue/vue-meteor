@@ -132,8 +132,6 @@ VueComponentTagHandler = class VueComponentTagHandler {
                 });
                 css = result.css;
                 cssMap = result.map;
-
-                console.log("css result", css);
             }
         } catch(e) {
             console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath}`, e);

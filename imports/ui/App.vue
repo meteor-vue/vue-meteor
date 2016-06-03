@@ -3,8 +3,11 @@
     <h1>Forum ({{count}})</h1>
     <form @submit.prevent="createThread"><input v-model="newThreadName" placeholder="Type new thread name" required/></form>
     <thread-item v-for="thread in threads" :data="thread" :selected="thread._id === selectedThreadId" @select="selectThread(thread._id)"></thread-item>
-    <hr/>
+    <hr />
     <thread v-if="selectedThread" :id="selectedThreadId"></thread>
+
+    <!-- Apollo example -->
+    <apollo></apollo>
   </div>
 </template>
 
@@ -15,10 +18,13 @@ import {Threads, Posts} from '/imports/api/collections';
 export default {
   data () {
     return {
-      newThreadName: '', // Vue data
-      selectedThreadId: null, // Vue data
-      selectedThread: null, // Initialize your meteor data
-      threads: [] // Initialize your meteor data
+      // Vue data
+      newThreadName: '',
+      selectedThreadId: null,
+
+      // Initialize your meteor data
+      selectedThread: null,
+      threads: []
     }
   },
   computed: {
@@ -26,6 +32,7 @@ export default {
       return this.threads.length;
     }
   },
+  // Meteor-specific options
   meteor: {
     // Subscriptions
     subscribe: {

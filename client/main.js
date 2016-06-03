@@ -32,6 +32,10 @@ Vue.component('post', Post);
 import Thread from '/imports/ui/Thread.vue';
 Vue.component('thread', Thread);
 
+// Apollo
+import Apollo from '/imports/ui/Apollo.vue';
+Vue.component('apollo', Apollo);
+
 // Main app
 import App from '/imports/ui/App.vue';
 Vue.component('app', App);
