@@ -13,7 +13,7 @@ Currently supported and possible future features (in no particular order) are:
  - [x] `lang` attribute on `<template>` in .vue files
  - [x] Less official integration in .vue files
  - [x] Apollo client integration
- - [ ] *Auto register components with file name ending with .global.vue*
+ - [x] Auto register components with file name ending with .global.vue
  - [ ] *Easy routing with vue-router out-of-the-box integration*
  - [ ] *Easy translation with vue i18n out-of-the-box integration*
  - [ ] *Sass official integration in .vue files*

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5 - 2016/06/03
+
+ - `.global.vue` files outside of the `imports` directory are automatically registered as custom tags. The default tag name is the name of the file in kebab-case, and you can set your own with the `name` attribute in the component options.
+
 ## 0.0.4 - 2016/06/03
 
  - Removed remaining debug console.log

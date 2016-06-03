@@ -22,6 +22,7 @@
 import {Meteor} from 'meteor/meteor';
 import {Threads, Posts} from '/imports/api/collections';
 export default {
+  name: 'selected-thread',
   props: ['id'],
   data () {
     return {

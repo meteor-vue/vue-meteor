@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component',
-  version: '0.0.4',
+  version: '0.0.5',
   summary: 'VueJS single-file components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'

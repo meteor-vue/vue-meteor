@@ -4,7 +4,7 @@
     <form @submit.prevent="createThread"><input v-model="newThreadName" placeholder="Type new thread name" required/></form>
     <thread-item v-for="thread in threads" :data="thread" :selected="thread._id === selectedThreadId" @select="selectThread(thread._id)"></thread-item>
     <hr />
-    <thread v-if="selectedThread" :id="selectedThreadId"></thread>
+    <selected-thread v-if="selectedThread" :id="selectedThreadId"></selected-thread>
 
     <!-- Apollo example -->
     <apollo></apollo>

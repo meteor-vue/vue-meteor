@@ -50,7 +50,7 @@ a {
 </style>
 ```
 
-
+### Manual import
 
 You can then import your .vue component files in your meteor code:
 
@@ -61,6 +61,26 @@ import Post from '/imports/ui/Post.vue';
 Vue.component('post', Post);
 ```
 
+### Global vue components
+
+`.global.vue` files outside of the `imports` directory are automatically registered as custom tags. The default tag name is the name of the file in kebab-case, and you can set your own with the `name` attribute in the component options.
+
+For example, the `Post.global.vue` component is automatically available in your vue templates as `<post>`:
+
+[screenshot](./global_component_file_tree.png)
+
+You can override the default naming behavior by setting the `name` option in your component:
+
+```html
+<script>
+export default {
+  name: 'selected-thread',
+  // other options...
+}
+</script>
+```
+
+Here your component will be available as `<selected-thread>` regardless of the file name.
 
 ---
 

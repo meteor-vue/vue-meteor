@@ -1,16 +1,9 @@
 import postcss from 'postcss';
 //import autoprefixer from 'autoprefixer';
 
-const jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
-const jsExportDefaultReg = /export\s+default/g;
-const quoteReg = /'/g;
-const lineReg = /\r?\n|\r/g;
-const tagReg = /<([\w\d-]+)(\s+.*?)?\/?>/ig;
-const classAttrReg = /\s+class=(['"])(.*?)\1/gi;
-
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
-  constructor({inputFile, allFiles, babelOptions}) {
+  constructor({ inputFile, allFiles, babelOptions }) {
     this.inputFile = inputFile;
     this.allFiles = allFiles;
     this.babelOptions = babelOptions;
@@ -99,7 +92,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       let result;
       template = template.replace(tagReg, (match, p1, p2, offset) => {
         let attributes = p2;
-        if(!attributes) {
+        if (!attributes) {
           return match.replace(p1, p1 + ` ${hash}`);
         } else {
           attributes += ` ${hash}`;
@@ -122,19 +115,19 @@ VueComponentTagHandler = class VueComponentTagHandler {
         let lang = styleTag.attribs.lang;
         // TODO
         try {
-            let compile = global.vue.lang[lang];
-            if(!compile) {
-                this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath}. Did you install it?`);
-            } else {
-                let result = compile({
-                    source: css,
-                    inputFile: this.inputFile
-                });
-                css = result.css;
-                cssMap = result.map;
-            }
-        } catch(e) {
-            console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath}`, e);
+          let compile = global.vue.lang[lang];
+          if (!compile) {
+            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath}. Did you install it?`);
+          } else {
+            let result = compile({
+              source: css,
+              inputFile: this.inputFile
+            });
+            css = result.css;
+            cssMap = result.map;
+          }
+        } catch (e) {
+          console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath}`, e);
         }
       }
 
@@ -159,7 +152,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
       // Autoprefixer
       if (styleTag.attribs.autoprefix !== 'off') {
-          // Removed - Performance issue while loading the plugin
+        // Removed - Performance issue while loading the plugin
         //plugins.push(autoprefixer());
       }
 
@@ -183,6 +176,27 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
     exports.default = __vue_script__;`;
 
+    // Auto register
+    if (globalFileNameReg.test(inputFilePath)) {
+
+      let name = Plugin.path.basename(inputFilePath);
+      name = name.substring(0, name.lastIndexOf('.global.vue'));
+
+      // Remove special characters
+      name = name.replace(nonWordCharReg, '');
+
+      // Kebab case
+      name = name.replace(capitalLetterReg, (match) => {
+        return '-' + match.toLowerCase();
+      });
+      name = name.replace(trimDashReg, '');
+
+      js += `var _akryumVue = require('meteor/akryum:vue');
+      _akryumVue.Vue.component((typeof __vue_script__ === "function" ?
+      (__vue_script__.options || (__vue_script__.options = {}))
+      : __vue_script__).name || '${name}', __vue_script__);`;
+    }
+
     let compileResult = {
       code: js,
       map,
@@ -196,3 +210,15 @@ VueComponentTagHandler = class VueComponentTagHandler {
     throwCompileError(this.tag, message, overrideIndex);
   }
 }
+
+
+const jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
+const jsExportDefaultReg = /export\s+default/g;
+const quoteReg = /'/g;
+const lineReg = /\r?\n|\r/g;
+const tagReg = /<([\w\d-]+)(\s+.*?)?\/?>/ig;
+const classAttrReg = /\s+class=(['"])(.*?)\1/gi;
+const globalFileNameReg = /\.global\.vue$/;
+const capitalLetterReg = /([A-Z])/g;
+const trimDashReg = /^-/;
+const nonWordCharReg = /\W/g;
