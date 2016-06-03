@@ -6,11 +6,11 @@
 
 ## 0.0.4 - 2016/06/03
 
- - Removed remaining debug console.log
+ - Removed remaining debug `console.log`
 
 ## 0.0.3 - 2016/06/01
 
- - <style> lang attribute implementation. Now exposes a config object to add lang support with other pacackages: global.vue.lang (see akryum:vue-less).
+ - `lang` attribute implementation for `<style>` tags. Now exposes a config object to add lang support with other packages: `global.vue.lang` (see [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)).
 
 ## 0.0.2 - 2016/05/30
 
