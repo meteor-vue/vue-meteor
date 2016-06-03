@@ -6,17 +6,19 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 
 ## Features
 
-Currently supported and possible future features are:
+Currently supported and possible future features (in no particular order) are:
 
  - [x] Declarative subscriptions and meteor reactive data
  - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute)
- - [x] Less integration in .vue files
+ - [x] `lang` attribute on `<template>` in .vue files
+ - [x] Less official integration in .vue files
  - [x] Apollo client integration
- - [ ] *Sass integration in .vue files*
  - [ ] *Auto register components with file name ending with .global.vue*
  - [ ] *Easy routing with vue-router out-of-the-box integration*
  - [ ] *Easy translation with vue i18n out-of-the-box integration*
- - [ ] *Jade integration in .vue file*
+ - [ ] *Sass official integration in .vue files*
+ - [ ] *`lang` attribute on `<template>` in .vue files*
+ - [ ] *Jade official integration in .vue file*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
  - [ ] *Hot-reloading of components*
 

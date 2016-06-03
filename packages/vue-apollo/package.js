@@ -10,7 +10,7 @@ Package.onUse(function(api) {
   api.versionsFrom('1.3.2.4');
   api.use('ecmascript');
   api.use('accounts-base');
-  api.use('akryum:vue');
+  api.use('akryum:vue@1.0.0');
   api.mainModule('vue-apollo.js', 'client');
 });
 
