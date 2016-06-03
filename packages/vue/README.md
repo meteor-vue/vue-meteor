@@ -17,7 +17,7 @@ new Vue({
     meteor: {
         // Meteor specific options
     }
-);
+});
 ```
 
 
