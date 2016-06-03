@@ -42,14 +42,13 @@ In the project directory:
 
 ### Meteor data integration
 
-[See akryum:vue package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue#usage)
+[See Usage in akryum:vue package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue#usage)
 
 ### Single-file component
 
-It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components):
-![screenshot](http://blog.evanyou.me/images/vue-component.png)
+It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components).
 
-[See arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
+[See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
 
 ## Get involved
 
