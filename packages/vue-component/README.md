@@ -13,6 +13,10 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 **Warning: the `lang` attribute on `<template>` tags is not supported yet!**
 
+Official lang packages for `<style>` tag:
+
+ - [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)
+
 The component file must include:
 
  - Maximum one `<template>` tag containing the template html of your component,
@@ -21,7 +25,8 @@ The component file must include:
 
 You must export your code with the ES2015 statement `export default` in your `<script>` tag:
 
-```javascript
+
+```html
 <script>
 // ES2015 Javascript with support for import statements
 // See the 'ecmascript' meteor package for more info
@@ -45,25 +50,6 @@ a {
 </style>
 ```
 
-You can specify the language used in your `<style>` tags, but you first need to add the corresponding package:
-
-    meteor add akryum:vue-less
-
-Then add the `lang` attribute on your tag:
-
-```html
-<style scoped lang="less">
-// Import
-@import "~imports/ui/mixins.import.less";
-
-.post {
-    .message {
-        // Mixin
-        .padding(12px);
-    }
-}
-</style>
-```
 
 
 You can then import your .vue component files in your meteor code:
