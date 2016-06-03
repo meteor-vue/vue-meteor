@@ -25,6 +25,17 @@ new Vue({
 
 You can access the [apollo-client](http://docs.apollostack.com/apollo-client/index.html) instance with `this.$apollo.client` in all your vue components.
 
+In your apollo server resolvers, you can access the current Meteor user like this:
+
+```javascript
+user(root, args, context) {
+  // Only return data if the fetched id matches the current user, for security
+  if (context.user._id === args.id) {
+    return context.user;
+  }
+}
+```
+
 ### Queries
 
 In the `data` object, add an attribute for each property you want to feed with the result of an Apollo query.
