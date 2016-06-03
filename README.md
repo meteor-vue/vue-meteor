@@ -1,4 +1,4 @@
-# Vue integration for Meteor
+# Vue as a Meteor UI layer
 
 **This project is experimental.**
 
