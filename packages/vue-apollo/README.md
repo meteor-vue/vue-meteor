@@ -210,7 +210,7 @@ Available advanced options:
  - `forceFetch: true` see the [apollo doc](http://docs.apollostack.com/apollo-client/core.html#forceFetch)
  - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match
  - `result(data)` is a hook called when a result is received
- - `error(errors, type)` is a hook called when there are errors, `type` value can either be `sending` or `execution`
+ - `error(errors, type)` is a hook called when there are errors, `type` value can either be `'sending'` or `'execution'`
 
 
 ```javascript
