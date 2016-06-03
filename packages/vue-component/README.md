@@ -67,7 +67,7 @@ Vue.component('post', Post);
 
 For example, the `Post.global.vue` component is automatically available in your vue templates as `<post>`:
 
-[screenshot](./global_component_file_tree.png)
+![screenshot](./global_component_file_tree.png)
 
 You can override the default naming behavior by setting the `name` option in your component:
 
