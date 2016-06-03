@@ -11,7 +11,7 @@ Currently supported and possible future features are:
  - [x] Declarative subscriptions and meteor reactive data
  - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute)
  - [x] Less integration in .vue files
- - [ ] Apollo client integration (soon)
+ - [x] Apollo client integration
  - [ ] *Sass integration in .vue files*
  - [ ] *Auto register components with file name ending with .global.vue*
  - [ ] *Easy routing with vue-router out-of-the-box integration*
@@ -51,6 +51,12 @@ Declarative subscriptions and meteor reactive data
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components).
 
 [See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
+
+### Apollo integration
+
+Use apollo in your vue component!
+
+[See Installation & Usage in akryum:vue-apollo package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
 
 ## Get involved
 

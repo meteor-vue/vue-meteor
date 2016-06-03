@@ -1,7 +1,7 @@
 Package.describe({
   name: 'akryum:vue-apollo',
   version: '0.0.1',
-  summary: 'support for apollo in vue components',
+  summary: 'Support for apollo client in vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
 });
