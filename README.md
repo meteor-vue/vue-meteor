@@ -10,7 +10,7 @@ Currently supported and possible future features (in no particular order) are:
 
  - [x] Declarative subscriptions and meteor reactive data
  - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute)
- - [x] `lang` attribute on `<template>` in .vue files
+ - [x] `lang` attribute on `<style>` in .vue files
  - [x] Less official integration in .vue files
  - [x] Apollo client integration
  - [x] Auto register components with file name ending with .global.vue
