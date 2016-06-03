@@ -69,7 +69,7 @@ Vue.component('post', Post);
 
 In the example above, the `Post.global.vue` component is automatically available in your vue templates as `<post>`.
 
-*The global component files shouldn't be inside a `imports` directory, or else they will not be automatically added to your app.*
+**The global component files shouldn't be inside a `imports` directory, or else they will not be automatically added to your app.**
 
 You can override the default naming behavior by setting the `name` option in your component:
 
