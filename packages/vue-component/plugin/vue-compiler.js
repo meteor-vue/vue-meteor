@@ -1,3 +1,7 @@
+import fs from 'fs';
+import path from 'path';
+import { Meteor } from 'meteor/meteor';
+
 global._vue_cache = global._vue_cache || {};
 
 VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
@@ -20,6 +24,10 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
   compileOneFile(inputFile) {
     const contents = inputFile.getContentsAsString();
+    return this.compileOneFileWithContents(inputFile, contents);
+  }
+
+  compileOneFileWithContents(inputFile, contents) {
     const inputPath = inputFile.getPathInPackage();
 
     try {
@@ -29,7 +37,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
         tagNames: ['template', 'script', 'style']
       });
 
-      return compileTags(inputFile, tags, this.babelOptions);
+      return this.compileTags(inputFile, tags, this.babelOptions);
     } catch (e) {
       if (e instanceof CompileError) {
         inputFile.error({
@@ -52,8 +60,6 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
     let cached = global._vue_cache[hash] || {};
 
-    console.log(inputFilePath, 'cached', cached);
-
     // Style
     let css = '';
     let cssHash = '';
@@ -62,30 +68,15 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
         css += style.css;
       }
 
-      // Hot-reloading
-      cssHash = Hash(css);
-      console.log('css->', cached.css, cssHash);
-      if(isDev && cached.css !== cssHash) {
-        console.log('css changed');
-        global._dev_server.emit('css', {hash: vueId, css});
-      }
-
-      addStylesheet(inputFile, {
+      this.addStylesheet(inputFile, {
         data: css
       });
     }
 
     let js = compileResult.code;
-    let jsHash = Hash(js);
 
     // Hot-reloading
     if (isDev) {
-      console.log('js->', cached.js, jsHash);
-      if(cached.js !== jsHash) {
-        console.log('js changed');
-        global._dev_server.emit('js', {hash: vueId, js});
-      }
-
       js += `\nwindow.__vue_hot__.createRecord('${vueId}', exports.default);`;
     }
 
@@ -117,34 +108,85 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       sourceMap: compileResult.map
     });
 
-    global._vue_cache[hash] = {
-      js: jsHash,
-      css: cssHash
+    if(isDev) {
+      // Hot-reloading
+      let filePath = path.resolve(inputFilePath);
+
+      // Listener
+      let fileChanged = Meteor.bindEnvironment((event) => {
+        if(event === 'change') {
+          try {
+            let contents = Plugin.fs.readFileSync(filePath, {
+              encoding: 'utf8'
+            });
+            let compileResult = this.compileOneFileWithContents(inputFile, contents);
+
+            // CSS
+            let css = '';
+            let cssHash = '';
+            if (compileResult.styles.length !== 0) {
+              for (let style of compileResult.styles) {
+                css += style.css;
+              }
+
+              // Hot-reloading
+              cssHash = Hash(css);
+              if(isDev && cached.css !== cssHash) {
+                global._dev_server.emit('css', {hash: vueId, css});
+              }
+            }
+
+            // JS
+            let js = compileResult.code;
+            let jsHash = Hash(js);
+            if(cached.js !== jsHash) {
+              global._dev_server.emit('js', {hash: vueId, js});
+            }
+          }catch(e) {
+            console.error(e);
+          }
+        }
+      });
+
+      // Fast file change detection
+      if(cached.watcher) {
+        cached.watcher.close();
+      }
+      let watcher = fs.watch(filePath, {
+        persistent: false
+      }, fileChanged);
+
+      // Cache
+      global._vue_cache[hash] = {
+        js: jsHash,
+        css: cssHash,
+        watcher
+      };
     }
   }
-}
 
-function compileTags(inputFile, tags, babelOptions) {
-  var handler = new VueComponentTagHandler({
-    inputFile,
-    babelOptions
-  });
+  compileTags(inputFile, tags, babelOptions) {
+    var handler = new VueComponentTagHandler({
+      inputFile,
+      babelOptions
+    });
 
-  tags.forEach((tag) => {
-    handler.addTagToResults(tag);
-  });
+    tags.forEach((tag) => {
+      handler.addTagToResults(tag);
+    });
 
-  return handler.getResults();
-}
+    return handler.getResults();
+  }
 
-function addStylesheet(inputFile, options) {
-  const data = options.data.replace(new RegExp("\r\n", "g"), "\n").replace(new RegExp("\r", "g"), "\n");
-  inputFile.addStylesheet({
-    path: inputFile.getPathInPackage() + '.css',
-    sourcePath: inputFile.getPathInPackage(),
-    data: data,
-    sourceMap: options.map
-  });
+  addStylesheet(inputFile, options) {
+    const data = options.data.replace(new RegExp("\r\n", "g"), "\n").replace(new RegExp("\r", "g"), "\n");
+    inputFile.addStylesheet({
+      path: inputFile.getPathInPackage() + '.css',
+      sourcePath: inputFile.getPathInPackage(),
+      data: data,
+      sourceMap: options.map
+    });
+  }
 }
 
 const globalFileNameReg = /\.global\.vue$/;

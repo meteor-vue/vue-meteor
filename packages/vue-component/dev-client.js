@@ -52,11 +52,12 @@ window.__vue_hot__ = VueHotReloadApi;
 
 const r = Reload._reload;
 Reload._reload = function(options) {
+  console.log('[[ Reload request ]]');
   if(_supressNextReload) {
     console.log("[[ Client changed, may need reload ]]");
-    _supressNextReload = false;
   } else {
     console.log("[[ Reloading app... ]]");
     r(options);
   }
+  _supressNextReload = false;
 }

@@ -11,6 +11,7 @@ export default {
   props: ['data'],
   methods: {
     removePost () {
+      console.log("meow");
       Meteor.call('posts.remove', this.data._id);
     }
   }
@@ -29,7 +30,8 @@ a {
     .message {
         // Mixin
         .padding(12px);
-        border-bottom: dashed 5px green;
+
+        border-bottom: dashed 1px green;
     }
 }
 </style>

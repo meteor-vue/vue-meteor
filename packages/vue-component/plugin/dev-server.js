@@ -11,10 +11,6 @@ var io = socket_io(server);
 
 PORT = 4242;
 
-io.on('connection', (socket) => {
-  console.log(`new client ${socket.id}`);
-});
-
 try {
   server.listen(PORT);
   console.log(`Dev server listening on port ${PORT}`);

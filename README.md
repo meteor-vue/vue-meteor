@@ -14,13 +14,13 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Less official integration in .vue files
  - [x] Apollo client integration
  - [x] Auto register components with file name ending with .global.vue
+ - [x] Hot-reloading of components
  - [ ] *Easy routing with vue-router out-of-the-box integration*
  - [ ] *Easy translation with vue i18n out-of-the-box integration*
  - [ ] *Sass official integration in .vue files*
  - [ ] *`lang` attribute on `<template>` in .vue files*
  - [ ] *Jade official integration in .vue file*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
- - [ ] *Hot-reloading of components*
 
 ## Usage
 
@@ -50,7 +50,7 @@ Declarative subscriptions and meteor reactive data
 
 ### Single-file component
 
-It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components).
+It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
 
 [See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
 
