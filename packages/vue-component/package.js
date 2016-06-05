@@ -14,6 +14,7 @@ Package.registerBuildPlugin({
     'babel-compiler@6.6.4'
   ],
   sources: [
+    'plugin/dev-server.js',
     'plugin/throw-compile-error.js',
     'plugin/post-css.js',
     'plugin/tag-scanner.js',
@@ -23,12 +24,18 @@ Package.registerBuildPlugin({
   ],
   npmDependencies: {
     'postcss': '5.0.21',
-    'postcss-selector-parser': '2.0.0'
+    'postcss-selector-parser': '2.0.0',
+    'socket.io': '1.4.6'
   }
 });
 
 Package.onUse(function(api) {
   api.use('isobuild:compiler-plugin@1.0.0');
+  if(process.env.NODE_ENV === 'development') {
+    api.use('ecmascript');
+    api.use('akryum:vue@1.0.0');
+    api.mainModule('dev-client.js', 'client');
+  }
 });
 
 Package.onTest(function(api) {
@@ -37,3 +44,8 @@ Package.onTest(function(api) {
   api.use('akryum:vue-component');
   api.mainModule('vue-component-tests.js');
 });
+
+Npm.depends({
+  'vue-hot-reload-api': '1.3.2',
+  'socket.io-client': '1.4.6'
+})

@@ -1,3 +1,8 @@
+
+let cache = global.__vue_cache__ || {};
+global.__vue_cache__ = cache;
+
+
 VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompiler {
   constructor() {
     super({
@@ -42,6 +47,9 @@ VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompil
   }
   addCompileResult(inputFile, compileResult) {
 
+    let hash = inputFile.getSourceHash();
+    let isDev = (process.env.NODE_ENV === 'development');
+
     if (compileResult.styles.length !== 0) {
       let css = '';
       for (let style of compileResult.styles) {
@@ -52,6 +60,10 @@ VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompil
       });
     }
 
+    // Hot-reloading
+    if(isDev) {
+      js += `window.__vue_hot__.createRecord(${hash}, exports.default)`;
+    }
 
     inputFile.addJavaScript({
       path: inputFile.getPathInPackage() + '.js',
@@ -59,6 +71,8 @@ VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompil
       data: compileResult.code,
       sourceMap: compileResult.map
     });
+
+    cache[hash] = 'meow';
   }
 }
 
