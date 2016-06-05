@@ -30,8 +30,6 @@ a {
     .message {
         // Mixin
         .padding(12px);
-
-        border-bottom: dashed 1px green;
     }
 }
 </style>

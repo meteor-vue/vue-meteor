@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0 - 2013/06/05
+
+ - Instant hot-push reloading of vue components.
+
 ## 0.0.5 - 2016/06/03
 
  - `.global.vue` files outside of the `imports` directory are automatically registered as custom tags. The default tag name is the name of the file in kebab-case, and you can set your own with the `name` attribute in the component options.

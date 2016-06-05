@@ -145,7 +145,7 @@ export default {
   margin-bottom: 6px;
   padding: 4px 6px;
   background: #40b883;
-  border-radius: 6px;
+  border-radius: 3px;
 
   a {
     color: white;
