@@ -1,8 +1,9 @@
 import http from 'http';
 import socket_io from 'socket.io';
 
-if(global._dev_server) {
-  global._dev_server.close();
+if(global._dev_server_http) {
+  global._dev_server_http.close();
+  console.log('Dev server closed');
 }
 
 var server = http.createServer();
@@ -17,7 +18,8 @@ io.on('connection', (socket) => {
 try {
   server.listen(PORT);
   console.log(`Dev server listening on port ${PORT}`);
-  global._dev_server = server;
+  global._dev_server = io;
+  global._dev_server_http = server;
 } catch(e) {
   console.log(e);
 }

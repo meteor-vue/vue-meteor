@@ -14,6 +14,7 @@ Package.registerBuildPlugin({
     'babel-compiler@6.6.4'
   ],
   sources: [
+    'plugin/file-hash.js',
     'plugin/dev-server.js',
     'plugin/throw-compile-error.js',
     'plugin/post-css.js',

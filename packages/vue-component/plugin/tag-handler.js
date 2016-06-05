@@ -1,6 +1,8 @@
 import postcss from 'postcss';
 //import autoprefixer from 'autoprefixer';
 
+global._vue_js_cache = global._vue_js_cache || {};
+
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
   constructor({ inputFile, allFiles, babelOptions }) {
@@ -56,9 +58,10 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let source = this.inputFile.getContentsAsString();
     let packageName = this.inputFile.getPackageName();
     let inputFilePath = this.inputFile.getPathInPackage();
-    let hash = '__v' + this.inputFile.getSourceHash();
+    let hash = '__v' + FileHash(this.inputFile);;
 
     let js = 'exports.__esModule = true;var __vue_script__, __vue_template__;';
+    let jsHash;
     let styles = [];
 
     // Script
@@ -66,6 +69,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     if (this.component.script) {
       let tag = this.component.script;
       let script = tag.contents;
+      jsHash = Hash(script);
 
       // Export
       script = script.replace(jsExportDefaultReg, 'return');
@@ -176,29 +180,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
     exports.default = __vue_script__;`;
 
-    // Auto register
-    if (globalFileNameReg.test(inputFilePath)) {
-
-      let name = Plugin.path.basename(inputFilePath);
-      name = name.substring(0, name.lastIndexOf('.global.vue'));
-
-      // Remove special characters
-      name = name.replace(nonWordCharReg, '');
-
-      // Kebab case
-      name = name.replace(capitalLetterReg, (match) => {
-        return '-' + match.toLowerCase();
-      });
-      name = name.replace(trimDashReg, '');
-
-      js += `var _akryumVue = require('meteor/akryum:vue');
-      _akryumVue.Vue.component((typeof __vue_script__ === "function" ?
-      (__vue_script__.options || (__vue_script__.options = {}))
-      : __vue_script__).name || '${name}', __vue_script__);`;
-    }
-
     let compileResult = {
       code: js,
+      codeHash: jsHash,
       map,
       styles
     };
@@ -218,7 +202,3 @@ const quoteReg = /'/g;
 const lineReg = /\r?\n|\r/g;
 const tagReg = /<([\w\d-]+)(\s+.*?)?\/?>/ig;
 const classAttrReg = /\s+class=(['"])(.*?)\1/gi;
-const globalFileNameReg = /\.global\.vue$/;
-const capitalLetterReg = /([A-Z])/g;
-const trimDashReg = /^-/;
-const nonWordCharReg = /\W/g;

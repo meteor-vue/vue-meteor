@@ -1,9 +1,6 @@
+global._vue_cache = global._vue_cache || {};
 
-let cache = global.__vue_cache__ || {};
-global.__vue_cache__ = cache;
-
-
-VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompiler {
+VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   constructor() {
     super({
       compilerName: 'vuecomponent',
@@ -12,13 +9,16 @@ VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompil
 
     this.babelOptions = Babel.getDefaultOptions();
   }
+
   getCacheKey(inputFile) {
     return inputFile.getSourceHash();
   }
+
   compileResultSize(compileResult) {
     return compileResult.code.length + compileResult.map.length;
   }
-  compileOneFile(inputFile, allFiles) {
+
+  compileOneFile(inputFile) {
     const contents = inputFile.getContentsAsString();
     const inputPath = inputFile.getPathInPackage();
 
@@ -29,10 +29,7 @@ VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompil
         tagNames: ['template', 'script', 'style']
       });
 
-      return {
-        compileResult: compileTags(inputFile, tags, this.babelOptions),
-        referencedImportPaths: []
-      };
+      return compileTags(inputFile, tags, this.babelOptions);
     } catch (e) {
       if (e instanceof CompileError) {
         inputFile.error({
@@ -45,39 +42,92 @@ VueComponentCompiler = class VueComponentCompiler extends MultiFileCachingCompil
       }
     }
   }
+
   addCompileResult(inputFile, compileResult) {
 
-    let hash = inputFile.getSourceHash();
+    let inputFilePath = inputFile.getPathInPackage();
+    let hash = FileHash(inputFile);
     let isDev = (process.env.NODE_ENV === 'development');
 
+    let cached = global._vue_cache[hash] || {};
+
+    console.log(inputFilePath, 'cached', cached);
+
+    // Style
+    let css = '';
+    let cssHash = '';
     if (compileResult.styles.length !== 0) {
-      let css = '';
       for (let style of compileResult.styles) {
         css += style.css;
       }
+
+      // Hot-reloading
+      cssHash = Hash(css);
+      console.log('css->', cached.css, cssHash);
+      if(isDev && cached.css !== cssHash) {
+        console.log('css changed');
+        global._dev_server.emit('css', {hash, css});
+      }
+
       addStylesheet(inputFile, {
         data: css
       });
     }
 
+    let js = compileResult.code;
+    let jsHash = compileResult.codeHash;
+
     // Hot-reloading
-    if(isDev) {
-      js += `window.__vue_hot__.createRecord(${hash}, exports.default)`;
+    if (isDev) {
+      console.log('js->', cached.js, jsHash);
+      if(cached.js !== jsHash) {
+        console.log('js changed');
+        global._dev_server.emit('js', {hash, js});
+      }
+
+      js += `\nwindow.__vue_hot__.createRecord('${hash}', exports.default);`;
+    }
+
+    // Auto register
+    if (globalFileNameReg.test(inputFilePath)) {
+
+      let name = Plugin.path.basename(inputFilePath);
+      name = name.substring(0, name.lastIndexOf('.global.vue'));
+
+      // Remove special characters
+      name = name.replace(nonWordCharReg, '');
+
+      // Kebab case
+      name = name.replace(capitalLetterReg, (match) => {
+        return '-' + match.toLowerCase();
+      });
+      name = name.replace(trimDashReg, '');
+
+      js += `\nvar _akryumVue = require('meteor/akryum:vue');
+      _akryumVue.Vue.component((typeof __vue_script__ === "function" ?
+      (__vue_script__.options || (__vue_script__.options = {}))
+      : __vue_script__).name || '${name}', __vue_script__);`;
     }
 
     inputFile.addJavaScript({
       path: inputFile.getPathInPackage() + '.js',
       sourcePath: inputFile.getPathInPackage(),
-      data: compileResult.code,
+      data: js,
       sourceMap: compileResult.map
     });
 
-    cache[hash] = 'meow';
+    global._vue_cache[hash] = {
+      js: jsHash,
+      css: cssHash
+    }
   }
 }
 
 function compileTags(inputFile, tags, babelOptions) {
-  var handler = new VueComponentTagHandler({ inputFile, babelOptions });
+  var handler = new VueComponentTagHandler({
+    inputFile,
+    babelOptions
+  });
 
   tags.forEach((tag) => {
     handler.addTagToResults(tag);
@@ -96,7 +146,7 @@ function addStylesheet(inputFile, options) {
   });
 }
 
-function cssToCommonJS(css) {
-  css = css.replace(/\n/g, '"+\n"');
-  return 'module.exports = require("meteor/modules").addStyles("' + css + '");';
-}
+const globalFileNameReg = /\.global\.vue$/;
+const capitalLetterReg = /([A-Z])/g;
+const trimDashReg = /^-/;
+const nonWordCharReg = /\W/g;
