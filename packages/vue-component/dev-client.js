@@ -51,11 +51,12 @@ window.__dev_client__ = _socket;
 window.__vue_hot__ = VueHotReloadApi;
 
 const r = Reload._reload;
-Reload._reload = function() {
+Reload._reload = function(options) {
   if(_supressNextReload) {
     console.log("[[ Client changed, may need reload ]]");
     _supressNextReload = false;
   } else {
-    r();
+    console.log("[[ Reloading app... ]]");
+    r(options);
   }
 }

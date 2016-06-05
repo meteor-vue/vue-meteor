@@ -43,3 +43,5 @@ new Vue({
   el: 'body',
   replace: false
 });
+
+console.log("meow");

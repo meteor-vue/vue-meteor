@@ -29,7 +29,7 @@ a {
     .message {
         // Mixin
         .padding(12px);
-        border-bottom: dashed 5px red;
+        border-bottom: dashed 5px green;
     }
 }
 </style>
