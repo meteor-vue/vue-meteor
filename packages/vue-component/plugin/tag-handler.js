@@ -58,10 +58,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let source = this.inputFile.getContentsAsString();
     let packageName = this.inputFile.getPackageName();
     let inputFilePath = this.inputFile.getPathInPackage();
-    let hash = '__v' + FileHash(this.inputFile);;
+    let hash = '__v' + FileHash(this.inputFile);
 
     let js = 'exports.__esModule = true;var __vue_script__, __vue_template__;';
-    let jsHash;
     let styles = [];
 
     // Script
@@ -182,7 +181,6 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
     let compileResult = {
       code: js,
-      codeHash: jsHash,
       map,
       styles
     };

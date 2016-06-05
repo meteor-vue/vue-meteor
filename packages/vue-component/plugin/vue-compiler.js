@@ -47,6 +47,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
     let inputFilePath = inputFile.getPathInPackage();
     let hash = FileHash(inputFile);
+    let vueId = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
     let isDev = (process.env.NODE_ENV === 'development');
 
     let cached = global._vue_cache[hash] || {};
@@ -66,7 +67,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       console.log('css->', cached.css, cssHash);
       if(isDev && cached.css !== cssHash) {
         console.log('css changed');
-        global._dev_server.emit('css', {hash, css});
+        global._dev_server.emit('css', {hash: vueId, css});
       }
 
       addStylesheet(inputFile, {
@@ -75,17 +76,17 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     }
 
     let js = compileResult.code;
-    let jsHash = compileResult.codeHash;
+    let jsHash = Hash(js);
 
     // Hot-reloading
     if (isDev) {
       console.log('js->', cached.js, jsHash);
       if(cached.js !== jsHash) {
         console.log('js changed');
-        global._dev_server.emit('js', {hash, js});
+        global._dev_server.emit('js', {hash: vueId, js});
       }
 
-      js += `\nwindow.__vue_hot__.createRecord('${hash}', exports.default);`;
+      js += `\nwindow.__vue_hot__.createRecord('${vueId}', exports.default);`;
     }
 
     // Auto register

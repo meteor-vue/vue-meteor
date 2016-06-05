@@ -22,18 +22,19 @@ _socket.on('disconnect', function() {
   console.log('Dev client disconnected');
 });
 
+var _supressNextReload = false;
+
 // JS
 _socket.on('js', function({hash, js}) {
   var exports = {};
   let result = eval(js);
-  console.log('dev client js', hash, result, exports);
   VueHotReloadApi.update(hash, result);
+  _supressNextReload = true;
 });
 
 // CSS
 var _styleNodes = {};
 _socket.on('css', function({hash, css}) {
-  console.log('dev client css', hash, css);
   let style = _styleNodes[hash];
   if(!style) {
     style = document.createElement('style');
@@ -41,6 +42,7 @@ _socket.on('css', function({hash, css}) {
     _styleNodes[hash] = style;
   }
   style.textContent = css;
+  _supressNextReload = true;
 });
 
 window.__dev_client__ = _socket;
@@ -50,5 +52,10 @@ window.__vue_hot__ = VueHotReloadApi;
 
 const r = Reload._reload;
 Reload._reload = function() {
-  console.log("Client changed, may need reload");
+  if(_supressNextReload) {
+    console.log("[[ Client changed, may need reload ]]");
+    _supressNextReload = false;
+  } else {
+    r();
+  }
 }
