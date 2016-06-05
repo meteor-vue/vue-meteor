@@ -11,6 +11,7 @@ export default {
   props: ['data'],
   methods: {
     removePost () {
+      console.log("meow");
       Meteor.call('posts.remove', this.data._id);
     }
   }

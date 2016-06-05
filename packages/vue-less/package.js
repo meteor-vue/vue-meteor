@@ -9,8 +9,7 @@ Package.describe({
 Package.registerBuildPlugin({
   name: "vue-component-less",
   use: [
-    'ecmascript@0.4.3',
-    'akryum:vue-component@0.0.3'
+    'ecmascript@0.4.3'
   ],
   sources: [
       'vue-less.js'
