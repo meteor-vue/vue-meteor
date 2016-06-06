@@ -62,5 +62,3 @@ Reload._reload = function(options) {
   }
   _supressNextReload = false;
 }
-
-console.log(Vue);

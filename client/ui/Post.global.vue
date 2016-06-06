@@ -1,6 +1,6 @@
 <template>
   <div class="post">
-    <div class="message">{{data.message}} <a class="action" @click="removePost">x Delete</a></div>
+    <div class="message">{{data.message}} <a class="action" @click="removePost">x</a></div>
   </div>
 </template>
 
@@ -11,7 +11,6 @@ export default {
   props: ['data'],
   methods: {
     removePost () {
-      console.log("waf");
       Meteor.call('posts.remove', this.data._id);
     }
   }
