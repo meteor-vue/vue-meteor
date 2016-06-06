@@ -2,8 +2,8 @@
 
 ## 0.1.1 - 2016/06/06
 
- - Fix relative imports not working #7
- - Globally registered component constructors are now correctly updated #6
+ - Fix relative imports not working Issue #7
+ - Globally registered component constructors are now correctly updated Issue #6
 
 ## 0.1.0 - 2016/06/05
 
