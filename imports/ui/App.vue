@@ -15,6 +15,8 @@
 import {Meteor} from 'meteor/meteor';
 import {Threads, Posts} from '/imports/api/collections';
 
+import ThreadItem from './ThreadItem.vue';
+
 export default {
   data () {
     return {
@@ -82,6 +84,9 @@ export default {
   },
   ready () {
     console.log('hello world!');
+  },
+  components: {
+    ThreadItem
   }
 }
 </script>

@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.1.0 - 2013/06/05
+## 0.1.1 - 2016/06/06
+
+ - Fix relative imports not working #7
+ - Globally registered component constructors are now correctly updated #6
+
+## 0.1.0 - 2016/06/05
 
  - Instant hot-push reloading of vue components.
 

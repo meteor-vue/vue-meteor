@@ -38,8 +38,12 @@ Vue.component('apollo', Apollo);
 
 // Main app
 import App from '/imports/ui/App.vue';
-Vue.component('app', App);
+//Vue.component('app', App);
+
 new Vue({
   el: 'body',
-  replace: false
+  replace: false,
+  components: {
+    App
+  }
 });

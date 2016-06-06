@@ -68,12 +68,32 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
         css += style.css;
       }
 
+      cssHash = Hash(css);
+
       this.addStylesheet(inputFile, {
         data: css
       });
     }
 
     let js = compileResult.code;
+    let jsHash = Hash(js);
+
+    js = 'exports.__esModule = true;var __vue_script__, __vue_template__;' + js;
+
+    let templateHash;
+    if(compileResult.template) {
+      js += "__vue_template__ = '" + compileResult.template + "';";
+      templateHash = Hash(compileResult.template);
+    }
+
+    // Output
+    js += `__vue_script__ = __vue_script__ || {};
+    if(__vue_template__) {
+      (typeof __vue_script__ === "function" ?
+      (__vue_script__.options || (__vue_script__.options = {}))
+      : __vue_script__).template = __vue_template__;
+    }
+    exports.default = __vue_script__;`;
 
     // Hot-reloading
     if (isDev) {
@@ -116,6 +136,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       let fileChanged = Meteor.bindEnvironment((event) => {
         if(event === 'change') {
           try {
+            let cached = global._vue_cache[hash] || {};
             let contents = Plugin.fs.readFileSync(filePath, {
               encoding: 'utf8'
             });
@@ -139,9 +160,41 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
             // JS
             let js = compileResult.code;
             let jsHash = Hash(js);
-            if(cached.js !== jsHash) {
-              global._dev_server.emit('js', {hash: vueId, js});
+            let template = compileResult.template;
+            let templateHash;
+            if(template) {
+              templateHash = Hash(template);
             }
+            if(cached.js !== jsHash || cached.template !== templateHash) {
+
+              // Require to absolute
+              js = js.replace(requireRelativeFileReg, `require('/${inputFilePath}/`);
+
+              js = 'exports.__esModule = true;var __vue_script__, __vue_template__;' + js;
+
+              if(template) {
+                js += "__vue_template__ = '" + template + "';";
+              }
+
+              // Output
+              js += `__vue_script__ = __vue_script__ || {};
+              if(__vue_template__) {
+                (typeof __vue_script__ === "function" ?
+                (__vue_script__.options || (__vue_script__.options = {}))
+                : __vue_script__).template = __vue_template__;
+              }
+              exports.default = __vue_script__;`;
+
+              global._dev_server.emit('js', {hash: vueId, js, template});
+            }
+
+            // Cache
+            global._vue_cache[hash] = {
+              js: jsHash,
+              css: cssHash,
+              template: templateHash,
+              watcher
+            };
           }catch(e) {
             console.error(e);
           }
@@ -160,6 +213,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       global._vue_cache[hash] = {
         js: jsHash,
         css: cssHash,
+        template: templateHash,
         watcher
       };
     }
@@ -193,3 +247,4 @@ const globalFileNameReg = /\.global\.vue$/;
 const capitalLetterReg = /([A-Z])/g;
 const trimDashReg = /^-/;
 const nonWordCharReg = /\W/g;
+const requireRelativeFileReg = /require\(["']\.\//ig

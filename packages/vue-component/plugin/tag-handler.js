@@ -60,7 +60,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let inputFilePath = this.inputFile.getPathInPackage();
     let hash = '__v' + FileHash(this.inputFile);
 
-    let js = 'exports.__esModule = true;var __vue_script__, __vue_template__;';
+    let js = '';
     let styles = [];
 
     // Script
@@ -88,8 +88,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
 
     // Template
+    let template;
     if (this.component.template) {
-      let template = this.component.template.contents;
+      template = this.component.template.contents;
 
       // Tag hash (for scoping)
       let result;
@@ -104,8 +105,6 @@ VueComponentTagHandler = class VueComponentTagHandler {
       });
 
       template = template.replace(quoteReg, "\\'").replace(lineReg, '');
-      js += "__vue_template__ = '" + template + "';";
-
     }
 
     // Styles
@@ -170,19 +169,11 @@ VueComponentTagHandler = class VueComponentTagHandler {
       })
     }
 
-    // Output
-    js += `__vue_script__ = __vue_script__ || {};
-    if(__vue_template__) {
-      (typeof __vue_script__ === "function" ?
-      (__vue_script__.options || (__vue_script__.options = {}))
-      : __vue_script__).template = __vue_template__;
-    }
-    exports.default = __vue_script__;`;
-
     let compileResult = {
       code: js,
       map,
-      styles
+      styles,
+      template
     };
 
     return compileResult;

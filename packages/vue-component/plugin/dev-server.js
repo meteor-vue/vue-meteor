@@ -3,7 +3,6 @@ import socket_io from 'socket.io';
 
 if(global._dev_server_http) {
   global._dev_server_http.close();
-  console.log('Dev server closed');
 }
 
 var server = http.createServer();
@@ -13,7 +12,7 @@ PORT = 4242;
 
 try {
   server.listen(PORT);
-  console.log(`Dev server listening on port ${PORT}`);
+  console.log(`\nDev server listening on port ${PORT}`);
   global._dev_server = io;
   global._dev_server_http = server;
 } catch(e) {

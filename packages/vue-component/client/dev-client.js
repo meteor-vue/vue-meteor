@@ -1,7 +1,8 @@
 
 import {Vue} from 'meteor/akryum:vue';
-import VueHotReloadApi from 'vue-hot-reload-api';
+import VueHotReloadApi from './vue-hot';
 import {Reload} from 'meteor/reload';
+import {Meteor} from 'meteor/meteor';
 
 Vue.use(VueHotReloadApi);
 
@@ -25,12 +26,12 @@ _socket.on('disconnect', function() {
 var _supressNextReload = false;
 
 // JS
-_socket.on('js', function({hash, js}) {
+_socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
+  _supressNextReload = true;
   var exports = {};
   let result = eval(js);
-  VueHotReloadApi.update(hash, result);
-  _supressNextReload = true;
-});
+  VueHotReloadApi.update(hash, result, template);
+}));
 
 // CSS
 var _styleNodes = {};
@@ -42,7 +43,7 @@ _socket.on('css', function({hash, css}) {
     _styleNodes[hash] = style;
   }
   style.textContent = css;
-  _supressNextReload = true;
+  //_supressNextReload = true;
 });
 
 window.__dev_client__ = _socket;
@@ -50,14 +51,16 @@ window.__dev_client__ = _socket;
 // Hot reload API
 window.__vue_hot__ = VueHotReloadApi;
 
-const r = Reload._reload;
+var _reload = Reload._reload;
 Reload._reload = function(options) {
   console.log('[[ Reload request ]]');
   if(_supressNextReload) {
     console.log("[[ Client changed, may need reload ]]");
   } else {
     console.log("[[ Reloading app... ]]");
-    r(options);
+    _reload.call(Reload, options);
   }
   _supressNextReload = false;
 }
+
+console.log(Vue);
