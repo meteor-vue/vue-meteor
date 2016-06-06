@@ -1,5 +1,6 @@
 var Vue // late bind
 var map = Object.create(null)
+var registeredComponents = Object.create(null)
 var shimmed = false
 var isBrowserify = false
 
@@ -114,6 +115,18 @@ exports.createRecord = function (id, options) {
       views: [],
       instances: []
     }
+
+    // Locally registered components
+    if(options.components) {
+      for(let c in options.components) {
+        let comp = options.components[c];
+        let list = registeredComponents[comp.hotID] = registeredComponents[comp.hotID] || {};
+        list[id] = {
+          record: map[id],
+          key: c
+        };
+      }
+    }
   }
 }
 
@@ -200,9 +213,20 @@ exports.update = function (id, newOptions, newTemplate) {
   }
   // Registered components
   if(oldComponent) {
+    // Global
     for(let c in Vue.options.components) {
       if(Vue.options.components[c] === oldComponent) {
         Vue.options.components[c] = Component
+      }
+    }
+    // Local
+    let rc = registeredComponents[id];
+    if(rc) {
+      for(let c in rc) {
+        let {key, record} = rc[c];
+        if(record.Component && record.Component.options && record.Component.options.components) {
+          record.Component.options.components[key] = Component;
+        }
       }
     }
   }

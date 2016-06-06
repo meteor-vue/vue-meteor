@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 - 2016/06/06
+
+- Fix locally registered component constructors not updating #6
+
 ## 0.1.1 - 2016/06/06
 
  - Fix relative imports not working #7
