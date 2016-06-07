@@ -1,6 +1,6 @@
 # Vue integration for Meteor
 
-Declarative subscriptions and meteor reactive data
+Declarative subscriptions and meteor reactive data (subscriptions, collections, tracker...)
 
 ## Installation
 
@@ -88,7 +88,8 @@ new Vue({
         return {
             selectedThreadId: null,
             // We init the property value in the data() component hook
-            threads: []
+            threads: [],
+            selectedThread: null
         };
     },
     meteor: {

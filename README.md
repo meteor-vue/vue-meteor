@@ -15,12 +15,13 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Apollo client integration
  - [x] Auto register components with file name ending with .global.vue
  - [x] Instant Hot-reloading of components
- - [ ] *Easy routing with vue-router out-of-the-box integration*
- - [ ] *Easy translation with vue i18n out-of-the-box integration*
+ - [ ] *Easy routing with vue-router out-of-the-box integration & fast-render(?)*
+ - [ ] *Easy translation with vue i18n out-of-the-box integration & lazy lang loading(?)*
  - [ ] *Sass official integration in .vue files*
  - [ ] *`lang` attribute on `<template>` in .vue files*
  - [ ] *Jade official integration in .vue file*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
+ - [ ] *Lazy-loading of components*
 
 ## Usage
 
@@ -42,7 +43,7 @@ In the project directory:
     meteor
 
 
-### Meteor data integration
+### Meteor & Tracker data integration
 
 Declarative subscriptions and meteor reactive data
 
