@@ -1,15 +1,19 @@
 {
-    "name": "meteor-vue-component",
-    "private": true,
-    "scripts": {
-        "start": "meteor run"
-    },
-    "dependencies": {
-        "meteor-node-stubs": "~0.2.0",
-        "casual": "^1.5.3",
-        "graphql": "^0.5.0",
-        "graphql-tools": "^0.4.2",
-        "express": "^4.13.4",
-        "http-proxy-middleware": "^0.15.2"
-    }
+  "name": "meteor-vue-component",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "meteor-node-stubs": "~0.2.0"
+  },
+  "devDependencies": {
+    "casual": "^1.5.3",
+    "express": "^4.13.4",
+    "graphql": "^0.5.0",
+    "graphql-tools": "^0.4.2",
+    "http-proxy-middleware": "^0.15.2",
+    "vue": "^1.0.24",
+    "apollo-client": "0.3.12"
+  }
 }
