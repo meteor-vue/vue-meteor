@@ -49,7 +49,7 @@ checkNpmDeps = function checkNpmDeps({dependencies, devDependencies}) {
   return hasChanged;
 }
 
-function isNpmPackageOlder(depVersion, currentVersion) {
+isNpmPackageOlder = function (depVersion, currentVersion) {
   if (!currentVersion) {
     return true;
   }

@@ -16,13 +16,12 @@ class NpmCheck {
     }
 
     if(checkNpmDeps(this.deps)) {
-      console.log('\nSome packages depends on these peer dependencies:\n');
-      console.log(this.deps);
+      console.log('\nSome packages depends on these peer dependencies:\n', this.deps);
       if(process.env.NODE_ENV === 'development') {
         console.log('\nYour package.json has been updated, now running: meteor npm install\n');
         let result = execSync('meteor npm install', {cwd: CWD});
       } else {
-        console.log('\nYour package.json has been updated, /!\\ you may need to run: meteor npm install');
+        console.warn('\nYour package.json has been updated, you may need to run: meteor npm install');
       }
     }
   }
@@ -33,4 +32,6 @@ class NpmCheck {
     _.extend(this.deps.dependencies, d.dependencies);
     _.extend(this.deps.devDependencies, d.devDependencies);
   }
+
+
 }
