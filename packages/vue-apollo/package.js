@@ -14,10 +14,3 @@ Package.onUse(function(api) {
   api.use('akryum:vue@1.0.0');
   api.mainModule('vue-apollo.js', 'client');
 });
-
-Package.onTest(function(api) {
-  api.use('ecmascript');
-  api.use('tinytest');
-  api.use('akryum:vue-apollo');
-  api.mainModule('vue-apollo-tests.js');
-});

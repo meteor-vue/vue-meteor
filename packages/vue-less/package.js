@@ -22,10 +22,3 @@ Package.registerBuildPlugin({
 Package.onUse(function(api) {
   api.use('isobuild:compiler-plugin@1.0.0');
 });
-
-Package.onTest(function(api) {
-  api.use('ecmascript');
-  api.use('tinytest');
-  api.use('akryum:vue-less');
-  api.mainModule('vue-less-tests.js');
-});

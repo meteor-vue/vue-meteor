@@ -12,10 +12,3 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.mainModule('index.js', 'client');
 });
-
-Package.onTest(function(api) {
-  api.use('ecmascript');
-  api.use('tinytest');
-  api.use('akryum:vue');
-  api.mainModule('vue-tests.js', 'client');
-});

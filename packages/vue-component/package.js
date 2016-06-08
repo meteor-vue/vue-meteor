@@ -39,13 +39,6 @@ Package.onUse(function(api) {
   }
 });
 
-Package.onTest(function(api) {
-  api.use('ecmascript');
-  api.use('tinytest');
-  api.use('akryum:vue-component');
-  api.mainModule('vue-component-tests.js');
-});
-
 Npm.depends({
   'socket.io-client': '1.4.6'
 })
