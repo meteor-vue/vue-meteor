@@ -6,16 +6,12 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 ## Installation
 
 
-    meteor add akryum:vue-component
+    meteor add akryum:vue akryum:vue-component
 
 
 ## Usage
 
-**Warning: the `lang` attribute on `<template>` tags is not supported yet!**
-
-Official lang packages for `<style>` tag:
-
- - [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)
+### File structure
 
 The component file must include:
 
@@ -38,6 +34,8 @@ export default {
 </script>
 ```
 
+### Scoped style
+
 By default, the css added with `<style>` tags will be applied to your entire app. But you can add the `scoped` attribute to any `<style>` tag in your component file so that the css is only applied to this specific component:
 
 
@@ -45,10 +43,24 @@ By default, the css added with `<style>` tags will be applied to your entire app
 <style scoped>
 /* Will only be applied to this component <a> elements */
 a {
-    color: red;
+   color: red;
 }
 </style>
 ```
+
+### Language packages
+
+Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>` or `<style>` tags.
+
+Official packages for `<template>` tag:
+
+- [akryum:vue-jade](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-jade)
+
+Official packages for `<style>` tag:
+
+ - [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)
+
+Community packages welcomed (add a your package with a PR)!
 
 ### Manual import
 
