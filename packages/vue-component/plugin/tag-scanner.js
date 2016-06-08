@@ -3,9 +3,6 @@ scanHtmlForTags = function scanHtmlForTags(options) {
   return scan.getTags();
 };
 
-const tagRegex = /<(\w+)(\s+.*)?>\n([\s\S]+?)<\/\1>/igm;
-const attrsRegex = /\s+(\w+)(=(["'])([\w\/~$@:.-]*)\3)?/ig;
-
 /**
  * Scan an HTML file for top-level tags and extract their contents. Pass them to
  * a tag handler (an object with a handleTag method)
@@ -28,7 +25,7 @@ class HtmlScan {
         tagNames
       }) {
     this.sourceName = sourceName;
-    this.contents = contents.replace(new RegExp("\r\n", "g"), "\n").replace(new RegExp("\r", "g"), "\n");
+    this.contents = contents.replace(rnRegex, '\n').replace(rRegex, '\n').replace(tagCommentRegex, '');
     this.tagNames = tagNames;
 
     this.tags = [];
@@ -88,3 +85,9 @@ class HtmlScan {
     return this.tags;
   }
 }
+
+const rnRegex = /\r\n/g;
+const rRegex = /\r/g;
+const tagCommentRegex = /<!--([\s\S]+?)-->/igm;
+const tagRegex = /<(\w+)(\s+.*)?>\n([\s\S]+?)<\/\1>/igm;
+const attrsRegex = /\s+(\w+)(=(["'])([\w\/~$@:.-]*)\3)?/ig;
