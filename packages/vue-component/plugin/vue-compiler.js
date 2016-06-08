@@ -56,7 +56,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     let inputFilePath = inputFile.getPathInPackage();
     let hash = FileHash(inputFile);
     let vueId = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
-    let isDev = (process.env.NODE_ENV === 'development');
+    let isDev = Meteor.isDevelopment;
 
     let cached = global._vue_cache[hash] || {};
 

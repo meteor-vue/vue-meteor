@@ -1,4 +1,5 @@
 import {_} from 'meteor/underscore';
+import {Meteor} from 'meteor/meteor';
 
 Plugin.registerCompiler({
   filenames: ['npm.json']
@@ -17,7 +18,7 @@ class NpmCheck {
 
     if(checkNpmDeps(this.deps)) {
       console.log('\nSome packages depends on these peer dependencies:\n', this.deps);
-      if(process.env.NODE_ENV === 'development') {
+      if(Meteor.isDevelopment) {
         console.log('\nYour package.json has been updated, now running: meteor npm install\n');
         let result = execSync('meteor npm install', {cwd: CWD});
       } else {
