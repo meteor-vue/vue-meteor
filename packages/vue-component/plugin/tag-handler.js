@@ -90,7 +90,27 @@ VueComponentTagHandler = class VueComponentTagHandler {
     // Template
     let template;
     if (this.component.template) {
-      template = this.component.template.contents;
+      let templateTag = this.component.template;
+      template = templateTag.contents;
+
+      // Lang
+      if (templateTag.attribs.lang !== undefined) {
+        let lang = templateTag.attribs.lang;
+        try {
+          let compile = global.vue.lang[lang];
+          if (!compile) {
+            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <template>. Did you install it?`);
+          } else {
+            let result = compile({
+              source: template,
+              inputFile: this.inputFile
+            });
+            template = result.template;
+          }
+        } catch (e) {
+          console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath} in <template>`, e);
+        }
+      }
 
       // Tag hash (for scoping)
       let result;
@@ -115,11 +135,10 @@ VueComponentTagHandler = class VueComponentTagHandler {
       // Lang
       if (styleTag.attribs.lang !== undefined) {
         let lang = styleTag.attribs.lang;
-        // TODO
         try {
           let compile = global.vue.lang[lang];
           if (!compile) {
-            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath}. Did you install it?`);
+            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <style>. Did you install it?`);
           } else {
             let result = compile({
               source: css,
@@ -129,7 +148,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             cssMap = result.map;
           }
         } catch (e) {
-          console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath}`, e);
+          console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath} in <style>`, e);
         }
       }
 

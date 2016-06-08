@@ -1,7 +1,13 @@
-<template>
+<!--<template>
   <div class="post">
     <div class="message">{{data.message}} <a class="action" @click="removePost">x</a></div>
   </div>
+</template>-->
+
+<template lang="jade">
+.post
+  .message {{data.message}}
+    a.action(@click="removePost") x
 </template>
 
 <script>

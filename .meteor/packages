@@ -23,5 +23,6 @@ ccorcos:subs-cache
 
 akryum:vue
 akryum:vue-component
-akryum:vue-less
 akryum:vue-apollo
+akryum:vue-less
+akryum:vue-jade
