@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.2.0 - 2016/06/08
+
+ - Adds support for `lang` attribute in `<template>` tags.
+
 ## 0.1.2 - 2016/06/06
 
-- Fix locally registered component constructors not updating #6
+ - Fix locally registered component constructors not updating #6
 
 ## 0.1.1 - 2016/06/06
 
