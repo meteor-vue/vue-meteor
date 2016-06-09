@@ -25,6 +25,8 @@ Currently supported and possible future features (in no particular order) are:
  - [ ] *`lang` attribute on `<script>` in .vue files*
  - [ ] *Coffeescript official integration in .vue files*
 
+Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
+
 ## Usage
 
 ### New Meteor project
