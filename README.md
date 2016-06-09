@@ -22,6 +22,8 @@ Currently supported and possible future features (in no particular order) are:
  - [ ] *Sass official integration in .vue files*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
  - [ ] *Lazy-loading of components*
+ - [ ] *`lang` attribute on `<script>` in .vue files*
+ - [ ] *Coffeescript official integration in .vue files*
 
 ## Usage
 
