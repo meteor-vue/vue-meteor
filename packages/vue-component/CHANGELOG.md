@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 - 2016/06/10
+## 0.2.1 - 2016/06/10
 
  - Fix [Issue #26](https://github.com/Akryum/meteor-vue-component/issues/26)
 
