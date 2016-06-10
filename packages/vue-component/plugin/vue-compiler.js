@@ -70,9 +70,14 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
       cssHash = Hash(css);
 
-      this.addStylesheet(inputFile, {
-        data: css
-      });
+      if(isDev) {
+        // Add style to client first-connection style list
+        global._dev_server.__addStyle({hash: vueId, css}, false);
+      } else {
+        this.addStylesheet(inputFile, {
+          data: css
+        });
+      }
     }
 
     let js = compileResult.code;
@@ -86,7 +91,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       templateHash = Hash(compileResult.template);
     }
 
-    // Output
+    // Template option & Export
     js += `__vue_script__ = __vue_script__ || {};
     if(__vue_template__) {
       (typeof __vue_script__ === "function" ?
@@ -97,7 +102,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
     // Hot-reloading
     if (isDev) {
-      js += `\nwindow.__vue_hot__.createRecord('${vueId}', exports.default);`;
+      js += `\nMeteor.startup(function(){window.__vue_hot__.createRecord('${vueId}', exports.default)});`;
     }
 
     // Auto register
@@ -115,12 +120,14 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       });
       name = name.replace(trimDashReg, '');
 
+      // Component registration
       js += `\nvar _akryumVue = require('meteor/akryum:vue');
       _akryumVue.Vue.component((typeof __vue_script__ === "function" ?
       (__vue_script__.options || (__vue_script__.options = {}))
       : __vue_script__).name || '${name}', __vue_script__);`;
     }
 
+    // Add JS Source file
     inputFile.addJavaScript({
       path: inputFile.getPathInPackage() + '.js',
       sourcePath: inputFile.getPathInPackage(),
@@ -153,11 +160,11 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
               // Hot-reloading
               cssHash = Hash(css);
               if(isDev && cached.css !== cssHash) {
-                global._dev_server.emit('css', {hash: vueId, css});
+                global._dev_server.__addStyle({hash: vueId, css});
               }
             }
 
-            // JS
+            // JS & Template
             let js = compileResult.code;
             let jsHash = Hash(js);
             let template = compileResult.template;
@@ -176,7 +183,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
                 js += "__vue_template__ = '" + template + "';";
               }
 
-              // Output
+              // Template option & Export
               js += `__vue_script__ = __vue_script__ || {};
               if(__vue_template__) {
                 (typeof __vue_script__ === "function" ?

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 - 2016/06/10
+
+ - Fix [Issue #26](https://github.com/Akryum/meteor-vue-component/issues/26)
+
 ## 0.2.0 - 2016/06/08
 
  - Adds support for `lang` attribute in `<template>` tags.
