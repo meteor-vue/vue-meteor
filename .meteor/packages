@@ -25,5 +25,6 @@ akryum:vue
 akryum:vue-component
 akryum:vue-apollo
 akryum:vue-less
+akryum:vue-sass
 akryum:vue-jade
 akryum:vue-coffee

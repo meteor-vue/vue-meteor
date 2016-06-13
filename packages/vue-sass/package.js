@@ -1,21 +1,21 @@
 Package.describe({
-  name: 'akryum:vue-less',
-  version: '0.0.2',
-  summary: 'Add less support for vue components',
+  name: 'akryum:vue-sass',
+  version: '0.0.1',
+  summary: 'Add sass and scss support for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
 });
 
 Package.registerBuildPlugin({
-  name: "vue-component-less",
+  name: "vue-component-sass",
   use: [
     'ecmascript@0.4.3'
   ],
   sources: [
-      'vue-less.js'
+      'vue-sass.js'
   ],
   npmDependencies: {
-    'less': '2.7.1'
+    'node-sass': '3.7.0'
   }
 });
 
