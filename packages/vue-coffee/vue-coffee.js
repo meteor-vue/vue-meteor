@@ -18,8 +18,6 @@ global.vue.lang.coffee = Meteor.wrapAsync(function({
   inputFile
 }, cb) {
 
-  console.log("coffee", inputFile.getPathInPackage(), source);
-
   const compileOptions = {
     bare: true,
     filename: inputFile.getPathInPackage(),
@@ -41,8 +39,6 @@ global.vue.lang.coffee = Meteor.wrapAsync(function({
       output.js = ECMAScript.compileForShell(output.js);
     } catch (e) {}
   }
-
-  console.log(output);
 
   const stripped = stripExportedVars(
     output.js,
