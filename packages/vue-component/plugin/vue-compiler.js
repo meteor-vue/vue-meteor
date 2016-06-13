@@ -102,7 +102,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
     // Hot-reloading
     if (isDev) {
-      js += `\nMeteor.startup(function(){window.__vue_hot__.createRecord('${vueId}', exports.default)});`;
+      js += `\nwindow.__vue_hot__.createRecord('${vueId}', exports.default);`;
     }
 
     // Auto register

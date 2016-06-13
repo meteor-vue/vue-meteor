@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0  - 2016/06/13
+
+ - Added support for `lang` attribute on `<script>` tags.
+
 ## 0.2.1 - 2016/06/10
 
  - Fix [Issue #26](https://github.com/Akryum/meteor-vue-component/issues/26)

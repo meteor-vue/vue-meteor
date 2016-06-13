@@ -17,13 +17,14 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Instant Hot-reloading of components
  - [x] `lang` attribute on `<template>` in .vue files
  - [x] Jade official integration in .vue file
+ - [x] `lang` attribute on `<script>` in .vue files
+ - [x] Coffeescript official integration in .vue files
  - [ ] *Easy routing with vue-router out-of-the-box integration & fast-render(?)*
  - [ ] *Easy translation with vue i18n out-of-the-box integration & lazy lang loading(?)*
  - [ ] *Sass official integration in .vue files*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
+ - [ ] *Typescript official integration in .vue files*
  - [ ] *Lazy-loading of components*
- - [ ] *`lang` attribute on `<script>` in .vue files*
- - [ ] *Coffeescript official integration in .vue files*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
 

@@ -64,27 +64,51 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let styles = [];
 
     // Script
-
     if (this.component.script) {
       let tag = this.component.script;
       let script = tag.contents;
+      let useBabel = true;
       jsHash = Hash(script);
+
+      // Lang
+      if (tag.attribs.lang !== undefined) {
+        let lang = tag.attribs.lang;
+        try {
+          let compile = global.vue.lang[lang];
+          if (!compile) {
+            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <script>. Did you install it?`);
+          } else {
+            let result = compile({
+              source: script,
+              inputFile: this.inputFile
+            });
+            script = result.script;
+            map = result.map;
+            useBabel = result.useBabel;
+          }
+        } catch (e) {
+          console.error(`Error while compiling script with lang ${lang} in file ${inputFilePath} in <script>`, e);
+        }
+      }
 
       // Export
       script = script.replace(jsExportDefaultReg, 'return');
 
-      // Babel options
-      this.babelOptions.sourceMap = true;
-      this.babelOptions.filename =
-        this.babelOptions.sourceFileName = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
-      this.babelOptions.sourceMapTarget = this.babelOptions.filename + ".map";
-
       // Babel
-      let output = Babel.compile(script, this.babelOptions);
+      if(useBabel) {
+        // Babel options
+        this.babelOptions.sourceMap = true;
+        this.babelOptions.filename =
+          this.babelOptions.sourceFileName = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+        this.babelOptions.sourceMapTarget = this.babelOptions.filename + ".map";
 
-      js += '__vue_script__ = (function(){' + output.code + '\n})();';
-      //js += imports;
-      map = output.map;
+        // Babel compilation
+        let output = Babel.compile(script, this.babelOptions);
+        script = output.code;
+        map = output.map;
+      }
+
+      js += '__vue_script__ = (function(){' + script + '\n})();';
     }
 
     // Template

@@ -50,11 +50,15 @@ a {
 
 ### Language packages
 
-Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>` or `<style>` tags.
+Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>`, `<script>` or `<style>` tags.
 
 Official packages for `<template>` tag:
 
 - [akryum:vue-jade](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-jade)
+
+Official packages from `<script>` tag:
+
+ - [akryum:vue-coffee](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-coffee)
 
 Official packages for `<style>` tag:
 
