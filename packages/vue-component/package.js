@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component',
-  version: '0.3.1',
+  version: '0.3.2',
   summary: 'VueJS single-file components that hot-reloads',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -9,9 +9,9 @@ Package.describe({
 Package.registerBuildPlugin({
   name: "vue-component",
   use: [
-    'ecmascript@0.4.3',
-    'caching-compiler@1.0.4',
-    'babel-compiler@6.6.4'
+    'ecmascript@0.4.4',
+    'caching-compiler@1.0.5',
+    'babel-compiler@6.8.0'
   ],
   sources: [
     'plugin/file-hash.js',
@@ -31,6 +31,7 @@ Package.registerBuildPlugin({
 });
 
 Package.onUse(function(api) {
+  api.versionsFrom('1.3.3');
   api.use('isobuild:compiler-plugin@1.0.0');
   if(process.env.NODE_ENV === 'development') {
     api.use('ecmascript');

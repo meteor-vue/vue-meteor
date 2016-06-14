@@ -9,9 +9,9 @@
 
 return {
   props: [ 'data' ]
-  methods: removePost: ->
-    Meteor.call 'posts.remove', @data._id
-    return
+  methods:
+    removePost: ->
+      Meteor.call 'posts.remove', @data._id
 }
 </script>
 

@@ -30,6 +30,8 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   compileOneFileWithContents(inputFile, contents) {
     const inputPath = inputFile.getPathInPackage();
 
+    //console.log(`\nCompiling file ${inputPath}...`);
+
     try {
       const tags = scanHtmlForTags({
         sourceName: inputPath,
@@ -70,6 +72,8 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
       cssHash = Hash(css);
 
+      //console.log(`css hash: ${cssHash}`);
+
       if(isDev) {
         // Add style to client first-connection style list
         global._dev_server.__addStyle({hash: vueId, css}, false);
@@ -83,12 +87,16 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     let js = compileResult.code;
     let jsHash = Hash(js);
 
-    js = 'exports.__esModule = true;var __vue_script__, __vue_template__;' + js;
+    //console.log(`js hash: ${jsHash}`);
+
+    js = 'var __vue_script__, __vue_template__;' + js;
 
     let templateHash;
     if(compileResult.template) {
       js += "__vue_template__ = '" + compileResult.template + "';";
       templateHash = Hash(compileResult.template);
+
+      //console.log(`template hash: ${templateHash}`);
     }
 
     // Template option & Export
@@ -98,11 +106,16 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       (__vue_script__.options || (__vue_script__.options = {}))
       : __vue_script__).template = __vue_template__;
     }
-    exports.default = __vue_script__;`;
+    module.export('default', function(){return __vue_script__;})`;
 
     // Hot-reloading
     if (isDev) {
-      js += `\nwindow.__vue_hot__.createRecord('${vueId}', exports.default);`;
+      js += `\nif(!window.__vue_hot__){
+        window.__vue_hot_pending__ = window.__vue_hot_pending__ || {};
+        window.__vue_hot_pending__['${vueId}'] = __vue_script__;
+      } else {
+        window.__vue_hot__.createRecord('${vueId}', __vue_script__);
+      }`;
     }
 
     // Auto register
@@ -177,7 +190,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
               // Require to absolute
               js = js.replace(requireRelativeFileReg, `require('/${inputFilePath}/`);
 
-              js = 'exports.__esModule = true;var __vue_script__, __vue_template__;' + js;
+              js = 'var __vue_script__, __vue_template__;' + js;
 
               if(template) {
                 js += "__vue_template__ = '" + template + "';";
@@ -190,7 +203,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
                 (__vue_script__.options || (__vue_script__.options = {}))
                 : __vue_script__).template = __vue_template__;
               }
-              exports.default = __vue_script__;`;
+              module.export('default', function(){return __vue_script__;})`;
 
               global._dev_server.emit('js', {hash: vueId, js, template});
             }

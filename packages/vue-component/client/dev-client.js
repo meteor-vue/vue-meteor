@@ -28,9 +28,21 @@ var _supressNextReload = false;
 // JS
 _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
   _supressNextReload = true;
-  var exports = {};
-  let result = eval(js);
-  VueHotReloadApi.update(hash, result, template);
+  let args = ['meteor/akryum:vue'];
+  let regResult;
+  while(regResult = jsImportsReg.exec(js)) {
+    args.push(regResult[2]);
+  }
+  console.log("imports:", args);
+  args.push(function(require,exports,module){
+    let evalResult = eval(js);
+    console.log(js, evalResult);
+  });
+  let id = `_component${(new Date()).getTime()}.js`;
+  let require = meteorInstall({[id]:args});
+  let result = require('./' + id);
+  console.log(result);
+  VueHotReloadApi.update(hash, result.default, template);
 }));
 
 // CSS
@@ -51,6 +63,13 @@ window.__dev_client__ = _socket;
 // Hot reload API
 window.__vue_hot__ = VueHotReloadApi;
 
+// Records initialized before vue hot reload api
+if(window.__vue_hot_pending__) {
+  for(let hash in window.__vue_hot_pending__) {
+    VueHotReloadApi.createRecord(hash, window.__vue_hot_pending__[hash]);
+  }
+}
+
 var _reload = Reload._reload;
 Reload._reload = function(options) {
   console.log('[[ Reload request ]]');
@@ -62,3 +81,6 @@ Reload._reload = function(options) {
   }
   _supressNextReload = false;
 }
+
+// Reg
+const jsImportsReg = /module\.import\((['"])(.+)\1/g;

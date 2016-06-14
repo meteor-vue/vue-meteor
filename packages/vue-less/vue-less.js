@@ -1,8 +1,8 @@
 global.vue = global.vue || {}
 global.vue.lang = global.vue.lang || {}
 
-const path = Plugin.path;
-const fs = Plugin.fs;
+import path from 'path';
+import fs from 'fs';
 import less from 'less';
 import {Meteor} from 'meteor/meteor';
 

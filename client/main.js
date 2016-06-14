@@ -20,30 +20,19 @@ Vue.config.meteor.subscribe = function(...args) {
 
 /// Components
 
-// Thread list items
-/*import ThreadItem from '/imports/ui/ThreadItem.vue';
-Vue.component('thread-item', ThreadItem);*/
-
-// Post
-/*import Post from '/imports/ui/Post.vue';
-Vue.component('post', Post);*/
-
-// Thread
-/*import Thread from '/imports/ui/Thread.vue';
-Vue.component('thread', Thread);*/
-
 // Apollo
 import Apollo from '/imports/ui/Apollo.vue';
 Vue.component('apollo', Apollo);
 
 // Main app
 import App from '/imports/ui/App.vue';
-//Vue.component('app', App);
 
-new Vue({
-  el: 'body',
-  replace: false,
-  components: {
-    App
-  }
+Meteor.startup(() => {
+  new Vue({
+    el: 'body',
+    replace: false,
+    components: {
+      App
+    }
+  });
 });

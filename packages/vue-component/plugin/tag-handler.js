@@ -78,6 +78,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           if (!compile) {
             this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <script>. Did you install it?`);
           } else {
+            //console.log(`Compiling <script> in lang ${lang}...`);
             let result = compile({
               source: script,
               inputFile: this.inputFile
@@ -125,6 +126,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           if (!compile) {
             this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <template>. Did you install it?`);
           } else {
+            //console.log(`Compiling <template> in lang ${lang}...`);
             let result = compile({
               source: template,
               inputFile: this.inputFile
@@ -164,10 +166,12 @@ VueComponentTagHandler = class VueComponentTagHandler {
           if (!compile) {
             this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <style>. Did you install it?`);
           } else {
+            //console.log(`Compiling <style> in lang ${lang}...`);
             let result = compile({
               source: css,
               inputFile: this.inputFile
             });
+            //console.log("Css result", result);
             css = result.css;
             cssMap = result.map;
           }
@@ -218,6 +222,8 @@ VueComponentTagHandler = class VueComponentTagHandler {
       styles,
       template
     };
+
+    //console.log("Result", compileResult);
 
     return compileResult;
   }

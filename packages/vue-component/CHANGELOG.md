@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 - 2016/06/15
+
+ - Support for meteor 1.3.3
+
 ## 0.3.0  - 2016/06/13
 
  - Added support for `lang` attribute on `<script>` tags.
