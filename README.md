@@ -4,6 +4,8 @@
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 
+Tested with Meteor 1.3.3+
+
 ## Features
 
 Currently supported and possible future features (in no particular order) are:
