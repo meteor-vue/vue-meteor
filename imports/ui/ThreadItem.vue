@@ -19,3 +19,23 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.thread-item {
+  padding: 12px;
+  cursor: default;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.thread-item:hover {
+    color: #40b883;
+}
+
+.thread-item.selected {
+    background: #caecde;
+    border-radius: 3px;
+}
+</style>

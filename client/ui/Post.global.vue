@@ -25,6 +25,8 @@ a {
 }
 
 .post {
+  margin: 6px 0;
+
   .message {
     // Mixin
     .padding(12px);

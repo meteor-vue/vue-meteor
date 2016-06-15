@@ -9,9 +9,6 @@
     <template v-if="selectedThread">
       <selected-thread :id="selectedThreadId"></selected-thread>
     </template>
-
-    <!-- Apollo example -->
-    <apollo></apollo>
   </div>
 </template>
 

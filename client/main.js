@@ -1,9 +1,13 @@
 // Libs
 import {Meteor} from 'meteor/meteor';
 import {Vue} from 'meteor/akryum:vue';
+import {Router} from 'meteor/akryum:vue-router';
 
 // Api
 import '/imports/api/methods';
+
+// Routes
+import './routes';
 
 // Subscriptions cache
 const subsCache = new SubsCache({
@@ -17,21 +21,14 @@ Vue.config.meteor.subscribe = function(...args) {
   return subsCache.subscribeFor.apply(subsCache, args);
 };
 
-/// Components
+// App layout
+import AppLayout from '/imports/ui/AppLayout.vue';
 
-// Apollo
-import Apollo from '/imports/ui/Apollo.vue';
-Vue.component('apollo', Apollo);
-
-// Main app
-import App from '/imports/ui/App.vue';
-
+// App start
 Meteor.startup(() => {
-  new Vue({
-    el: 'body',
-    replace: false,
-    components: {
-      App
-    }
-  });
+  // Start the router and create root vue instance
+  Router.boot({
+    history: true,
+    saveScrollPosition: true
+  }, AppLayout, 'app');
 });

@@ -12,6 +12,7 @@ body {
 a {
   color: #40b883;
   cursor: pointer;
+  text-decoration: none;
 }
 
 a:hover {
@@ -50,27 +51,6 @@ hr {
     border: none;
     height: 1px;
     background: #40b883;
-}
-
-.thread-item, .post {
-    padding: 6px 12px;
-}
-
-.thread-item {
-  cursor: default;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
-.thread-item:hover {
-    color: #40b883;
-}
-
-.thread-item.selected {
-    background: #caecde;
-    border-radius: 3px;
 }
 
 .thread .actions {

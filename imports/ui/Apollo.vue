@@ -1,5 +1,6 @@
 <template>
   <div class="apollo">
+    <h1>Apollo</h1>
     <div class="tags">
       <h2>Tags</h2>
       <p>
