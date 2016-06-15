@@ -11,6 +11,29 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 ## Usage
 
+### Hot-reloading
+
+To enable component hot-reloading, make sure that:
+
+ - You have set the `NODE_ENV` environment variable to `development`
+ - You launch meteor in development mode (typically with `meteor` or `meteor run`)
+
+The server console should print these lines:
+
+```
+Dev client (vue-components) added to bundle
+Dev server (vue-components) listening on port 4242
+```
+
+Your browser console should also output:
+
+```
+[HMR] Vue component hot reload shim applied.
+Dev client connected
+```
+
+Now, whenever you save a component file, it will be instantly updated on all the connected clients.
+
 ### File structure
 
 The component file must include:

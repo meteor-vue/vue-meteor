@@ -33,15 +33,12 @@ _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
   while(regResult = jsImportsReg.exec(js)) {
     args.push(regResult[2]);
   }
-  console.log("imports:", args);
   args.push(function(require,exports,module){
-    let evalResult = eval(js);
-    console.log(js, evalResult);
+    eval(js);
   });
   let id = `_component${(new Date()).getTime()}.js`;
   let require = meteorInstall({[id]:args});
   let result = require('./' + id);
-  console.log(result);
   VueHotReloadApi.update(hash, result.default, template);
 }));
 
@@ -55,7 +52,6 @@ _socket.on('css', function({hash, css}) {
     _styleNodes[hash] = style;
   }
   style.textContent = css;
-  //_supressNextReload = true;
 });
 
 window.__dev_client__ = _socket;

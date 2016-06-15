@@ -32,44 +32,49 @@ class HtmlScan {
 
     let result;
 
-    while(result = tagRegex.exec(this.contents)) {
-      let tagName = result[1];
-      let attrs = result[2];
-      let tagContents = result[3];
-
-      if(tagNames.indexOf(tagName) === -1) {
-        this.throwCompileError(`Expected one of: <${this.tagNames.join('>, <')}>, found <${tagName}>`);
-      }
-
-      let tagAttribs = {};
-      if(attrs) {
-        let attr;
-        while(attr = attrsRegex.exec(attrs)) {
-          let attrValue;
-          if(attr.length === 5) {
-            attrValue = attr[4];
-            if(attrValue === undefined) {
-                attrValue = true;
-            }
-          } else {
-            attrValue = true;
-          }
-          tagAttribs[attr[1]] = attrValue;
-        }
-      }
-
-      const tag = {
-        tagName: tagName,
-        attribs: tagAttribs,
-        contents: tagContents,
-        fileContents: this.contents,
-        sourceName: this.sourceName,
-      };
-
-      // save the tag
-      this.tags.push(tag);
-
+    // Unique tags: Template & Script
+    while(result = expandedTagRegex.exec(this.contents)) {
+      this.addTagFromResult(result);
     }
+
+    // Multiple styles
+    while(result = limitedTagRegex.exec(this.contents)) {
+      this.addTagFromResult(result);
+    }
+  }
+
+  addTagFromResult(result) {
+    let tagName = result[1];
+    let attrs = result[2];
+    let tagContents = result[3];
+
+    let tagAttribs = {};
+    if(attrs) {
+      let attr;
+      while(attr = attrsRegex.exec(attrs)) {
+        let attrValue;
+        if(attr.length === 5) {
+          attrValue = attr[4];
+          if(attrValue === undefined) {
+              attrValue = true;
+          }
+        } else {
+          attrValue = true;
+        }
+        tagAttribs[attr[1]] = attrValue;
+      }
+    }
+
+    const tag = {
+      tagName: tagName,
+      attribs: tagAttribs,
+      contents: tagContents,
+      fileContents: this.contents,
+      sourceName: this.sourceName,
+    };
+
+    // save the tag
+    this.tags.push(tag);
   }
 
   throwCompileError(msg) {
@@ -89,5 +94,6 @@ class HtmlScan {
 const rnRegex = /\r\n/g;
 const rRegex = /\r/g;
 const tagCommentRegex = /<!--([\s\S]+?)-->/igm;
-const tagRegex = /<(\w+)(\s+.*)?>\n([\s\S]+?)<\/\1>/igm;
+const expandedTagRegex = /<(template|script)(\s+.*)?>\n([\s\S]+)<\/\1>/igm;
+const limitedTagRegex = /<(style)(\s+.*)?>\n([\s\S]+?)<\/\1>/igm;
 const attrsRegex = /\s+(\w+)(=(["'])([\w\/~$@:.-]*)\3)?/ig;

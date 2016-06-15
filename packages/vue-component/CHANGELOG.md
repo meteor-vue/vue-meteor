@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.3.3 - 2016/06/15
+
+ - Fix nested <template> tags for Vue conditional rendering [#29](https://github.com/Akryum/meteor-vue-component/issues/29)
+
 ## 0.3.2 - 2016/06/15
 
  - Support for meteor 1.3.3
+ - Fix [Issue #28](https://github.com/Akryum/meteor-vue-component/issues/28)
 
 ## 0.3.0  - 2016/06/13
 
@@ -18,12 +23,12 @@
 
 ## 0.1.2 - 2016/06/06
 
- - Fix locally registered component constructors not updating #6
+ - Fix locally registered component constructors not updating [#6](https://github.com/Akryum/meteor-vue-component/issues/6)
 
 ## 0.1.1 - 2016/06/06
 
- - Fix relative imports not working Issue #7
- - Globally registered component constructors are now correctly updated Issue #6
+ - Fix relative imports not working Issue [#7](https://github.com/Akryum/meteor-vue-component/issues/7)
+ - Globally registered component constructors are now correctly updated Issue [#6](https://github.com/Akryum/meteor-vue-component/issues/6)
 
 ## 0.1.0 - 2016/06/05
 
