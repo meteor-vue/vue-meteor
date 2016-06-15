@@ -3,7 +3,6 @@ import {Meteor} from 'meteor/meteor';
 import {Vue} from 'meteor/akryum:vue';
 
 // Api
-import {Threads, Posts} from '/imports/api/collections';
 import '/imports/api/methods';
 
 // Subscriptions cache
