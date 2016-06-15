@@ -11,6 +11,6 @@
     "graphql-tools": "^0.4.2",
     "http-proxy-middleware": "^0.15.2",
     "vue": "^1.0.24",
-    "apollo-client": "0.3.12"
+    "apollo-client": "^0.3.13"
   }
 }

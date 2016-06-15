@@ -269,7 +269,7 @@ apollo: {
 
 ### Reactive Queries
 
-*For now, the reactivity in apollo is quite limited and unstable. You can only do polling and it is currently broken (but should be fixed soon, see https://github.com/apollostack/apollo-client/pull/262).*
+*For now, the reactivity in apollo is quite limited, since you can only do polling.*
 
 For more info, see the [apollo doc](http://docs.apollostack.com/apollo-client/core.html#watchQuery).
 
@@ -288,7 +288,7 @@ apollo: {
           label
         }
       }`,
-      pollInterval: 300
+      pollInterval: 300 // ms
     }
   }
 }
