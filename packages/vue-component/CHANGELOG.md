@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.4 - 2016/06/16
+
+ - Fix [Issue #32](https://github.com/Akryum/meteor-vue-component/issues/32)
+
 ## 0.3.3 - 2016/06/15
 
  - Fix nested <template> tags for Vue conditional rendering [#29](https://github.com/Akryum/meteor-vue-component/issues/29)

@@ -3,7 +3,8 @@ akryum:npm-check@0.0.3
 akryum:vue@1.0.2
 akryum:vue-apollo@0.0.4
 akryum:vue-coffee@0.0.2
-akryum:vue-component@0.3.3
+akryum:vue-component@0.3.4
+akryum:vue-component-dev-client@0.0.1
 akryum:vue-jade@0.0.1
 akryum:vue-less@0.0.3
 akryum:vue-router@0.0.1

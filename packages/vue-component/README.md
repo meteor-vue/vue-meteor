@@ -13,12 +13,7 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 ### Hot-reloading
 
-To enable component hot-reloading, make sure that:
-
- - You have set the `NODE_ENV` environment variable to `development`
- - You launch meteor in development mode (typically with `meteor` or `meteor run`)
-
-The server console should print these lines:
+To enable component hot-reloading, make sure that you launch meteor in development mode (typically with `meteor` or `meteor run`). The server console should print these lines:
 
 ```
 Dev client (vue-components) added to bundle
