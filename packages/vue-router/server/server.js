@@ -1,6 +1,6 @@
 import RouteRecognizer from './route-recognizer';
 
-const internalKeysRE = /^(sendData|subRoutes|fullPath)$/
+const internalKeysRE = /^(sendData|subscribe|subRoutes|fullPath)$/
 
 class RouterClass {
   constructor() {
@@ -80,11 +80,44 @@ class RouterClass {
       // for internal use
       result.matched = matched;
 
-      console.log(result);
-
+      // Fast render subs
+      [].forEach.call(matched, match => {
+        if (typeof match.handler.subscribe === 'function') {
+          let subs = match.handler.subscribe({
+            path: result.path,
+            params: result.params,
+            query: result.query
+          });
+          for(let name in subs) {
+            this._subscribe(name, subs[name]);
+          }
+        }
+      });
     }
 
     done();
+  }
+
+  _subscribe(subName, params) {
+    var publishHandler = Meteor.default_server.publish_handlers[subName];
+    if (publishHandler) {
+      let context = {
+        userId: null, // TODO User support
+        added(collection, id, fields) {},
+        changed(collection, id, fields) {},
+        removed(collection, id) {},
+        ready() {},
+        onStop(func) {},
+        error(error) {},
+        stop() {},
+        connection: null
+      }
+      let result = publishHandler.call(context, params);
+      console.log(result);
+    } else {
+      console.warn('There is no such publish handler named:', subName);
+      return {};
+    }
   }
 }
 

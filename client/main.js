@@ -27,7 +27,7 @@ import AppLayout from '/imports/ui/AppLayout.vue';
 // App start
 Meteor.startup(() => {
   // Start the router and create root vue instance
-  Router.boot({
+  Router.start({
     history: true,
     saveScrollPosition: true
   }, AppLayout, 'app');

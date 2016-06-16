@@ -22,8 +22,8 @@ Currently supported and possible future features (in no particular order) are:
  - [x] `lang` attribute on `<script>` in .vue files
  - [x] Coffeescript official integration in .vue files
  - [x] Sass official integration in .vue files
+ - [x] Easy routing with vue-router out-of-the-box integration & fast-render
  - [ ] *Typescript official integration in .vue files*
- - [ ] *Easy routing with vue-router out-of-the-box integration & fast-render(?)*
  - [ ] *Easy translation with vue i18n out-of-the-box integration & lazy lang loading(?)*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
  - [ ] *Lazy-loading of components*
@@ -61,6 +61,12 @@ Declarative subscriptions and meteor reactive data
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
 
 [See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
+
+### Routing
+
+Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-router).
+
+[See Installation & Usage in arkyum:vue-router package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
 
 ### Apollo integration
 

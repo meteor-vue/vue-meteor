@@ -29,3 +29,4 @@ akryum:vue-less
 akryum:vue-sass
 akryum:vue-jade
 akryum:vue-coffee
+meteorhacks:fast-render
