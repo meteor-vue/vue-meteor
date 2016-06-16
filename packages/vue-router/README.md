@@ -141,6 +141,10 @@ For more info about router start, check the [vue-router documentation](http://ro
 
 You can use the [meteorhacks:fast-render](https://github.com/kadirahq/fast-render) package to inject the subscriptions data in the html. This greatly speeds up the initial render of your app if it depends on subscriptions.
 
+First, install the fast-render package:
+
+    meteor add meteorhacks:fast-render
+
 In your server, add fast-render routes:
 
 ```javascript
