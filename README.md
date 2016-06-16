@@ -32,7 +32,7 @@ Track the project progress [here](https://github.com/Akryum/meteor-vue-component
 
 ## Usage
 
-### New Meteor project
+### New project without blaze
 
 Open a terminal and type:
 
@@ -42,7 +42,66 @@ Open a terminal and type:
     meteor add static-html akryum:vue akryum:vue-component
     meteor
 
-### Example project
+In your client file, create a vue instance:
+
+```javascript
+// Libs
+import {Meteor} from 'meteor/meteor';
+import {Vue} from 'meteor/akryum:vue';
+
+// Main app
+import App from '/imports/ui/App.vue';
+
+Meteor.startup(() => {
+  new Vue({
+    el: 'body',
+    replace: false,
+    components: {
+      App
+    }
+  });
+});
+```
+
+### New project with blaze
+
+Open a terminal and type:
+
+    meteor create my-app
+    cd ./my-app
+    meteor add akryum:vue akryum:vue-component
+    meteor
+
+Add a div in your blaze template:
+
+```html
+<template name="vue_demo">
+  <div id="vue-demo"></div>
+</template>
+```
+
+And create a vue instance in your client script:
+
+```javascript
+/* Vue-demo */
+
+import {Vue} from 'meteor/akryum:vue';
+import Widget from '/imports/ui/Widget.vue';
+
+Template.vue_demo.rendered = function() {
+  var vm = new Vue({
+    el: '#vue-demo',
+    template: '<div><widget></widget></div>',
+    components: {
+      Widget
+    }
+  });
+}
+```
+
+See the [example project](https://github.com/Akryum/meteor-vue-blaze).
+
+### Start the example project
 
 In the project directory:
 
