@@ -99,15 +99,14 @@ Template.vue_demo.rendered = function() {
 }
 ```
 
-See the [example project](https://github.com/Akryum/meteor-vue-blaze).
+See the [blaze example project](https://github.com/Akryum/meteor-vue-blaze).
 
-### Start the example project
+### Development project
 
-In the project directory:
+Clone this repository and type in the project directory:
 
     meteor npm install
     meteor
-
 
 ### Meteor & Tracker data integration
 
