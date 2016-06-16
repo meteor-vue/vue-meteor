@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.5 - 2016/06/16
+
+ - Fix [Issue #33](https://github.com/Akryum/meteor-vue-component/issues/33)
+
 ## 0.3.4 - 2016/06/16
 
  - Fix [Issue #32](https://github.com/Akryum/meteor-vue-component/issues/32)

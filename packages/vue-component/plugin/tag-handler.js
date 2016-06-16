@@ -150,7 +150,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         }
       });
 
-      template = template.replace(quoteReg, "\\'").replace(lineReg, '');
+      template = template.replace(quoteReg, "&#39;").replace(lineReg, '');
     }
 
     // Styles
