@@ -137,6 +137,19 @@ The most important method is `Router.start(options, App, el, callback)` that tak
 
 For more info about router start, check the [vue-router documentation](http://router.vuejs.org/en/api/start.html).
 
+### Fast-render
+
+You can use the [meteorhacks:fast-render](https://github.com/kadirahq/fast-render) package to inject the subscriptions data in the html. This greatly speeds up the initial render of your app if it depends on subscriptions.
+
+In your server, add fast-render routes:
+
+```javascript
+FastRender.route('/forum', function(params) {
+  this.subscribe('threads');
+});
+```
+
+This will send the `threads` subscription data along side the html if the user open your app with the `yourapp/forum` url.
 
 ---
 
