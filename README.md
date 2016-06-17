@@ -71,6 +71,8 @@ Meteor.startup(() => {
 });
 ```
 
+See the [simple example project](https://github.com/Akryum/meteor-vue-example).
+
 ### New project with blaze
 
 Open a terminal and type:
