@@ -3,6 +3,8 @@
 ## Add routes in the blink of an eye.
 Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-router).
 
+See the [example here](https://github.com/Akryum/meteor-vue-example-routing).
+
 ## Installation
 
 

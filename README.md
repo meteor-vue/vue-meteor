@@ -65,6 +65,8 @@ Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-route
 
 [See Installation & Usage in arkyum:vue-router package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
 
+[See the routing example](https://github.com/Akryum/meteor-vue-example-routing)
+
 ### Apollo integration
 
 Use apollo in your vue component!
