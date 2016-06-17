@@ -42,6 +42,14 @@ Open a terminal and type:
     meteor add static-html akryum:vue akryum:vue-component
     meteor
 
+In a html file, set the `<body>` like this:
+
+```html
+<body>
+  <app></app>
+</body>
+```
+
 In your client file, create a vue instance:
 
 ```javascript
