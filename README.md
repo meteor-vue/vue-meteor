@@ -34,80 +34,9 @@ Track the project progress [here](https://github.com/Akryum/meteor-vue-component
 
 ### New project without blaze
 
-Open a terminal and type:
-
-    meteor create my-app
-    cd ./my-app
-    meteor remove blaze-html-templates
-    meteor add static-html akryum:vue akryum:vue-component
-    meteor
-
-In a html file, set the `<body>` like this:
-
-```html
-<body>
-  <app></app>
-</body>
-```
-
-In your client file, create a vue instance:
-
-```javascript
-// Libs
-import {Meteor} from 'meteor/meteor';
-import {Vue} from 'meteor/akryum:vue';
-
-// Main app
-import App from '/imports/ui/App.vue';
-
-Meteor.startup(() => {
-  new Vue({
-    el: 'body',
-    replace: false,
-    components: {
-      App
-    }
-  });
-});
-```
-
 See the [simple example project](https://github.com/Akryum/meteor-vue-example).
 
 ### New project with blaze
-
-Open a terminal and type:
-
-    meteor create my-app
-    cd ./my-app
-    meteor add akryum:vue akryum:vue-component
-    meteor
-
-Add a div in your blaze template:
-
-```html
-<template name="vue_demo">
-  <div id="vue-demo"></div>
-</template>
-```
-
-And create a vue instance in your client script:
-
-```javascript
-/* Vue-demo */
-
-import {Vue} from 'meteor/akryum:vue';
-import Widget from '/imports/ui/Widget.vue';
-
-Template.vue_demo.rendered = function() {
-  var vm = new Vue({
-    el: '#vue-demo',
-    template: '<div><widget></widget></div>',
-    components: {
-      Widget
-    }
-  });
-}
-```
 
 See the [blaze example project](https://github.com/Akryum/meteor-vue-blaze).
 
