@@ -16,7 +16,8 @@ if(window.__vue_hot_pending__) {
   }
 }
 
-let _reload = Reload._reload;
+var _supressNextReload = false;
+var _reload = Reload._reload;
 Reload._reload = function(options) {
   console.log('[[ Reload request ]]');
   if(_supressNextReload) {
@@ -47,8 +48,6 @@ Meteor.startup(function() {
   _socket.on('disconnect', function() {
     console.log('Dev client disconnected');
   });
-
-  let _supressNextReload = false;
 
   // JS
   _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {

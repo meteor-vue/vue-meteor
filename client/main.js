@@ -25,10 +25,12 @@ Vue.config.meteor.subscribe = function(...args) {
 import AppLayout from '/imports/ui/AppLayout.vue';
 
 // App start
-Meteor.startup(() => {
+Meteor.startup(function() {
   // Start the router and create root vue instance
   Router.start({
     history: true,
     saveScrollPosition: true
-  }, AppLayout, 'app');
+  }, AppLayout, '#app');
 });
+
+Test = 'test';

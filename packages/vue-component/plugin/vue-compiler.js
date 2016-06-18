@@ -106,7 +106,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       (__vue_script__.options || (__vue_script__.options = {}))
       : __vue_script__).template = __vue_template__;
     }
-    module.export('default', function(){return __vue_script__;})`;
+    module.export('default', exports.default = __vue_script__)`;
 
     // Hot-reloading
     if (isDev) {
@@ -203,7 +203,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
                 (__vue_script__.options || (__vue_script__.options = {}))
                 : __vue_script__).template = __vue_template__;
               }
-              module.export('default', function(){return __vue_script__;})`;
+              module.export('default', exports.default = __vue_script__)`;
 
               global._dev_server.emit('js', {hash: vueId, js, template});
             }
