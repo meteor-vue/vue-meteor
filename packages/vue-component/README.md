@@ -16,7 +16,7 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 To enable component hot-reloading, make sure that you launch meteor in development mode (typically with `meteor` or `meteor run`). The server console should print this line:
 
 ```
-Dev server (vue-components) listening on port 4242
+Dev server (vue-components) listening on port 3003
 ```
 
 Your browser console should also output:
@@ -27,6 +27,11 @@ Dev client connected
 ```
 
 Now, whenever you save a component file, it will be instantly updated on all the connected clients.
+
+You can change the port used by the hot-reloading server with the `VUE_DEV_SERVER_PORT` environment variable:
+
+    set VUE_DEV_SERVER_PORT=4242
+
 
 ### File structure
 

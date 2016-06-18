@@ -6,56 +6,6 @@ import {Meteor} from 'meteor/meteor';
 
 Vue.use(VueHotReloadApi);
 
-// Hack https://github.com/socketio/socket.io-client/issues/961
-import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
-if(!Response.prototype.setEncoding) {
-    Response.prototype.setEncoding = function(encoding){
-        // do nothing
-    }
-}
-
-// Dev client
-var _socket = require('socket.io-client')('http://localhost:4242');
-_socket.on('connect', function() {
-  console.log('Dev client connected');
-});
-_socket.on('disconnect', function() {
-  console.log('Dev client disconnected');
-});
-
-var _supressNextReload = false;
-
-// JS
-_socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
-  _supressNextReload = true;
-  let args = ['meteor/akryum:vue'];
-  let regResult;
-  while(regResult = jsImportsReg.exec(js)) {
-    args.push(regResult[2]);
-  }
-  args.push(function(require,exports,module){
-    eval(js);
-  });
-  let id = `_component${(new Date()).getTime()}.js`;
-  let require = meteorInstall({[id]:args});
-  let result = require('./' + id);
-  VueHotReloadApi.update(hash, result.default, template);
-}));
-
-// CSS
-var _styleNodes = {};
-_socket.on('css', function({hash, css}) {
-  let style = _styleNodes[hash];
-  if(!style) {
-    style = document.createElement('style');
-    document.getElementsByTagName('head')[0].appendChild(style);
-    _styleNodes[hash] = style;
-  }
-  style.textContent = css;
-});
-
-window.__dev_client__ = _socket;
-
 // Hot reload API
 window.__vue_hot__ = VueHotReloadApi;
 
@@ -66,7 +16,7 @@ if(window.__vue_hot_pending__) {
   }
 }
 
-var _reload = Reload._reload;
+let _reload = Reload._reload;
 Reload._reload = function(options) {
   console.log('[[ Reload request ]]');
   if(_supressNextReload) {
@@ -78,5 +28,59 @@ Reload._reload = function(options) {
   _supressNextReload = false;
 }
 
-// Reg
-const jsImportsReg = /module\.import\((['"])(.+)\1/g;
+// Hack https://github.com/socketio/socket.io-client/issues/961
+import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
+if(!Response.prototype.setEncoding) {
+    Response.prototype.setEncoding = function(encoding){
+        // do nothing
+    }
+}
+
+Meteor.startup(function() {
+  // Dev client
+  let port = window.__hot_port__ || 3003;
+  console.log('dev client port', port);
+  let _socket = require('socket.io-client')(`http://localhost:${port}`);
+  _socket.on('connect', function() {
+    console.log('Dev client connected');
+  });
+  _socket.on('disconnect', function() {
+    console.log('Dev client disconnected');
+  });
+
+  let _supressNextReload = false;
+
+  // JS
+  _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
+    _supressNextReload = true;
+    let args = ['meteor/akryum:vue'];
+    let regResult;
+    while(regResult = jsImportsReg.exec(js)) {
+      args.push(regResult[2]);
+    }
+    args.push(function(require,exports,module){
+      eval(js);
+    });
+    let id = `_component${(new Date()).getTime()}.js`;
+    let require = meteorInstall({[id]:args});
+    let result = require('./' + id);
+    VueHotReloadApi.update(hash, result.default, template);
+  }));
+
+  // CSS
+  let _styleNodes = {};
+  _socket.on('css', function({hash, css}) {
+    let style = _styleNodes[hash];
+    if(!style) {
+      style = document.createElement('style');
+      document.getElementsByTagName('head')[0].appendChild(style);
+      _styleNodes[hash] = style;
+    }
+    style.textContent = css;
+  });
+
+  window.__dev_client__ = _socket;
+
+  // Reg
+  const jsImportsReg = /module\.import\((['"])(.+)\1/g;
+})

@@ -28,7 +28,7 @@ if(Meteor.isDevelopment) {
     }
   });
 
-  PORT = 4242;
+  PORT = parseInt(process.env.VUE_DEV_SERVER_PORT) || 3003;
 
   try {
     server.listen(PORT);
