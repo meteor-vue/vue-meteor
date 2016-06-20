@@ -1,7 +1,7 @@
 <template lang="jade">
 .home
   h1 Welcome Home
-  p Create awesome apps with vuejs &amp; meteor!
+  p Create awesome apps with vuejs &amp; meteor!&nbsp;
     a(href="https://github.com/Akryum/meteor-vue-component") More info
   img.logo(src="/img/vue.png")
   img.logo(src="/img/meteor.png")
