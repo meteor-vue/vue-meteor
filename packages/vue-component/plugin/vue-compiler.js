@@ -150,7 +150,8 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
     if(isDev) {
       // Hot-reloading
-      let filePath = path.resolve(inputFilePath);
+      let sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
+      let filePath = path.resolve(sourceRoot, inputFilePath);
 
       // Listener
       let fileChanged = Meteor.bindEnvironment((event) => {

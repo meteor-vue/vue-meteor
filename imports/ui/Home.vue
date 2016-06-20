@@ -1,11 +1,24 @@
 <template lang="jade">
 .home
   h1 Welcome Home
-  p Create awesome apps with vuejs &amp; meteor! 
+  p Create awesome apps with vuejs &amp; meteor!
     a(href="https://github.com/Akryum/meteor-vue-component") More info
   img.logo(src="/img/vue.png")
   img.logo(src="/img/meteor.png")
+
+  p
+    button2(label="Don't click me", @click="clicked=true", v-if="!clicked")
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      clicked: false
+    }
+  }
+}
+</script>
 
 <style scoped lang="less">
 .home {
