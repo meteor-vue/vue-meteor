@@ -24,6 +24,12 @@ Vue.config.meteor.subscribe = function(...args) {
 // App layout
 import AppLayout from '/imports/ui/AppLayout.vue';
 
+// Not found
+import NotFound from '/imports/ui/NotFound.vue';
+Router.on('*', {
+  component: NotFound
+});
+
 // App start
 Meteor.startup(function() {
   // Start the router and create root vue instance

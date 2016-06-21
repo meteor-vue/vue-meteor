@@ -12,6 +12,12 @@ class RouterClass {
     this._defs.push(def);
   }
 
+  on(path, options) {
+    this._defs.push({
+      [path]: options
+    });
+  }
+
   start(options, App, el, callback) {
     this.lib = new VueRouter(options);
     for(let def of this._defs) {

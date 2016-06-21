@@ -17,7 +17,7 @@ See the [example here](https://github.com/Akryum/meteor-vue-example-routing).
 In your client, add some routes (for more info about route definition, check the [vue-router documentation](http://router.vuejs.org/en/nested.html)):
 
 ```javascript
-/* routes.js */
+/* /client/routes.js */
 
 // Import the router
 import {Router} from 'meteor/akryum:vue-router';
@@ -44,12 +44,36 @@ Router.map({
 });
 ```
 
+#### Simple syntax
+
+You can use an alternative special syntax in `.routes.js` files:
+
+```javascript
+/* /client/main.routes.js */
+export default {
+  '/': {
+    name: 'home',
+    component: '/imports/ui/Home.vue'
+  },
+  '/forum': {
+    name: 'forum',
+    component: '/imports/ui/Forum.vue'
+  },
+  '/apollo': {
+    name: 'apollo',
+    component: '/imports/ui/Apollo.vue'
+  }
+};
+```
+
+All the routes will be automatically added and the component's paths resolved.
+
 ### App menu
 
 Use the `v-link` directive to add dynamic links that take to different routes in your app ([more info](http://router.vuejs.org/en/link.html)):
 
 ```html
-<!-- AppMenu.vue -->
+<!-- /imports/ui/AppMenu.vue -->
 <template>
 <div class="app-menu">
   <a v-link="{ name:'home', exact: true }">Home</a>
@@ -81,7 +105,7 @@ Use the `v-link` directive to add dynamic links that take to different routes in
 Create a vue component with a `<router-view></router-view>` element, that will contain the route content ([more info](http://router.vuejs.org/en/view.html)):
 
 ```html
-<!-- AppLayout.vue -->
+<!-- /imports/ui/AppLayout.vue -->
 <template>
 <div class="app-layout">
   <!-- Menu -->
@@ -108,14 +132,11 @@ export default {
 Then import the routes and start the router in your client:
 
 ```javascript
-/* client.js */
+/* /client/client.js */
 
 // Imports
 import {Meteor} from 'meteor/meteor';
 import {Router} from 'meteor/akryum:vue-router';
-
-// Routes
-import './routes';
 
 // App layout
 import AppLayout from '/imports/ui/AppLayout.vue';
@@ -130,6 +151,8 @@ Meteor.startup(() => {
 });
 ```
 
+**If you put your routes files in the `/imports` folder, you need to import them manually.**
+
 The most important method is `Router.start(options, App, el, callback)` that takes these parameters:
 
  - `options` allow you to customize the router behavior ([more info](http://router.vuejs.org/en/options.html)).
@@ -138,6 +161,14 @@ The most important method is `Router.start(options, App, el, callback)` that tak
  - `callback` is an optional function which will be called when the router app's initial render is complete.
 
 For more info about router start, check the [vue-router documentation](http://router.vuejs.org/en/api/start.html).
+
+### Access all the `vue-router` methods
+
+Use the `lib` property:
+
+```javascript
+Router.lib.on('/home', {...});
+```
 
 ### Fast-render
 

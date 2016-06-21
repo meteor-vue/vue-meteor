@@ -33,7 +33,6 @@ class VueRouterCompiler extends CachingCompiler  {
     code = 'let r = (()=>{' + code + `})();
     import {Router} from 'meteor/akryum:vue-router';
     Router.map(r);`;
-    console.log(code);
     let map = '';
 
     let babelOptions = Babel.getDefaultOptions();
