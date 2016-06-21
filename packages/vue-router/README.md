@@ -127,6 +127,20 @@ export default {
 </script>
 ```
 
+### Not found page
+
+To add a 'not found' page, add a `*` route in your client code:
+
+```javascript
+/* /client/client.js */
+
+// Not found
+import NotFound from '/imports/ui/NotFound.vue';
+Router.on('*', {
+  component: NotFound
+});
+```
+
 ### Starting the router
 
 Then import the routes and start the router in your client:
