@@ -7,7 +7,7 @@ import {Router} from 'meteor/akryum:vue-router';
 import '/imports/api/methods';
 
 // Routes
-import './routes';
+//import './routes';
 
 // Subscriptions cache
 const subsCache = new SubsCache({

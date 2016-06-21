@@ -254,7 +254,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   }
 
   addStylesheet(inputFile, options) {
-    const data = options.data.replace(new RegExp("\r\n", "g"), "\n").replace(new RegExp("\r", "g"), "\n");
+    const data = options.data.replace(rnReg, "\n").replace(rReg, "\n");
     inputFile.addStylesheet({
       path: inputFile.getPathInPackage() + '.css',
       sourcePath: inputFile.getPathInPackage(),
@@ -264,6 +264,8 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   }
 }
 
+const rnReg = new RegExp("\r\n", "g");
+const rReg = new RegExp("\r", "g");
 const globalFileNameReg = /\.global\.vue$/;
 const capitalLetterReg = /([A-Z])/g;
 const trimDashReg = /^-/;
