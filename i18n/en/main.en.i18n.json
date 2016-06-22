@@ -1,0 +1,35 @@
+{
+  "pages": {
+    "home": {
+      "title": "Home",
+      "welcome": "Welcome Home",
+      "text1": "Create awesome apps with vuejs & meteor!",
+      "more": "Learn more",
+      "button": "Don't click me"
+    },
+    "forum": {
+      "title": "Forum",
+      "thread": {
+        "add": "Type new thread name",
+        "delete": "Delete thread"
+      },
+      "message": {
+        "add": "Type new message"
+      }
+    },
+    "apollo": {
+      "title": "Apollo",
+      "tags": {
+        "title": "Tags",
+        "info": "These tags are fetched from an apollo server.",
+        "add": "Add a tag"
+      },
+      "tests": {
+        "title": "Tests",
+        "hello": "Hello",
+        "ping": "Ping",
+        "input": "Enter a message"
+      }
+    }
+  }
+}

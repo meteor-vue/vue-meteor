@@ -1,31 +1,31 @@
 <template>
   <div class="apollo">
-    <h1>Apollo</h1>
+    <h1>{{$t('pages.apollo.title')}}</h1>
     <div class="tags">
-      <h2>Tags</h2>
+      <h2>{{$t('pages.apollo.tags.title')}}</h2>
       <p>
-          These tags are fetched from an apollo server.
+          {{$t('pages.apollo.tags.info')}}
       </p>
       <span class="tag" v-for="tag in tags"><a>{{tag.label}}</a></span>
 
       <form @submit.prevent="addTag">
-        <input v-model="tagLabel" placeholder="Add a tag" />
+        <input v-model="tagLabel" :placeholder="$t('pages.apollo.tags.add')" />
       </form>
     </div>
 
     <hr />
 
     <div class="tests">
-      <h2>Apollo Tests</h2>
+      <h2>{{$t('pages.apollo.tests.title')}}</h2>
       <div>
-        <h3>Hello</h3>
+        <h3>{{$t('pages.apollo.tests.hello')}}</h3>
         <p>
           {{hello}}
         </p>
       </div>
       <div>
-        <h3>Ping</h3>
-        <input v-model="pingInput" placeholder="Enter a message" />
+        <h3>{{$t('pages.apollo.tests.ping')}}</h3>
+        <input v-model="pingInput" :placeholder="$t('pages.apollo.tests.input')" />
         <p>
           {{pingMessage}}
         </p>

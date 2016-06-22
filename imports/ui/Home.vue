@@ -1,13 +1,13 @@
 <template lang="jade">
 .home
-  h1 Welcome Home
-  p Create awesome apps with vuejs &amp; meteor!&nbsp;
-    a(href="https://github.com/Akryum/meteor-vue-component") More info
+  h1 {{$t('pages.home.welcome')}}
+  p {{$t('pages.home.text1')}}&nbsp;
+    a(href="https://github.com/Akryum/meteor-vue-component") {{$t('pages.home.more')}}
   img.logo(src="/img/vue.png")
   img.logo(src="/img/meteor.png")
 
   p
-    button2(label="Don't click me", @click="clicked=true", v-if="!clicked")
+    button2(:label="$t('pages.home.button')", @click="clicked=true", v-if="!clicked")
 </template>
 
 <script>

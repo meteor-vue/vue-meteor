@@ -1,7 +1,7 @@
 <template>
   <div class="app">
-    <h1>Forum ({{count}})</h1>
-    <form @submit.prevent="createThread"><input v-model="newThreadName" placeholder="Type new thread name" required/></form>
+    <h1>{{$t('pages.forum.title')}} ({{count}})</h1>
+    <form @submit.prevent="createThread"><input v-model="newThreadName" :placeholder="$t('pages.forum.thread.add')" required/></form>
     <thread-item v-for="thread in threads" :data="thread" :selected="thread._id === selectedThreadId" @select="selectThread(thread._id)"></thread-item>
     <hr />
 

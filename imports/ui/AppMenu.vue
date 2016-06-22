@@ -1,8 +1,8 @@
 <template lang="jade">
 .app-menu
-  a(v-link="{ name:'home', exact: true }") Home
-  a(v-link="{ name:'forum' }") Forum
-  a(v-link="{ name:'apollo' }") Apollo
+  a(v-link="{ name:'home', exact: true }") {{$t('pages.home.title')}}
+  a(v-link="{ name:'forum' }") {{$t('pages.forum.title')}}
+  a(v-link="{ name:'apollo' }") {{$t('pages.apollo.title')}}
 </template>
 
 <style scoped lang="sass">

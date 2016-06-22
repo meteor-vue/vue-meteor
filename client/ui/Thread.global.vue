@@ -5,12 +5,12 @@
 
     <!-- Actions -->
     <div class="actions">
-      <a @click="removeThread">Delete thread</a>
+      <a @click="removeThread">{{$t('pages.forum.thread.delete')}}</a>
     </div>
 
     <!-- New post form -->
     <form @submit.prevent="createPost">
-      <input v-model="newPostMessage" placeholder="Type new message" required/>
+      <input v-model="newPostMessage" :placeholder="$t('pages.forum.message.add')" required/>
     </form>
 
     <!-- Posts -->

@@ -38,5 +38,3 @@ Meteor.startup(function() {
     saveScrollPosition: true
   }, AppLayout, '#app');
 });
-
-Test = 'test';
