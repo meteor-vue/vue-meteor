@@ -26,8 +26,9 @@ Package.onUse(function(api) {
   api.use('isobuild:compiler-plugin@1.0.0');
   api.use('akryum:npm-check@0.0.2');
   api.use('ecmascript');
-  api.use('akryum:vue@1.0.2');
   api.use('webapp');
+  api.use('akryum:vue@1.0.2');
+  api.use('meteorhacks:inject-data@2.0.0');
   api.mainModule('client/client.js', 'client');
   api.mainModule('server/server.js', 'server');
 });

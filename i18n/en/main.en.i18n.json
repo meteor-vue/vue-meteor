@@ -2,8 +2,8 @@
   "pages": {
     "home": {
       "title": "Home",
-      "welcome": "Welcome Home",
-      "text1": "Create awesome apps with vuejs & meteor!",
+      "welcome": "Be Creative",
+      "text1": "Create awesome apps swiftly with vuejs & meteor!",
       "more": "Learn more",
       "button": "Don't click me"
     },

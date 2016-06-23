@@ -1,21 +1,36 @@
 import fs from 'fs';
+import locale from 'locale';
 
+// Language list
 let langsJson = fs.readFileSync(`assets/app/i18n/__langs.json`, {
   encoding: 'utf8'
 });
 let langs = JSON.parse(langsJson);
-console.log(langs);
 
-let lang = 'en';
-let localeData = fs.readFileSync(`assets/app/i18n/${lang}.json`, {
-  encoding: 'utf8'
+// Locale data
+let langsData = {};
+for(let lang of langs) {
+  let localeJson = fs.readFileSync(`assets/app/i18n/${lang}.json`, {
+    encoding: 'utf8'
+  });
+  let localeData = JSON.parse(localeJson);
+  langsData[lang] = localeData;
+}
+
+// Locale negotiation
+WebApp.connectHandlers.use(locale(langs));
+
+// Client request
+WebApp.connectHandlers.use((req, res, next) => {
+  let lang = req.locale;
+  let cookies = req.cookies;
+  if(cookies._vueLang) {
+    lang = cookies._vueLang;
+  }
+  InjectData.pushData(res, 'vue-i18n-lang', {
+    langs,
+    lang,
+    locale: langsData[lang]
+  });
+  next();
 });
-console.log(localeData);
-
-WebAppInternals.addStaticJs(`
-(function(){
-  window.__vue_langs__ = ${langsJson};
-  window.__vue_default_locale__ = ${localeData};
-  window.__vue_default_lang__ = '${lang}';
-})();
-`);
