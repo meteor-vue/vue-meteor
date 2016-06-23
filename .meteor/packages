@@ -27,6 +27,7 @@ akryum:vue-component
 akryum:vue-apollo
 akryum:vue-router
 akryum:vue-i18n
+akryum:vue-i18n-ui
 akryum:vue-less
 akryum:vue-sass
 akryum:vue-jade

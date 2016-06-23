@@ -326,6 +326,22 @@ function restoreState (vm, state, isRoot) {
   }
 }
 
+exports.updateWatchers = function() {
+  for(let id in map) {
+    let record = map[id];
+    for(let vm of record.instances) {
+      updateInstanceWatchers(vm);
+    }
+  }
+}
+
+function updateInstanceWatchers (vm) {
+  let i = vm._watchers.length
+  while (i--) {
+    vm._watchers[i].update(true) // shallow updates
+  }
+}
+
 function format (id) {
   return id.match(/[^\/]+\.vue$/)[0]
 }

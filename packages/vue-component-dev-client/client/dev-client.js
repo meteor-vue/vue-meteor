@@ -78,6 +78,16 @@ Meteor.startup(function() {
     style.textContent = css;
   });
 
+  // Locale
+  _socket.on('lang.updated', function({lang, data}) {
+    Vue.locale(lang, data);
+    if(lang === Vue.config.lang) {
+      // Refresh
+      _supressNextReload = true;
+      VueHotReloadApi.updateWatchers();
+    }
+  });
+
   window.__dev_client__ = _socket;
 
   // Reg
