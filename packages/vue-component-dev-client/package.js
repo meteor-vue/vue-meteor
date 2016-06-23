@@ -12,7 +12,6 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use('akryum:vue@1.0.2');
   api.mainModule('client/dev-client.js', 'client');
-  console.log('\nDev client (vue-components) added to bundle');
 });
 
 

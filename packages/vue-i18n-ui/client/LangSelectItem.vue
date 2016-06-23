@@ -1,7 +1,7 @@
 <template>
-  <div class="lang-item" :class="langItemClasses" @click="handleClick">
+  <a class="lang-item" :class="langItemClasses" @click="handleClick" @keyup.space="handleClick" role="button" tabindex="0" aria-describedby="Select the {{lang}} language">
     <slot></slot>
-  </div>
+  </a>
 </template>
 
 <script>

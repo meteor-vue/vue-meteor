@@ -21,6 +21,7 @@ class VueI18nCompiler {
       let packageName = inputFile.getPackageName();
       let contents = JSON.parse(updatedSource || inputFile.getContentsAsString());
       if(packageName) {
+        packageName = packageName.replace(packageNameCharsReg, '_');
         if(!data.packages) {
           data.packages = {};
         }
@@ -40,7 +41,7 @@ class VueI18nCompiler {
     if(files.length === 0){
       throw new Error('You must add at last one lang file in your client code (ex: app.en.i18n.json).');
     }
-    let firstFile = files[0];
+    let firstFile = null;
 
     let langFiles = {};
     let langs = [];
@@ -51,6 +52,10 @@ class VueI18nCompiler {
       let inputFilePath = inputFile.getPathInPackage();
       let packageName = inputFile.getPackageName();
       let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+
+      if(!firstFile && !packageName) {
+        firstFile = inputFile;
+      }
 
       let lang = path.basename(inputFilePath).split(".").slice(0, -2).pop();
 
@@ -107,6 +112,10 @@ class VueI18nCompiler {
       }
     }
 
+    if(!firstFile) {
+      throw new Error('You must add at last one lang file in your client code (ex: app.en.i18n.json).');
+    }
+
     // Generate merged asset for each language
     for(let lang in langFiles) {
       let data = this.generateLocale(langFiles[lang]);
@@ -127,3 +136,5 @@ class VueI18nCompiler {
     });
   }
 }
+
+const packageNameCharsReg = /:|-/g;

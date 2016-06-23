@@ -15,5 +15,9 @@ Package.onUse(function(api) {
     'akryum:vue-less@0.0.3',
     'akryum:vue-i18n@0.0.1'
   ]);
+  api.addFiles([
+    'lib.en.i18n.json',
+    'lib.fr.i18n.json'
+  ]);
   api.mainModule('client/client.js', 'client');
 });

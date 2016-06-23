@@ -4,6 +4,26 @@ import Cookies from 'js-cookie';
 
 Vue.use(VueI18n);
 
+// $tp method
+const packageNameCharsReg = /:|-/g;
+Vue.prototype.$tp = function(key, ...args) {
+  if(!key) {
+    return '';
+  }
+
+  // Add package path to key
+  if(this.$options.packageName) {
+    // Normalize package name
+    if(!this.$options.packageNameI18n) {
+      this.$options.packageNameI18n = this.$options.packageName.replace(packageNameCharsReg, '_');
+    }
+
+    key = `packages.${this.$options.packageNameI18n}.${key}`;
+  }
+
+  return this.$t(key, args);
+};
+
 let languageList, defaultLang, defaultLocale;
 
 // Manager
@@ -71,9 +91,7 @@ let I18n = new Vue({
     setLocale(lang, remember=false) {
       this.loadLocale(lang).then((lang) => {
         if(remember) {
-          this.savedLangOption = lang;
-          Cookies.set('_vueLang', lang, {expires: 365});
-          localStorage.setItem('_vueLang', lang);
+          this.saveLang(lang);
         }
       });
     },
@@ -107,6 +125,11 @@ let I18n = new Vue({
         this.savedLangOption = lang;
         this.loadLocale(lang, true);
       }
+    },
+    saveLang(lang) {
+      this.savedLangOption = lang;
+      Cookies.set('_vueLang', lang, {expires: 365});
+      localStorage.setItem('_vueLang', lang);
     }
   }
 });
@@ -118,6 +141,8 @@ InjectData.getData('vue-i18n-lang', function(data) {
   languageList = data.langs;
   defaultLang = data.lang;
   defaultLocale = data.locale;
+
+  console.log(data);
 
   Vue.locale(defaultLang, defaultLocale);
   Vue.config.lang = defaultLang;

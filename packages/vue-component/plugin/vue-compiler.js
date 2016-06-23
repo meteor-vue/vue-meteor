@@ -99,14 +99,21 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       //console.log(`template hash: ${templateHash}`);
     }
 
-    // Template option & Export
+    // Template option
     js += `__vue_script__ = __vue_script__ || {};
     if(__vue_template__) {
       (typeof __vue_script__ === "function" ?
       (__vue_script__.options || (__vue_script__.options = {}))
       : __vue_script__).template = __vue_template__;
-    }
-    module.export('default', exports.default = __vue_script__)`;
+    }`;
+
+    // Package context
+    js += `(typeof __vue_script__ === "function" ?
+    (__vue_script__.options || (__vue_script__.options = {}))
+    : __vue_script__).packageName = '${inputFile.getPackageName()}';`;
+
+    // Export
+    js += `module.export('default', exports.default = __vue_script__);`;
 
     // Hot-reloading
     if (isDev) {
@@ -203,8 +210,15 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
                 (typeof __vue_script__ === "function" ?
                 (__vue_script__.options || (__vue_script__.options = {}))
                 : __vue_script__).template = __vue_template__;
-              }
-              module.export('default', exports.default = __vue_script__)`;
+              }`;
+
+              // Package context
+              js += `(typeof __vue_script__ === "function" ?
+              (__vue_script__.options || (__vue_script__.options = {}))
+              : __vue_script__).packageName = '${inputFile.getPackageName()}';`;
+
+              // Export
+              js += `module.export('default', exports.default = __vue_script__);`;
 
               global._dev_server.emit('js', {hash: vueId, js, template});
             }
