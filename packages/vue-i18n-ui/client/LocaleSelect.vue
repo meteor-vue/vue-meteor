@@ -313,7 +313,7 @@ export default {
         a {
           display: inline-block;
           .frame;
-          padding: 4px 8px;
+          padding: 6px 8px;
           flex: 100% 1 1;
           .ellipsis;
           margin-right: 8px;
