@@ -1,11 +1,11 @@
 <template>
   <div class="vue-locale-select" :class="componentClass">
-    <div class="backdrop" v-show="isOpen || showRememberPrompt" @click="isOpen = false"></div>
+    <div class="backdrop" v-show="isOpen || showRememberPrompt" transition="fade" @click="isOpen = false"></div>
     <div class="component-wrapper">
       <div class="main-select-btn">
 
         <!-- Loading -->
-        <div v-if="loading" class="loading-animation">
+        <div v-show="loading" class="loading-animation" transition="fade">
           <div class="spinner">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
@@ -14,7 +14,7 @@
         </div>
 
         <!-- Current lang -->
-        <a v-else class="current-lang select-btn" @click="toggleOpen" @keyup.space="toggleOpen" tabindex="0" role="button" aria-describedby="Opens the language selection list">
+        <a v-else class="current-lang select-btn" @click="toggleOpen" @keyup.space="toggleOpen" tabindex="0" role="button" aria-describedby="Opens the language selection list" transition="fade">
           {{currentLang | langName}}
           <span class="arrow">
             <slot name="arrow">
@@ -34,7 +34,7 @@
       </div>
 
       <!-- Remember promp -->
-      <div class="remember-prompt dialog" v-if="showRememberPrompt" role="alertdialog" aria-labelledby="Remember language choice" aria-describedby="Asks if the selected language will be saved for the next visit">
+      <div class="remember-prompt dialog" v-show="showRememberPrompt" transition="zoom" role="alertdialog" aria-labelledby="Remember language choice" aria-describedby="Asks if the selected language will be saved for the next visit">
         <div class="dialog-document" role="document">
           <div class="content info">
             {{$tp('remember.info')}}
@@ -203,9 +203,17 @@ export default {
   }
 
   .main-select-btn {
+    position: relative;
+    width: 140px;
+    height: 32px;
     display: inline-block;
     margin-bottom: 4px;
     .frame;
+
+    .current-lang, .loading-animation {
+      position: absolute;
+      top: 0;
+    }
   }
 
   .lang-list {
@@ -233,8 +241,8 @@ export default {
   }
 
   .loading-animation {
-    width: 140px;
-    height: 32px;
+    width: 100%;
+    height: 100%;
     padding: 7px 0;
     box-sizing: border-box;
   }
@@ -333,6 +341,23 @@ export default {
     .select-btn {
       pointer-events: none;
     }
+  }
+
+  .fade-transition {
+    transition: opacity .15s linear;
+  }
+
+  .fade-enter, .fade-leave {
+    opacity: 0;
+  }
+
+  .zoom-transition {
+    transition: opacity .15s linear, transform .15s cubic-bezier(0.190, 1.000, 0.220, 1.000);
+  }
+
+  .zoom-enter, .zoom-leave {
+    transform: scale(0.9);
+    opacity: 0;
   }
 }
 </style>
