@@ -3,8 +3,6 @@ import VueI18n from 'vue-i18n';
 
 Vue.use(VueI18n);
 
-Vue.config.lang = 'null';
-
 // Manager
 let I18n = new Vue({
   data() {
@@ -68,5 +66,15 @@ let I18n = new Vue({
 });
 
 I18n.lib = VueI18n;
+
+Meteor.startup(function() {
+  let languageList = window.__vue_langs__;
+  let defaultLang = window.__vue_default_lang__;
+  let defaultLocale = window.__vue_default_locale__;
+
+  Vue.locale(defaultLang, defaultLocale);
+  Vue.config.lang = defaultLang;
+  I18n.init(languageList);
+});
 
 export default I18n;

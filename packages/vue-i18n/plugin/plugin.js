@@ -56,27 +56,17 @@ class VueI18nCompiler {
       }
 
       firstFile.addAsset({
-        path: `/i18n/${lang}.json`,
+        path: `i18n/${lang}.json`,
         data: JSON.stringify(data)
       });
 
       langs.push(lang);
     }
 
-    console.log(firstFile.getArch());
-    if(firstFile.getArch().indexOf('web') !== -1) {
-      // Add language list
-      let js = `import I18n from 'meteor/akryum:vue-i18n';
-      I18n.init(${JSON.stringify(langs)});`;
-
-      // Babel compilation
-      let output = Babel.compile(js, Babel.getDefaultOptions());
-      js = output.code;
-
-      firstFile.addJavaScript({
-        path: '__langs.js',
-        data: js
-      });
-    }
+    let langsJson = JSON.stringify(langs);
+    firstFile.addAsset({
+      path: 'i18n/__langs.json',
+      data: langsJson
+    });
   }
 }
