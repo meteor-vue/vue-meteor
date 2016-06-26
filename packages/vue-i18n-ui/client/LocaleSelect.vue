@@ -30,7 +30,7 @@
 
       <!-- Lang-list -->
       <div class="lang-list" v-if="isOpen" role="list" aria-describedby="Available languages list">
-        <lang-item class="lang-option select-btn" v-for="l in langs | orderBy l" @select="select" :lang="l">{{l | langName}}</lang-item>
+        <lang-item class="lang-option select-btn" v-for="l in langs | orderBy l" @select="select" :lang="l"><span :title="l | nativeLangName">{{l | langName}}</span></lang-item>
       </div>
 
       <!-- Remember promp -->
@@ -131,6 +131,9 @@ export default {
       } else {
         return name.name;
       }
+    },
+    nativeLangName(value) {
+      return isoLangs[value].name;
     }
   },
   components: {
@@ -166,6 +169,7 @@ export default {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    cursor: default;
   }
 
   .backdrop {

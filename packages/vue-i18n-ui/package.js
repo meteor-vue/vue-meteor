@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-i18n-ui',
-  version: '0.0.1',
+  version: '0.0.2',
   summary: 'Premade components for akryum:vue-i18n',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'

@@ -47,3 +47,17 @@ Template | Default | Description
 
 
 ![screenshot](./remember.png)
+
+### Localize the components
+
+In your own *locale files*, add the following strings and translate them:
+
+```json
+"packages": {
+  "akryum_vue_i18n_ui": {
+    "info": "Do you want to remember your choice?",
+    "yes": "Yes",
+    "no": "No"
+  }
+}
+```
