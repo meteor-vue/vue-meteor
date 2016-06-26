@@ -241,11 +241,13 @@ At this point, you can already try your localizations if you open your app: by d
 
  1. When the user open the app, the server looks for a `_vueLang` cookie in the incoming http request containing a language tag like `'fr'`.
  2. Then, it negotiates the language with the `accept-language` http header with [locale](https://github.com/florrain/locale).
- 3. If still not found, it uses the `'en'` language or the first language it finds if there is no `'en'` locale.
+ 3. If still not found, it uses the default language or the first language it finds if the default language is not available.
  4. The server injects the locale data in the html response.
  5. The client renders the injected locale as soon as the page is ready.
  6. If there is a different `_vueLang` item in html5 `localStorage`, it asynchronously loads this locale.
  7. Else, the client uses `window.navigator.userLanguage` or `window.navigator.language` to check the user language. If it doesn't match with the one chosen by the server, it asynchronously loads this locale.
+
+The default language used by the server is `'en'`. You can change it with the `DEFAULT_LANG` environment variable.
 
 ### I18n API
 
