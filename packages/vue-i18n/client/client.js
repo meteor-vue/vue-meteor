@@ -41,7 +41,8 @@ let I18n = new Vue({
   methods: {
     init(languageList) {
       if (languageList.length === 0) {
-        throw new Error('Empty language list. Did you add a language file in your client?');
+        this.error = 'Empty language list. Did you add a language file in your client?';
+        throw new Error(this.error);
       }
       this.languageList = languageList;
 

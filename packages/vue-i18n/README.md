@@ -187,7 +187,7 @@ Output the following:
 <p>hello world</p>
 ```
 
-## List formatting
+#### List formatting
 
 Locale the following:
 
@@ -211,7 +211,7 @@ Output the following:
 <p>hello world</p>
 ```
 
-## Support ruby on rails i18n format
+#### Support ruby on rails i18n format
 
 Locale the following:
 
@@ -249,7 +249,95 @@ At this point, you can already try your localizations if you open your app: by d
 
 ### I18n API
 
+On the client, the package exposes a `I18n` vue instance:
 
+```javascript
+import I18n from 'meteor/akryum:vue-i18n';
+```
+
+#### Properties
+
+Name | Type | Description
+--- | --- | ---
+`autoLocale` | String | Locale automatically selected ([see Automatic language selection](#automatic-language-selection)).
+`browserLocale` | String | Locale natively determined by the browser.
+`error` | String | Last error message.
+`languageList` | Array | List of available languages. Initialized by the server ([see Automatic language selection](#automatic-language-selection)).
+`loading` | Boolean | Is `true` if a new locale is being loaded and not yet applied.
+`savedLangOption` | String | Locale saved by the user.
+
+#### Methods
+
+##### `setLocale(lang, remember=false)`
+
+Loads the new locale and save it (it will override automatic detection).
+
+Arguments:
+
+ - `lang` (String): Language code
+ - `remember` (Boolean, default `false`): If `true`, save the language choice.
+
+---
+
+##### `setAutoLocale(remember=false)`
+
+ Automatically detects the user language and apply it to the app.
+
+ Arguments:
+
+  - `remember` (Boolean, default `false`): If `true`, unset the eventual saved language so that it will be automatically detected the next time.
+
+---
+
+##### `setSavedLocale()`
+
+Loads the eventual saved language and apply it.
+
+---
+
+##### `saveLang(lang)`
+
+Set the currently saved language (without loading it), so next time the user opens your app, it will use this language and override the automatic language detection. To load it, use `loadLocale`.
+
+Arguments:
+
+ - `lang` (String): Language code
+
+---
+
+##### `loadLocale(lang)`
+
+Loads a locale with the specified language code. Returns a promise.
+
+Arguments:
+
+ - `lang` (String): Language code
+
+### Iso codes
+
+There is a language code list available from the package:
+
+```javascript
+import {isoLangs} from 'meteor/akryum:vue-i18n';
+
+console.log(isoLangs['en']);
+
+/*
+{
+    "name":"English",
+    "nativeName":"English"
+}
+*/
+
+console.log(isoLangs['fr']);
+
+/*
+{
+    "name":"French",
+    "nativeName":"Français"
+}
+*/
+```
 
 ### Premade ui
 
