@@ -81,6 +81,8 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 [Premade selection ui in akryum:vue-i18n-ui package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n-ui)
 
+[Example app](https://github.com/Akryum/meteor-vue-example-i18n)
+
 ## Get involved
 
 This project is very much a work-in-progress, so your help will be greatly appreciated!  

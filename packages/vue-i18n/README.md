@@ -9,6 +9,8 @@ Vue internationalization integrated in your meteor app using [vue-i18n](https://
 
 ## Usage
 
+[Example app](https://github.com/Akryum/meteor-vue-example-i18n)
+
 ### Locale files
 
 The translated strings must be put in json *locale files*. Each locale file name must end with `.<lang>.i18n.json` where `<lang>` is the corresponding language code. For example, the following english strings can be put in the `app.en.i18n.json` file:
