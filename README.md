@@ -23,8 +23,8 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Coffeescript official integration in .vue files
  - [x] Sass official integration in .vue files
  - [x] Easy routing with vue-router out-of-the-box integration & fast-render
+ - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui
  - [ ] *Typescript official integration in .vue files*
- - [ ] *Easy translation with vue i18n out-of-the-box integration & lazy lang loading(?)*
  - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
  - [ ] *Lazy-loading of components*
 
@@ -72,6 +72,14 @@ Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-route
 Use apollo in your vue component!
 
 [See Installation & Usage in akryum:vue-apollo package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
+
+### Localization
+
+Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon/vue-i18n).
+
+[See Installation & Usage in akryum:vue-i18n package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n#installation)
+
+[Premade selection ui in akryum:vue-i18n-ui package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n-ui)
 
 ## Get involved
 

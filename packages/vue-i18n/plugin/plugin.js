@@ -10,6 +10,7 @@ function isHot() {
 
 Plugin.registerCompiler({
   extensions: ['i18n.json'],
+  filenames: ['langs.json'],
   archMatching: 'web'
 }, () => new VueI18nCompiler());
 
@@ -37,6 +38,34 @@ class VueI18nCompiler {
     return data;
   }
 
+  watchFile(id, inputFile, context, callback) {
+    if(this.watchers[id]) {
+      this.watchers[id].close();
+    }
+
+    let sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
+    let filePath = path.resolve(sourceRoot, inputFile.getPathInPackage());
+
+    context.filePath = filePath;
+
+    callback = callback.bind(context);
+
+    let watcher = fs.watch(filePath, {
+      persistent: false
+    }, (function(event) {
+      if(event === 'change') {
+        let contents = Plugin.fs.readFileSync(this.filePath, {
+          encoding: 'utf8'
+        });
+        if(this.contents !== contents) {
+          this.contents = contents;
+          callback(contents);
+        }
+      }
+    }).bind(context));
+    this.watchers[id] = watcher;
+  }
+
   processFilesForTarget(files) {
     if(files.length === 0){
       throw new Error('You must add at last one lang file in your client code (ex: app.en.i18n.json).');
@@ -45,70 +74,76 @@ class VueI18nCompiler {
 
     let langFiles = {};
     let langs = [];
+    let manualLangs = false;
     this.watchers = global._vue_i18n_cache_;
 
     // Add files to languages
     for(let inputFile of files) {
-      let inputFilePath = inputFile.getPathInPackage();
-      let packageName = inputFile.getPackageName();
-      let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+      //console.log(inputFile.getBasename());
+      if(inputFile.getBasename() === 'langs.json') {
+        // Lang list
+        manualLangs = true;
+        langs = JSON.parse(inputFile.getContentsAsString());
 
-      if(!firstFile && !packageName) {
-        firstFile = inputFile;
-      }
+        // Hot-reloading
+        if(isHot()) {
+          let compiler = this;
+          this.watchFile('_langs', inputFile, {}, function(contents) {
+            global._dev_server.emit('langs.updated', {
+              langs
+            });
+          });
+        }
+      } else {
+        // Locale file
+        let inputFilePath = inputFile.getPathInPackage();
+        let packageName = inputFile.getPackageName();
+        let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
 
-      let lang = path.basename(inputFilePath).split(".").slice(0, -2).pop();
-
-      if(lang === null || typeof lang === 'undefined') {
-        throw new Error('Missing lang tag in filename (ex: app.en.i18n.json):' + sourcePath);
-      }
-
-      if(!langFiles[lang]) {
-        langFiles[lang] = [];
-      }
-      let fileList = langFiles[lang];
-      let handler = {
-        inputFile,
-        updatedSource: null
-      };
-      fileList.push(handler);
-
-      // Hot-reloading
-      if(isHot()) {
-        if(this.watchers[sourcePath]) {
-          this.watchers[sourcePath].close();
+        if(!firstFile && !packageName) {
+          firstFile = inputFile;
         }
 
-        let sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
-        let filePath = path.resolve(sourceRoot, inputFilePath);
-        let context = {
-          lang,
-          filePath,
-          handler,
-          fileList,
-          contents: null
+        let lang = inputFile.getBasename().split(".").slice(0, -2).pop();
+
+        if(lang === null || typeof lang === 'undefined') {
+          throw new Error('Missing lang tag in filename (ex: app.en.i18n.json):' + sourcePath);
+        }
+
+        if(!langFiles[lang]) {
+          langFiles[lang] = {
+            hasAppLocale: false,
+            files: []
+          };
+        }
+        let fileList = langFiles[lang];
+        let handler = {
+          inputFile,
+          updatedSource: null
         };
+        fileList.files.push(handler);
 
-        let compiler = this;
-        let watcher = fs.watch(filePath, {
-          persistent: false
-        }, (function(event) {
-          if(event === 'change') {
-            let contents = Plugin.fs.readFileSync(this.filePath, {
-              encoding: 'utf8'
+        if(!inputFile.getPackageName()) {
+          fileList.hasAppLocale = true;
+        }
+
+        // Hot-reloading
+        if(isHot()) {
+          let compiler = this;
+          this.watchFile(sourcePath, inputFile, {
+            lang,
+            handler,
+            fileList
+          }, function(contents) {
+            this.handler.updatedSource = contents;
+            let data = compiler.generateLocale(this.fileList.files);
+
+            global._dev_server.emit('lang.updated', {
+              lang: this.lang,
+              data
             });
-            if(this.contents !== contents) {
-              this.contents = this.handler.updatedSource = contents;
-              let data = compiler.generateLocale(this.fileList);
-
-              global._dev_server.emit('lang.updated', {
-                lang: this.lang,
-                data
-              });
-            }
-          }
-        }).bind(context));
-        this.watchers[sourcePath] = watcher;
+          });
+        }
       }
     }
 
@@ -118,15 +153,22 @@ class VueI18nCompiler {
 
     // Generate merged asset for each language
     for(let lang in langFiles) {
-      let data = this.generateLocale(langFiles[lang]);
+      if(!manualLangs || langs.indexOf(lang) !== -1) {
+        let fileList = langFiles[lang];
+        if(fileList.hasAppLocale) {
+          let data = this.generateLocale(fileList.files);
 
-      firstFile.addAsset({
-        path: `i18n/${lang}.json`,
-        data: JSON.stringify(data),
-        lazy: true
-      });
+          firstFile.addAsset({
+            path: `i18n/${lang}.json`,
+            data: JSON.stringify(data),
+            lazy: true
+          });
 
-      langs.push(lang);
+          if(!manualLangs) {
+            langs.push(lang);
+          }
+        }
+      }
     }
 
     let langsJson = JSON.stringify(langs);

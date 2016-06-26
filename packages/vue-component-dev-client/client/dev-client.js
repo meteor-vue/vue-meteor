@@ -3,6 +3,9 @@ import {Vue} from 'meteor/akryum:vue';
 import VueHotReloadApi from './vue-hot';
 import {Reload} from 'meteor/reload';
 import {Meteor} from 'meteor/meteor';
+import {Tracker} from 'meteor/tracker';
+import {Autoupdate} from 'meteor/autoupdate';
+import {ReactiveVar} from 'meteor/reactive-var';
 
 Vue.use(VueHotReloadApi);
 
@@ -16,18 +19,44 @@ if(window.__vue_hot_pending__) {
   }
 }
 
-var _supressNextReload = false;
+// Reload override
+var _suppressNextReload = false, _deferReload = 0;
 var _reload = Reload._reload;
 Reload._reload = function(options) {
-  console.log('[[ Reload request ]]');
-  if(_supressNextReload) {
-    console.log("[[ Client changed, may need reload ]]");
+  // Disable original reload for autoupdate package
+  if(Reload._reload.caller.name !== 'checkNewVersionDocument') {
+    _reload(options);
+  }
+}
+
+// Custom reload method
+function reload(options) {
+  console.log('[HMR] Reload request received');
+  if(_deferReload !== 0) {
+    setTimeout(_reload, _deferReload);
+    console.log(`[HMR] Client reload defered, will reload in ${_deferReload} ms`);
+  } else if(_suppressNextReload) {
+    console.log(`[HMR] Client version changed, reload suppressed because of previously hot-reloaded resource`);
   } else {
-    console.log("[[ Reloading app... ]]");
+    console.log(`[HMR] Reloading app...`);
     _reload.call(Reload, options);
   }
-  _supressNextReload = false;
+  _suppressNextReload = false;
+  _deferReload = 0;
 }
+
+// Reimplement client version check from autoupdate package
+var autoupdateVersion = __meteor_runtime_config__.autoupdateVersion || `unknown`;
+var ClientVersions = Autoupdate._ClientVersions;
+function checkNewVersionDocument (doc) {
+  if (doc._id === 'version' && doc.version !== autoupdateVersion) {
+    reload();
+  }
+}
+ClientVersions.find().observe({
+  added: checkNewVersionDocument,
+  changed: checkNewVersionDocument
+});
 
 // Hack https://github.com/socketio/socket.io-client/issues/961
 import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
@@ -40,18 +69,20 @@ if(!Response.prototype.setEncoding) {
 Meteor.startup(function() {
   // Dev client
   let port = window.__hot_port__ || 3003;
-  console.log('dev client port', port);
+  console.log('[HMR] Dev client port', port);
   let _socket = require('socket.io-client')(`http://localhost:${port}`);
+  window.__dev_client__ = _socket;
+
   _socket.on('connect', function() {
-    console.log('Dev client connected');
+    console.log('[HMR] Dev client connected');
   });
   _socket.on('disconnect', function() {
-    console.log('Dev client disconnected');
+    console.log('[HMR] Dev client disconnected');
   });
 
   // JS
   _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
-    _supressNextReload = true;
+    _suppressNextReload = true;
     let args = ['meteor/akryum:vue'];
     let regResult;
     while(regResult = jsImportsReg.exec(js)) {
@@ -83,12 +114,13 @@ Meteor.startup(function() {
     Vue.locale(lang, data);
     if(lang === Vue.config.lang) {
       // Refresh
-      _supressNextReload = true;
+      _suppressNextReload = true;
       VueHotReloadApi.updateWatchers();
     }
   });
-
-  window.__dev_client__ = _socket;
+  _socket.on('langs.updated', function({langs}) {
+    _deferReload = 3000;
+  });
 
   // Reg
   const jsImportsReg = /module\.import\((['"])(.+)\1/g;

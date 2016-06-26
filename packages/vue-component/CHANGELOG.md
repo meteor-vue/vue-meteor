@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 - 2016/06/24
+
+ - Added akryum:vue-i18n support.
+ - The component definitions have the new `packageName` attribute.
+ - Fix [Issue #5](https://github.com/Akryum/meteor-vue-component/issues/5)
+
 ## 0.3.8 - 2016/06/20
 
  - Fix [Issue #35](https://github.com/Akryum/meteor-vue-component/issues/35)

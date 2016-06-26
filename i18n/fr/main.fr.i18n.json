@@ -2,8 +2,8 @@
   "pages": {
     "home": {
       "title": "Accueil",
-      "welcome": "Soyez créatifs!",
-      "text1": "Développez d'incroyables applications rapidement et facilement avec meteor & vue!",
+      "welcome": "Soyez créatifs",
+      "text1": "Développez d'incroyables applications rapidement et facilement avec meteor & vue !",
       "more": "En savoir plus",
       "button": "Ne me cliquez pas"
     },

@@ -100,10 +100,10 @@ let I18n = new Vue({
       let autoLocale = this.browserLocale;
 
       if (this.languageList.indexOf(autoLocale) === -1) {
-        if (this.languageList.indexOf('en') === -1) {
+        if (this.languageList.indexOf(defaultLang) === -1) {
           autoLocale = this.languageList[0];
         } else {
-          autoLocale = 'en';
+          autoLocale = defaultLang;
         }
       }
 
@@ -141,8 +141,6 @@ InjectData.getData('vue-i18n-lang', function(data) {
   languageList = data.langs;
   defaultLang = data.lang;
   defaultLocale = data.locale;
-
-  console.log(data);
 
   Vue.locale(defaultLang, defaultLocale);
   Vue.config.lang = defaultLang;

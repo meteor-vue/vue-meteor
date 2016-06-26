@@ -123,6 +123,14 @@ export default {
 
 Here your component will be available as `<selected-thread>` regardless of the file name.
 
+### Package name
+
+If your component files are in a package, they will have the `packageName` attribute set. You can access it in your component instances like this:
+
+```javascript
+let packageName = this.$options.packageName;
+```
+
 ---
 
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)
