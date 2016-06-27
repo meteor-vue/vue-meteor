@@ -79,9 +79,12 @@ module.exports = {
 
           function error(errors, type) {
             if(type === 'execution') {
-              console.error(`GraphQL execution errors for query ${query}`, errors)
+              console.error(`GraphQL execution errors for query ${query}`);
+              for(let error of errors) {
+                console.error(error);
+              }
             } else if(type === 'sending') {
-              console.error(`Error sending the query ${query}`, error)
+              console.error(`Error sending the query ${query}`, errors)
             }
 
             if(typeof options.error === 'function') {

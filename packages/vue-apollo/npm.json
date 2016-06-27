@@ -1,5 +1,6 @@
 {
   "devDependencies": {
-    "apollo-client": "^0.3.13"
+    "apollo-client": "^0.3.13",
+    "graphql-tag": "^0.1.7"
   }
 }

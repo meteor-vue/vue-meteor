@@ -2,6 +2,8 @@
 
 Integrates [apollo](http://www.apollostack.com/) in your vue components with declarative queries.
 
+**The Apollo project is still in development.**
+
 *TODO npm package for use in non-meteor project*
 
 ## Installation

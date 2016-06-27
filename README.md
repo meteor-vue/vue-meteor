@@ -2,7 +2,7 @@
 
 **This project is experimental.**
 
-Tested with Meteor 1.3.4
+Tested with Meteor 1.3.4.1
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 

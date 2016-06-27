@@ -1,32 +1,9 @@
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import ApolloClient from 'apollo-client';
+import { meteorClientConfig } from 'meteor/apollo';
 
-import { Accounts } from 'meteor/accounts-base';
+import gql from 'graphql-tag';
+window['gql'] = gql;
 
-import { registerGqlTag } from 'apollo-client/gql';
-
-registerGqlTag();
-
-const networkInterface = createNetworkInterface(process.env.APOLLO_CLIENT_URL || '/graphql');
-
-networkInterface.use([{
-  applyMiddleware(request, next) {
-    const currentUserToken = Accounts._storedLoginToken();
-
-    if (!currentUserToken) {
-      next();
-      return;
-    }
-
-    if (!request.options.headers) {
-      request.options.headers = new Headers();
-    }
-
-    request.options.headers.Authorization = currentUserToken;
-
-    next();
-  }
-}]);
-
-export const client = new ApolloClient({
-  networkInterface
-});
+export const client = new ApolloClient(meteorClientConfig({
+  path: process.env.APOLLO_CLIENT_URL || '/graphql'
+}));

@@ -7,14 +7,14 @@
   "devDependencies": {
     "casual": "^1.5.3",
     "express": "^4.13.4",
-    "graphql": "^0.5.0",
-    "graphql-tools": "^0.4.2",
-    "http-proxy-middleware": "^0.15.2",
+    "apollo-server": "^0.1.5",
+    "graphql-tools": "^0.6.0",
     "vue": "^1.0.24",
     "apollo-client": "^0.3.13",
     "vue-router": "^0.7.13",
     "vue-i18n": "^4.0.1",
     "locale": "^0.1.0",
-    "js-cookie": "^2.1.2"
+    "js-cookie": "^2.1.2",
+    "graphql-tag": "^0.1.7"
   }
 }

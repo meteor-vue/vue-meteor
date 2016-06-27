@@ -18,6 +18,7 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 static-html
 check
+apollo
 
 ccorcos:subs-cache
 meteorhacks:fast-render
