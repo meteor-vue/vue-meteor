@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-i18n-ui',
-  version: '0.0.2',
+  version: '0.0.3',
   summary: 'Premade components for akryum:vue-i18n',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -13,7 +13,7 @@ Package.onUse(function(api) {
     'akryum:vue@1.0.2',
     'akryum:vue-component@0.3.8',
     'akryum:vue-less@0.0.3',
-    'akryum:vue-i18n@0.0.1'
+    'akryum:vue-i18n@0.0.2'
   ]);
   api.addFiles([
     'lib.en.i18n.json',

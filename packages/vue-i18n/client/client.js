@@ -154,7 +154,7 @@ export default I18n;
  * @author Phil Teare
  * using wikipedia data
  */
-export const isoLangs = {
+export const IsoLangs = {
     "ab":{
         "name":"Abkhaz",
         "nativeName":"аҧсуа"

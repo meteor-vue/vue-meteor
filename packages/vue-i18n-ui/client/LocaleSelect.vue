@@ -52,7 +52,7 @@
 
 <script>
 import {Vue} from 'meteor/akryum:vue';
-import I18n, {isoLangs} from 'meteor/akryum:vue-i18n';
+import I18n, {IsoLangs} from 'meteor/akryum:vue-i18n';
 import LangItem from './LangSelectItem.vue';
 
 export default {
@@ -125,7 +125,7 @@ export default {
   },
   filters: {
     langName(value) {
-      let name = isoLangs[value];
+      let name = IsoLangs[value];
       if(this.useNativeNames) {
         return name.nativeName;
       } else {
@@ -133,7 +133,7 @@ export default {
       }
     },
     nativeLangName(value) {
-      return isoLangs[value].name;
+      return IsoLangs[value].name;
     }
   },
   components: {

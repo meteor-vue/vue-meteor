@@ -322,9 +322,9 @@ Arguments:
 There is a language code list available from the package:
 
 ```javascript
-import {isoLangs} from 'meteor/akryum:vue-i18n';
+import {IsoLangs} from 'meteor/akryum:vue-i18n';
 
-console.log(isoLangs['en']);
+console.log(IsoLangs['en']);
 
 /*
 {
@@ -333,7 +333,7 @@ console.log(isoLangs['en']);
 }
 */
 
-console.log(isoLangs['fr']);
+console.log(IsoLangs['fr']);
 
 /*
 {
