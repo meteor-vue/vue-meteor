@@ -126,10 +126,13 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     }
 
     // Auto register
-    if (globalFileNameReg.test(inputFilePath)) {
+    let isGlobalName = globalFileNameReg.test(inputFilePath);
+    let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1;
+    if (isOutsideImports || isGlobalName) {
+      let ext = (isGlobalName?'.global':'') + '.vue';
 
       let name = Plugin.path.basename(inputFilePath);
-      name = name.substring(0, name.lastIndexOf('.global.vue'));
+      name = name.substring(0, name.lastIndexOf(ext));
 
       // Remove special characters
       name = name.replace(nonWordCharReg, '');

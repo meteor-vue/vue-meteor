@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0 - 2016/06/28
+
+ - No longer requires component files to be named `.global.vue` outside the `imports` folder.
+
 ## 0.4.0 - 2016/06/24
 
  - Added akryum:vue-i18n support.

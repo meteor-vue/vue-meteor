@@ -100,15 +100,13 @@ import Post from '/imports/ui/Post.vue';
 Vue.component('post', Post);
 ```
 
-### Global vue components
+### Automatic components registration
 
-`.global.vue` files outside of the `imports` directory are automatically registered as custom tags. The default tag name is the name of the file in kebab-case, and you can set your own with the `name` attribute in the component options.
+`.vue` files outside of the `imports` directory are automatically registered as custom tags. The default tag name is the name of the file in kebab-case, and you can set your own with the `name` attribute in the component options.
 
 ![screenshot](./global_component_file_tree.png)
 
-In the example above, the `Post.global.vue` component is automatically available in your vue templates as `<post>`.
-
-**The global component files shouldn't be inside an `imports` directory, or else they will not be automatically added to your app.**
+In the example above, the `Post.vue` component is automatically available in your vue templates as `<post>`.
 
 You can override the default naming behavior by setting the `name` option in your component:
 
@@ -130,6 +128,8 @@ If your component files are in a package, they will have the `packageName` attri
 ```javascript
 let packageName = this.$options.packageName;
 ```
+
+It will be null if the components is in your application code.
 
 ---
 
