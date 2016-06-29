@@ -1,17 +1,25 @@
 <template lang="jade">
 .app-layout
   locale-select.lang-select
-  app-menu
+  links-menu(:links="links")
   router-view
 </template>
 
 <script>
-import AppMenu from '/imports/ui/AppMenu.vue';
 import {LocaleSelect} from 'meteor/akryum:vue-i18n-ui';
 
 export default {
+  data() {
+    return {
+      links: [
+        { name: 'home', exact: true, lb: 'pages.home.title' },
+        { name: 'forum', lb: 'pages.forum.title' },
+        { name: 'apollo', lb: 'pages.apollo.title' },
+        { name: 'vuex', lb: 'pages.vuex.title' }
+      ]
+    }
+  },
   components: {
-    AppMenu,
     LocaleSelect
   }
 }

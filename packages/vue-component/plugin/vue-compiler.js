@@ -246,6 +246,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       let watcher = fs.watch(filePath, {
         persistent: false
       }, fileChanged);
+      watcher.on('error', (error) => console.log(error));
 
       // Cache
       global._vue_cache[hash] = {

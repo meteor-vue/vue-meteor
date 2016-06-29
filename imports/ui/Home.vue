@@ -7,7 +7,7 @@
   img.logo(src="/img/meteor.png")
 
   p
-    button2(:label="$t('pages.home.button')", @click="clicked=true", v-if="!clicked")
+    button2(:label="$t('pages.home.button')", @action="clicked=true", v-if="!clicked")
 </template>
 
 <script>

@@ -9,7 +9,7 @@ export default {
   props: ['label'],
   methods: {
     handleClick() {
-      this.$emit('click', this);
+      this.$emit('action', this);
     }
   }
 }

@@ -183,12 +183,7 @@ exports.update = function (id, newOptions, newTemplate) {
   // managed by a view
   if (!record || (record.instances.length && !record.views.length)) {
     console.log('[HMR] Root or manually-mounted instance modified. Full reload may be required.')
-    if (!isBrowserify) {
-      window.location.reload()
-    } else {
-      // browserify-hmr somehow sends incomplete bundle if we reload here
-      return
-    }
+    return true;
   }
   if (!isBrowserify) {
     // browserify-hmr already logs this
@@ -240,6 +235,7 @@ exports.update = function (id, newOptions, newTemplate) {
   if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
     window.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit('flush')
   }
+  return false;
 }
 
 /**

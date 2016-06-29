@@ -30,6 +30,15 @@
         "ping": "Ping",
         "input": "Enter a message"
       }
+    },
+    "vuex": {
+      "title": "Vuex",
+      "count": "Count is {count}",
+      "increment": "Increment",
+      "decrement": "Decrement",
+      "amount": "Amount",
+      "counter": "Counter",
+      "collection": "Collection"
     }
   }
 }

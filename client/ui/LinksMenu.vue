@@ -1,9 +1,13 @@
 <template lang="jade">
 .app-menu
-  a(v-link="{ name:'home', exact: true }") {{$t('pages.home.title')}}
-  a(v-link="{ name:'forum' }") {{$t('pages.forum.title')}}
-  a(v-link="{ name:'apollo' }") {{$t('pages.apollo.title')}}
+  a(v-for="link in links", v-link="link") {{$t(link.lb)}}
 </template>
+
+<script>
+export default {
+  props:['links']
+}
+</script>
 
 <style scoped lang="sass">
 @import ~imports/ui/colors.sass

@@ -15,6 +15,7 @@
     "vue-i18n": "^4.0.1",
     "locale": "^0.1.0",
     "js-cookie": "^2.1.2",
-    "graphql-tag": "^0.1.7"
+    "graphql-tag": "^0.1.7",
+    "vuex": "^0.8.0"
   }
 }

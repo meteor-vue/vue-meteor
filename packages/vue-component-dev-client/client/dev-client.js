@@ -82,19 +82,30 @@ Meteor.startup(function() {
 
   // JS
   _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
-    _suppressNextReload = true;
     let args = ['meteor/akryum:vue'];
     let regResult;
+    let error = null;
     while(regResult = jsImportsReg.exec(js)) {
       args.push(regResult[2]);
     }
     args.push(function(require,exports,module){
-      eval(js);
+      try {
+        eval(js);
+      } catch(e) {
+        console.error(e);
+        error = e;
+      }
     });
     let id = `_component${(new Date()).getTime()}.js`;
     let require = meteorInstall({[id]:args});
     let result = require('./' + id);
-    VueHotReloadApi.update(hash, result.default, template);
+    let needsReload = false;
+    if(!error) {
+       needsReload = VueHotReloadApi.update(hash, result.default, template);
+    }
+
+    //_suppressNextReload = !error && !needsReload;
+    _suppressNextReload = true;
   }));
 
   // CSS
@@ -114,9 +125,10 @@ Meteor.startup(function() {
     Vue.locale(lang, data);
     if(lang === Vue.config.lang) {
       // Refresh
-      _suppressNextReload = true;
       VueHotReloadApi.updateWatchers();
     }
+    console.log(`[HMR] Updated locale ${lang}`);
+    _suppressNextReload = true;
   });
   _socket.on('langs.updated', function({langs}) {
     _deferReload = 3000;

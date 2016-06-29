@@ -39,8 +39,9 @@ class VueI18nCompiler {
   }
 
   watchFile(id, inputFile, context, callback) {
-    if(this.watchers[id]) {
-      this.watchers[id].close();
+    let cache = this.cache[id];
+    if(cache.watcher) {
+      cache.watcher.close();
     }
 
     let sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
@@ -63,7 +64,8 @@ class VueI18nCompiler {
         }
       }
     }).bind(context));
-    this.watchers[id] = watcher;
+    watcher.on('error', (error) => console.log(error));
+    cache.watcher = watcher;
   }
 
   processFilesForTarget(files) {
@@ -75,12 +77,25 @@ class VueI18nCompiler {
     let langFiles = {};
     let langs = [];
     let manualLangs = false;
-    this.watchers = global._vue_i18n_cache_;
+    this.cache = global._vue_i18n_cache_;
 
     // Add files to languages
     for(let inputFile of files) {
+      let inputFilePath = inputFile.getPathInPackage();
+      let packageName = inputFile.getPackageName();
+      let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+      let id = sourcePath;
+
+      let isLangsFile = (inputFile.getBasename() === 'langs.json');
+      if(isLangsFile) {
+        id = '__langs__';
+      }
+
+      let cache = this.cache[id] = this.cache[id] || {};
+      // TODO caching?
+
       //console.log(inputFile.getBasename());
-      if(inputFile.getBasename() === 'langs.json') {
+      if(isLangsFile) {
         // Lang list
         manualLangs = true;
         langs = JSON.parse(inputFile.getContentsAsString());
@@ -88,7 +103,7 @@ class VueI18nCompiler {
         // Hot-reloading
         if(isHot()) {
           let compiler = this;
-          this.watchFile('_langs', inputFile, {}, function(contents) {
+          this.watchFile(id, inputFile, {}, function(contents) {
             global._dev_server.emit('langs.updated', {
               langs
             });
@@ -96,9 +111,6 @@ class VueI18nCompiler {
         }
       } else {
         // Locale file
-        let inputFilePath = inputFile.getPathInPackage();
-        let packageName = inputFile.getPackageName();
-        let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
 
         if(!firstFile && !packageName) {
           firstFile = inputFile;
@@ -130,7 +142,7 @@ class VueI18nCompiler {
         // Hot-reloading
         if(isHot()) {
           let compiler = this;
-          this.watchFile(sourcePath, inputFile, {
+          this.watchFile(id, inputFile, {
             lang,
             handler,
             fileList
