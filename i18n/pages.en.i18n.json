@@ -33,12 +33,19 @@
     },
     "vuex": {
       "title": "Vuex",
-      "count": "Count is {count}",
-      "increment": "Increment",
-      "decrement": "Decrement",
-      "amount": "Amount",
-      "counter": "Counter",
-      "collection": "Collection"
+      "counter": {
+        "title": "Counter",
+        "info": "The counter value is coming from the vuex store and is changed by mutations.",
+        "count": "Count is {count}",
+        "increment": "Increment",
+        "decrement": "Decrement",
+        "amount": "Amount"
+      },
+      "collection": {
+        "title": "Collection",
+        "info": "Data is coming from the vuex store and is being updated by meteor tracker. The state of the date sorting is also managed by the store.",
+        "date": "Date"
+      }
     }
   }
 }

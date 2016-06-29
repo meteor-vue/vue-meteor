@@ -3,9 +3,9 @@
     <h1>{{$t('pages.apollo.title')}}</h1>
     <div class="tags">
       <h2>{{$t('pages.apollo.tags.title')}}</h2>
-      <p>
+      <div class="info">
           {{$t('pages.apollo.tags.info')}}
-      </p>
+      </div>
       <span class="tag" v-for="tag in tags"><a>{{tag.label}}</a></span>
 
       <form @submit.prevent="addTag">

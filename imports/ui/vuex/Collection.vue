@@ -1,9 +1,12 @@
 <template>
 <div class="vuex-collection">
   <div class="threads">
+    <div class="info">
+      {{ $t('pages.vuex.collection.info') }}
+    </div>
     <div class="options">
       <div class="option sort-date" @click="toggleSortDate">
-        Date
+        {{ $t('pages.vuex.collection.date') }}
         <span v-if="sortDate === 1">&#9660;</span>
         <span v-else>&#9650;</span>
       </div>
@@ -17,18 +20,13 @@
 </template>
 
 <script>
+import CollectionTest from '/imports/vuex/modules/collection-test';
+
 export default {
   vuex: {
     trackers: ['collection.threads'],
-    getters: {
-      threads: state => state.collection.threads,
-      sortDate: state => state.collection.sortDate
-    },
-    actions: {
-      toggleSortDate (store) {
-        store.dispatch('THREADS_SORT_DATE', -1*this.sortDate)
-      }
-    }
+    getters: CollectionTest.getters,
+    actions: CollectionTest.actions
   },
   filters: {
     date(value) {

@@ -1,5 +1,5 @@
 <template>
-  <a class="lang-item" :class="langItemClasses" @click="handleClick" @keyup.space="handleClick" role="button" tabindex="0" aria-describedby="Select the {{lang}} language">
+  <a class="vue-ui-lang-item" :class="langItemClasses" @click="handleClick" @keyup.space="handleClick" role="button" tabindex="0" aria-describedby="Select the {{lang}} language">
     <slot></slot>
   </a>
 </template>
@@ -15,7 +15,7 @@ export default {
     },
     langItemClasses() {
       return {
-        selected: this.selected
+        'vue-ui-selected': this.selected
       }
     }
   },
@@ -28,9 +28,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-.lang-item {
-  &.selected {
-    background-color: #d1eeeb;
+.vue-ui-lang-item {
+  &.vue-ui-selected {
+    background-color: #d1eeeb !important;
   }
 }
 </style>

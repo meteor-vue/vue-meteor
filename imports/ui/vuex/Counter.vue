@@ -1,5 +1,8 @@
 <template>
 <div class="counter">
+  <div class="info">
+    {{ $t('pages.vuex.counter.info') }}
+  </div>
   <display></display>
   <increment></increment>
   <decrement></decrement>

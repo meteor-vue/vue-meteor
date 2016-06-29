@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ $t('pages.vuex.count', {count: counter}) }}</h3>
+    <h3>{{ $t('pages.vuex.counter.count', {count: counter}) }}</h3>
   </div>
 </template>
 

@@ -1,22 +1,33 @@
 import {StoreModule} from 'meteor/akryum:vuex';
 import {Threads} from '/imports/api/collections';
 
-const store = new StoreModule('collection');
+const s = new StoreModule('collection');
 
-store.state({
+s.addState({
   threads: [],
   sortDate: -1
 });
 
-store.mutations({
+s.addGetters({
+  threads: state => state.threads,
+  sortDate: state => state.sortDate
+});
+
+s.addMutations({
   THREADS_SORT_DATE(state, order) {
     state.sortDate = order;
     // Call this in your tracker dependencies
-    store.updateTracker('threads');
+    s.updateTracker('threads');
   }
 });
 
-store.trackers({
+s.addActions({
+  toggleSortDate(store, state) {
+    store.dispatch('THREADS_SORT_DATE', -1*state.sortDate);
+  }
+});
+
+s.addTrackers({
   threads() {
     let sub;
     return {
@@ -40,4 +51,4 @@ store.trackers({
   }
 });
 
-export default store;
+export default s;

@@ -1,13 +1,13 @@
 import {Store} from 'meteor/akryum:vuex';
 import CollectionTest from './modules/collection-test';
 
-const store = new Store();
+const s = new Store();
 
-store.state({
+s.addState({
   counter: 0
 });
 
-store.mutations({
+s.addMutations({
   INCREMENT(state, amount) {
     state.counter += amount;
   },
@@ -16,6 +16,16 @@ store.mutations({
   }
 });
 
-store.addModule(CollectionTest);
+s.addActions({
+  increment(store, state, amount) {
+    store.dispatch('INCREMENT', amount);
+  },
+  decrement(store, state, amount) {
+    store.dispatch('DECREMENT', amount);
+  }
+})
 
-export default store.exportStore();
+s.addModule(CollectionTest);
+
+export const store = s.exportStore();
+export default s;

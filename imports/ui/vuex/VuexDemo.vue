@@ -7,15 +7,15 @@
 </template>
 
 <script>
-import store from '/imports/vuex/store'
+import {store} from '/imports/vuex/store'
 
 export default {
   store,
   data() {
     return {
       links: [
-        { name: 'vuex', exact: true, lb: 'pages.vuex.counter' },
-        { name: 'vuex.collection', lb: 'pages.vuex.collection' }
+        { name: 'vuex', exact: true, lb: 'pages.vuex.counter.title' },
+        { name: 'vuex.collection', lb: 'pages.vuex.collection.title' }
       ]
     }
   }

@@ -104,8 +104,8 @@ Meteor.startup(function() {
        needsReload = VueHotReloadApi.update(hash, result.default, template);
     }
 
-    //_suppressNextReload = !error && !needsReload;
-    _suppressNextReload = true;
+    _suppressNextReload = !error && !needsReload;
+    //_suppressNextReload = true;
   }));
 
   // CSS

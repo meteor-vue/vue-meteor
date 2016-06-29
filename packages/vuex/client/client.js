@@ -37,21 +37,34 @@ function parseTrackerPath(t) {
 export class StoreModule {
   constructor(name) {
     this.name = name;
+    this.getters = {};
+    this.actions = {};
+
     this._state = {};
+    this._getters = {};
     this._mutations = {};
+    this._actions = {};
     this._trackers = {};
     this._trackerHandlers = {};
   }
 
-  state(data) {
+  addState(data) {
     _.merge(this._state, data);
   }
 
-  mutations(map) {
+  addGetters(map) {
+    _.merge(this._getters, map);
+  }
+
+  addMutations(map) {
     _.merge(this._mutations, map);
   }
 
-  trackers(map) {
+  addActions(map) {
+    _.merge(this._actions, map);
+  }
+
+  addTrackers(map) {
     _.merge(this._trackers, map);
   }
 
@@ -79,6 +92,30 @@ export class StoreModule {
       this._trackerHandlers[t].setStore(store);
     }
   }
+
+  _processGetters() {
+    for(let g in this._getters) {
+      this.getters[g] = this._addGetter(this._getters[g]);
+    }
+  }
+
+  _addGetter(getter) {
+    return (state) => {
+      return getter(this.getState(state));
+    }
+  }
+
+  _processActions() {
+    for(let g in this._actions) {
+      this.actions[g] = this._addAction(this._actions[g]);
+    }
+  }
+
+  _addAction(action) {
+    return (store, ...args) => {
+      return action.call(this, store, this.getState(store.state), ...args);
+    }
+  }
 }
 
 export class Store extends StoreModule {
@@ -97,6 +134,9 @@ export class Store extends StoreModule {
   }
 
   exportStore() {
+
+    this._processGetters();
+    this._processActions();
 
     this._createTrackers();
 
@@ -133,6 +173,20 @@ export class Store extends StoreModule {
     super._setStore(store);
     for(let m in this._modules) {
       this._modules[m]._setStore(store);
+    }
+  }
+
+  _processGetters() {
+    super._processGetters();
+    for(let m in this._modules) {
+      this._modules[m]._processGetters();
+    }
+  }
+
+  _processActions() {
+    super._processActions();
+    for(let m in this._modules) {
+      this._modules[m]._processActions();
     }
   }
 }
@@ -247,7 +301,7 @@ class StoreTracker {
     this.mutationName = this.module.name + '_' + this.id + '_tracker';
 
     // Add mutation
-    this.module.mutations({
+    this.module.addMutations({
       [this.mutationName]: this.mutation
     });
   }

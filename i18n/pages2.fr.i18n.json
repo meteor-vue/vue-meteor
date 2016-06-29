@@ -4,7 +4,7 @@
       "title": "Apollo",
       "tags": {
         "title": "Etiquettes",
-        "info": "Ces étiquettes ont été chargées depuis un serveur apollo",
+        "info": "Ces étiquettes ont été chargées depuis un serveur apollo.",
         "add": "Ajouter une étiquette"
       },
       "tests": {
@@ -16,12 +16,19 @@
     },
     "vuex": {
       "title": "Vuex",
-      "count": "Le compteur est {count}",
-      "increment": "Incrémenter",
-      "decrement": "Décrémenter",
-      "amount": "Quantité",
-      "counter": "Compteur",
-      "collection": "Collection"
+      "counter": {
+        "title": "Compteur",
+        "info": "La valeur du compteur provient du magasin vuex et elle est modifiée via des mutations.",
+        "count": "Le compteur est {count}",
+        "increment": "Incrémenter",
+        "decrement": "Décrémenter",
+        "amount": "Quantité"
+      },
+      "collection": {
+        "title": "Collection",
+        "info": "Ces données proviennent du magasin vuex et sont mises à jour par meteor tracker. L'état du tri des dates est également géré par le magasin.",
+        "date": "Date"
+      }
     }
   }
 }
