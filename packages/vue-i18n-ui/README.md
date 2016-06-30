@@ -48,6 +48,17 @@ Template | Default | Description
 
 ![screenshot](./remember.png)
 
+### Slots
+
+You can customize the default icon using [vue slots](http://vuejs.org/guide/components.html#Content-Distribution-with-Slots). The following slot is available:
+
+```html
+<locale-select class="lang-select">
+  <!-- This slot will override the default icon html code -->
+  <span slot="arrow">v</span>
+</locale-select>
+```
+
 ### Localize the components
 
 In your own *locale files*, add the following strings and translate them:
