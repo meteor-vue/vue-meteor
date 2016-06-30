@@ -1,51 +1,27 @@
-import {Tracker} from 'meteor/tracker';
-import {Vue} from 'meteor/akryum:vue';
+import { Tracker } from 'meteor/tracker';
+import { Vue } from 'meteor/akryum:vue';
 import Vuex from 'vuex';
 import _ from 'lodash';
 
+import { getWatcher, getDep } from './util';
+
 Vue.use(Vuex);
-
-let bus = new Vue({});
-
-let trackerEventPrefix = '_vuex_tracker_';
-function getAddClientEvent(id, moduleName) {
-  return trackerEventPrefix + '_addClient__' + moduleName + '__' + id
-}
-function getRemoveClientEvent(id, moduleName) {
-  return trackerEventPrefix + '_removeClient__' + moduleName + '__' + id
-}
-
-function parseTrackerPath(t) {
-  let tPath = t.split('.');
-  if(tPath.length < 1 || tPath.length > 2) {
-    throw new Error(`The vuex.trackers options must contain only '<tracker_name>' or '<module_name>.<tracker_name>' strings.`);
-  }
-  let moduleName, id;
-  if(tPath.length == 1) {
-    moduleName = "root";
-    id = tPath[0];
-  } else {
-    moduleName = tPath[0];
-    id = tPath[1];
-  }
-  return {
-    moduleName,
-    id
-  }
-}
 
 export class StoreModule {
   constructor(name) {
     this.name = name;
     this.getters = {};
     this.actions = {};
+    this.trackers = {};
 
     this._state = {};
     this._getters = {};
     this._mutations = {};
     this._actions = {};
     this._trackers = {};
+    this._meteorData = {};
     this._trackerHandlers = {};
+    this._vm = null;
   }
 
   addState(data) {
@@ -68,33 +44,31 @@ export class StoreModule {
     _.merge(this._trackers, map);
   }
 
-  updateTracker(id) {
-    let handler = this._trackerHandlers[id];
-    if(handler) {
-      handler.update();
-    }
-  }
-
   getState(state) {
     return state[this.name];
   }
 
   _createTrackers() {
-    for(let t in this._trackers) {
+    for (let t in this._trackers) {
       let handler = new StoreTracker(t, this._trackers[t](), this);
-      this._trackerHandlers[t] = handler;
+      this.trackers[t] = this._trackerHandlers[t] = handler;
     }
+
+    // Create the Vue instance that will hold meteor data
+    this._vm = new Vue({
+      data: this._meteorData
+    });
   }
 
   _setStore(store) {
     this.store = store;
-    for(let t in this._trackerHandlers) {
+    for (let t in this._trackerHandlers) {
       this._trackerHandlers[t].setStore(store);
     }
   }
 
   _processGetters() {
-    for(let g in this._getters) {
+    for (let g in this._getters) {
       this.getters[g] = this._addGetter(this._getters[g]);
     }
   }
@@ -106,7 +80,7 @@ export class StoreModule {
   }
 
   _processActions() {
-    for(let g in this._actions) {
+    for (let g in this._actions) {
       this.actions[g] = this._addAction(this._actions[g]);
     }
   }
@@ -142,7 +116,7 @@ export class Store extends StoreModule {
 
     // Modules
     let modules = {};
-    for(let m in this._modules) {
+    for (let m in this._modules) {
       let module = this._modules[m];
       modules[module.name] = {
         state: module._state,
@@ -164,28 +138,28 @@ export class Store extends StoreModule {
 
   _createTrackers() {
     super._createTrackers();
-    for(let m in this._modules) {
+    for (let m in this._modules) {
       this._modules[m]._createTrackers();
     }
   }
 
   _setStore(store) {
     super._setStore(store);
-    for(let m in this._modules) {
+    for (let m in this._modules) {
       this._modules[m]._setStore(store);
     }
   }
 
   _processGetters() {
     super._processGetters();
-    for(let m in this._modules) {
+    for (let m in this._modules) {
       this._modules[m]._processGetters();
     }
   }
 
   _processActions() {
     super._processActions();
-    for(let m in this._modules) {
+    for (let m in this._modules) {
       this._modules[m]._processActions();
     }
   }
@@ -195,16 +169,6 @@ class ExtendedStore extends Vuex.Store {
   constructor(store, options) {
     super(options);
   }
-
-  activateTracker(path) {
-    let {moduleName, id} = parseTrackerPath(path);
-    bus.$emit(getAddClientEvent(id, moduleName));
-  }
-
-  deactivateTracker(path) {
-    let {moduleName, id} = parseTrackerPath(path);
-    bus.$emit(getRemoveClientEvent(id, moduleName));
-  }
 }
 
 class StoreTracker {
@@ -212,70 +176,60 @@ class StoreTracker {
     this.id = id;
     this.options = options;
     this.module = module;
-
     this.clientCount = 0;
 
-    this._createMutation();
-
-    bus.$on(getAddClientEvent(this.id, this.module.name), () => {
-      this.addClient();
-    });
-
-    bus.$on(getRemoveClientEvent(this.id, this.module.name), () => {
-      this.removeClient();
-    });
+    this._configure();
   }
 
   setStore(store) {
     this.store = store;
 
-    if(this.options.autoActivate) {
+    if (this.options.autoActivate) {
       this.activate();
-      this.clientCount ++;
+      this.clientCount++;
     }
   }
 
   activate() {
-    if(this.options.activate) {
+    if (this.options.activate) {
       this.options.activate();
     }
 
-    this.computation = Tracker.autorun(() => {
-      this.update();
-    })
+    if (this.watchCb && this.store) {
+      this.store.watch((state) => {
+        return this.watchCb(this.module.getState(state));
+      }, this._autorun.bind(this), {
+        immediate: true
+      });
+    } else {
+      this._autorun();
+    }
 
-    if(Meteor.isDevelopment) {
+    if (Meteor.isDevelopment) {
       console.log(`Vuex tracker activated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
     }
   }
 
   deactivate() {
-    if(this.options.deactivate) {
+    if (this.options.deactivate) {
       this.options.deactivate();
     }
 
-    if(this.computation) {
-      this.computation.stop();
-    }
+    this._stopComputation();
 
-    if(Meteor.isDevelopment) {
+    if (Meteor.isDevelopment) {
       console.log(`Vuex tracker deactivated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
     }
   }
 
-  update() {
-    if(this.store) {
-      this.store.dispatch({
-        type: this.mutationName,
-        silent: true
-      });
-    }
+  update(params) {
+    this.updateCb(this.module._vm, params);
   }
 
   addClient() {
     this.clientCount++;
 
-    if(this.clientCount === 1) {
+    if (this.clientCount === 1) {
       this.activate();
     }
   }
@@ -283,72 +237,164 @@ class StoreTracker {
   removeClient() {
     this.clientCount--;
 
-    if(this.clientCount === 0) {
+    if (this.clientCount === 0) {
       this.deactivate();
     }
   }
 
-  _createMutation() {
-    let func;
-    if(typeof this.options === 'function') {
-      func = this.options
-    } else if(typeof this.options.mutate === 'function') {
-      func = this.options.mutate
-    } else {
-      throw Error('You must provide either a function or an object with the mutate() method.')
-    }
-    this.mutation = func;
-    this.mutationName = this.module.name + '_' + this.id + '_tracker';
+  _configure() {
+    let func, init, watch;
+    if (typeof this.options === 'function') {
+      func = this.options;
+    } else if (typeof this.options.update === 'function') {
+      func = this.options.update;
 
-    // Add mutation
-    this.module.addMutations({
-      [this.mutationName]: this.mutation
-    });
+      if (typeof this.options.init === 'function') {
+        init = this.options.init;
+      }
+
+      if (typeof this.options.watch === 'function') {
+        watch = this.options.watch;
+      }
+    } else {
+      throw Error('You must provide either a function or an object with the mutate() method.');
+    }
+
+    this.updateCb = func;
+    this.watchCb = watch;
+
+    // Initialize meteor data
+    if (init) {
+      init(this.module._meteorData);
+    }
+
+    // Getters
+    if(this.options.getters) {
+      for(let k in this.options.getters) {
+        if(k.indexOf('get') !== 0) {
+          console.warn(`Getters in vuex trackers should be named like 'getName()', found '${k}' in module ${this.module.name}`);
+        }
+        let getter = this.options.getters[k];
+        getter.tracker = this;
+        this[k] = getter;
+      }
+    }
+  }
+
+  _stopComputation() {
+    if (this.computation) {
+      this.computation.stop();
+    }
+  }
+
+  _autorun(params) {
+    this._stopComputation();
+    this.computation = Tracker.autorun(() => {
+      this.update(params);
+    })
   }
 }
 
+// Vue plugin
+
 const VuePlugin = {
   install(Vue) {
+
+    // Init override
     const _init = Vue.prototype._init
-    Vue.prototype._init = function (options = {}) {
-      options.init = options.init
-        ? [vuexInit].concat(options.init)
-        : vuexInit
+    Vue.prototype._init = function(options = {}) {
+      options.init = options.init ? [vuexInit].concat(options.init) :
+        vuexInit
       _init.call(this, options)
     }
 
     function vuexInit() {
       const options = this.$options;
 
-      this._vuex_trackers_add_events = [];
-      this._vuex_trackers_remove_events = [];
+      this._vuex_trackers = [];
 
-      const {vuex} = options;
-      if(vuex) {
-        const {trackers} = vuex;
-        if(trackers) {
-          for(let t of trackers) {
-            let {moduleName, id} = parseTrackerPath(t);
-            this._vuex_trackers_add_events.push(getAddClientEvent(id, moduleName));
-            this._vuex_trackers_remove_events.push(getRemoveClientEvent(id, moduleName));
+      const { vuex } = options;
+      if (vuex) {
+        const { trackers } = vuex;
+        if (trackers) {
+          for (let t in trackers) {
+            defineVuexTracker(this, t, trackers[t]);
           }
         }
       }
     }
 
+    function setter() {
+      throw new Error('vuex getter properties are read-only.')
+    }
+
+    function defineVuexTracker(vm, key, getter) {
+      const tracker = getter.tracker;
+      Object.defineProperty(vm, key, {
+        enumerable: true,
+        configurable: true,
+        get: makeComputedGetter(tracker, getter),
+        set: setter
+      });
+      vm._vuex_trackers.push(tracker);
+    }
+
+    function makeComputedGetter(tracker, getter) {
+      const {store} = tracker;
+      const id = store._getterCacheId
+
+      // cached
+      if (getter[id]) {
+        return getter[id]
+      }
+      const vm = tracker.module._vm
+      const Watcher = getWatcher(vm)
+      const Dep = getDep(vm)
+      const watcher = new Watcher(
+        vm,
+        vm => getter(vm),
+        null, { lazy: true }
+      )
+      const computedGetter = () => {
+        if (watcher.dirty) {
+          watcher.evaluate()
+        }
+        if (Dep.target) {
+          watcher.depend()
+        }
+        return watcher.value
+      }
+      getter[id] = computedGetter
+      return computedGetter
+    }
+
+
     Vue.mixin({
       beforeCompile: function() {
-        for(let event of this._vuex_trackers_add_events) {
-          bus.$emit(event);
+        for (let tracker of this._vuex_trackers) {
+          tracker.addClient();
         }
       },
 
       destroyed: function() {
-        for(let event of this._vuex_trackers_remove_events) {
-          bus.$emit(event);
+        for (let tracker of this._vuex_trackers) {
+          tracker.removeClient();
         }
       }
     })
+
+    // option merging
+    const merge = Vue.config.optionMergeStrategies.computed
+    Vue.config.optionMergeStrategies.vuex = (toVal, fromVal) => {
+      if (!toVal) return fromVal
+      if (!fromVal) return toVal
+      return {
+        getters: merge(toVal.getters, fromVal.getters),
+        state: merge(toVal.state, fromVal.state),
+        actions: merge(toVal.actions, fromVal.actions),
+        trackers: merge(toVal.trackers, fromVal.trackers)
+      }
+    }
   }
 }
 

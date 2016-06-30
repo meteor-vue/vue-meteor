@@ -24,7 +24,9 @@ import CollectionTest from '/imports/vuex/modules/collection-test';
 
 export default {
   vuex: {
-    trackers: ['collection.threads'],
+    trackers: {
+      threads: CollectionTest.trackers.threads.getThreads
+    },
     getters: CollectionTest.getters,
     actions: CollectionTest.actions
   },
