@@ -27,7 +27,7 @@ Package.onUse(function(api) {
   api.use('akryum:npm-check@0.0.2');
   api.use('ecmascript');
   api.use('webapp');
-  api.use('akryum:vue@1.0.2');
+  api.use('akryum:vue@1.0.3');
   api.use('meteorhacks:inject-data@2.0.0');
   api.mainModule('client/client.js', 'client');
   api.mainModule('server/server.js', 'server');
