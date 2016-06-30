@@ -89,6 +89,8 @@ Manage the state of your app with a centralized data store.
 
 [See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
 
+[Example app](https://github.com/Akryum/meteor-vuex-example)
+
 ## Get involved
 
 This project is very much a work-in-progress, so your help will be greatly appreciated!  
