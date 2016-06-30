@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vuex',
-  version: '0.0.1',
+  version: '0.1.0',
   summary: 'State management with vuex for Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -11,7 +11,7 @@ Package.onUse(function(api) {
   api.use('isobuild:compiler-plugin@1.0.0');
   api.use('ecmascript');
   api.use('akryum:npm-check@0.0.2');
-  api.use('akryum:vue@1.0.2');
+  api.use('akryum:vue@1.0.3');
   api.mainModule('client/client.js', 'client');
   api.export('StoreModule', 'client');
 });

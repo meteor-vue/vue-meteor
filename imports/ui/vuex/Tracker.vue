@@ -1,12 +1,12 @@
 <template>
-<div class="vuex-collection">
+<div class="vuex-tracker">
   <div class="threads">
     <div class="info">
-      {{ $t('pages.vuex.collection.info') }}
+      {{ $t('pages.vuex.tracker.info') }}
     </div>
     <div class="options">
       <div class="option sort-date" @click="toggleSortDate">
-        {{ $t('pages.vuex.collection.date') }}
+        {{ $t('pages.vuex.tracker.date') }}
         <span v-if="sortDate === 1">&#9660;</span>
         <span v-else>&#9650;</span>
       </div>
@@ -21,13 +21,13 @@
 
 <script>
 export default {
-  vuex({collection}) {
+  vuex({forum}) {
     return {
       trackers: {
-        threads: collection.trackers.getThreads
+        threads: forum.trackers.getThreads
       },
-      getters: collection.getters,
-      actions: collection.actions
+      getters: forum.getters,
+      actions: forum.actions
     }
   },
   filters: {

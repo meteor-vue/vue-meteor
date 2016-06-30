@@ -1,16 +1,15 @@
-import {Store} from 'meteor/akryum:vuex';
-import CollectionTest from './modules/collection-test';
+import {StoreModule} from 'meteor/akryum:vuex';
 
-const s = new Store();
+const root = new StoreModule();
 
 // Add some initial state
-s.addState({
+root.addState({
   counter: 0
 });
 
 // Using centralized getters is good practice
 // They are also cached by vue just like computed props
-s.addGetters({
+root.addGetters({
   counter: state => state.counter,
   status: state => {
     if(state.counter === 0) {
@@ -24,7 +23,7 @@ s.addGetters({
 });
 
 // Only mutations can change the store state
-s.addMutations({
+root.addMutations({
   INCREMENT(state, amount) {
     state.counter += amount;
   },
@@ -34,7 +33,7 @@ s.addMutations({
 });
 
 // Using centralized actions is good practice
-s.addActions({
+root.addActions({
   increment(store, state, amount) {
     // state is immutable
     store.dispatch('INCREMENT', amount);
@@ -45,7 +44,9 @@ s.addActions({
   }
 });
 
-s.addModule(CollectionTest);
+// Submodule
+import forum from './modules/forum';
+root.addModule(forum);
 
 // Export the vuex native store
-export const store = s.exportStore();
+export const store = root.exportStore();

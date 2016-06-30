@@ -41,8 +41,8 @@
         "decrement": "Decrement",
         "amount": "Amount"
       },
-      "collection": {
-        "title": "Collection",
+      "tracker": {
+        "title": "Tracker",
         "info": "Data is coming from the vuex store and is being updated by meteor tracker. The state of the date sorting is also managed by the store.",
         "date": "Date"
       }

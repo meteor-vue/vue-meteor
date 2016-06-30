@@ -18,9 +18,9 @@ export default {
       '/': {
         component: '/imports/ui/vuex/Counter.vue'
       },
-      '/collection': {
-        name: 'vuex.collection',
-        component: '/imports/ui/vuex/Collection.vue'
+      '/tracker': {
+        name: 'vuex.tracker',
+        component: '/imports/ui/vuex/Tracker.vue'
       }
     }
   }

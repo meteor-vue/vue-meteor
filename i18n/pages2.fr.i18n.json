@@ -24,8 +24,8 @@
         "decrement": "Décrémenter",
         "amount": "Quantité"
       },
-      "collection": {
-        "title": "Collection",
+      "tracker": {
+        "title": "Tracker",
         "info": "Ces données proviennent du magasin vuex et sont mises à jour par meteor tracker. L'état du tri des dates est également géré par le magasin.",
         "date": "Date"
       }

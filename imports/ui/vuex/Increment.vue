@@ -6,8 +6,6 @@
 </template>
 
 <script>
-import Store from '/imports/vuex/store';
-
 export default {
   data() {
     return {

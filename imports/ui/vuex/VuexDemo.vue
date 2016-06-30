@@ -15,7 +15,7 @@ export default {
     return {
       links: [
         { name: 'vuex', exact: true, lb: 'pages.vuex.counter.title' },
-        { name: 'vuex.collection', lb: 'pages.vuex.collection.title' }
+        { name: 'vuex.tracker', lb: 'pages.vuex.tracker.title' }
       ]
     }
   }

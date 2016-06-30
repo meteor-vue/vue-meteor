@@ -7,7 +7,6 @@
 <script>
 export default {
   vuex(root) {
-    console.log(root);
     return {
       getters: root.getters
     };

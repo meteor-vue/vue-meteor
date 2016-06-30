@@ -1,22 +1,22 @@
-import {StoreModule} from 'meteor/akryum:vuex';
+import {StoreSubModule} from 'meteor/akryum:vuex';
 
-const s = new StoreModule('collection');
+const subModule = new StoreSubModule('forum');
 
-s.addState({
+subModule.addState({
   sortDate: -1
 });
 
-s.addGetters({
+subModule.addGetters({
   sortDate: state => state.sortDate
 });
 
-s.addMutations({
+subModule.addMutations({
   THREADS_SORT_DATE(state, order) {
     state.sortDate = order;
   }
 });
 
-s.addActions({
+subModule.addActions({
   toggleSortDate(store, state) {
     // state is immutable
     store.dispatch('THREADS_SORT_DATE', -1*state.sortDate);
@@ -25,13 +25,18 @@ s.addActions({
 
 // Meteor integration
 
+// Import a meteor collection
 import {Threads} from '/imports/api/collections';
 
-s.addTrackers({
+// Add trackers to the store module
+subModule.addTrackers({
   // Name of the tracker
   threads() {
     // Context variables
     let sub;
+
+    // You can execute arbitrary code here
+
     return {
       // Initialize the meteor data
       init(data) {
@@ -65,7 +70,7 @@ s.addTrackers({
         console.log("updated threads", threads.length);
 
         // Update the module meteor data
-        data.threads = threads;
+        data.threads = Object.freeze(threads);
       },
       // Getters
       // These are computed properties and are cached by vue
@@ -75,11 +80,11 @@ s.addTrackers({
           return data.threads;
         }
       },
-      // If true, activate automatically
-      // Else, you need to call tracker.addClient()
-      autoActivate: false
+      // If true, the tracker will be activated right away
+      // Else, you need to add it on a vue component or call tracker.addClient()
+      isActivated: false
     }
   }
 });
 
-export default s;
+export default subModule;

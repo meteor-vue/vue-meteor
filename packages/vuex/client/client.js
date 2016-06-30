@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import { getWatcher, getDep } from './util';
 
-export class StoreModule {
+export class StoreSubModule {
   constructor(name) {
     this.name = name;
     this.getters = {};
@@ -20,30 +20,42 @@ export class StoreModule {
     this._meteorData = {};
     this._trackerHandlers = {};
     this._vm = null;
+    this._exported = false;
   }
 
   addState(data) {
+    this._checkExported();
     _.merge(this._state, data);
   }
 
   addGetters(map) {
+    this._checkExported();
     _.merge(this._getters, map);
   }
 
   addMutations(map) {
+    this._checkExported();
     _.merge(this._mutations, map);
   }
 
   addActions(map) {
+    this._checkExported();
     _.merge(this._actions, map);
   }
 
   addTrackers(map) {
+    this._checkExported();
     _.merge(this._trackers, map);
   }
 
   getState(state) {
     return state[this.name];
+  }
+
+  _checkExported() {
+    if(this._exported) {
+      throw new Error(`The store has been exported, you can't change the modules anymore.`);
+    }
   }
 
   _createTrackers() {
@@ -63,6 +75,8 @@ export class StoreModule {
     for (let t in this._trackerHandlers) {
       this._trackerHandlers[t].setStore(store);
     }
+
+    this._exported = true;
   }
 
   _processGetters() {
@@ -90,7 +104,7 @@ export class StoreModule {
   }
 }
 
-export class Store extends StoreModule {
+export class StoreModule extends StoreSubModule {
   constructor() {
     super("root");
     this._modules = {};
@@ -101,6 +115,7 @@ export class Store extends StoreModule {
   }
 
   addModule(module) {
+    this._checkExported();
     this[module.name] = this._modules[module.name] = module;
     module.root = this;
   }
@@ -178,46 +193,55 @@ class StoreTracker {
     this.clientCount = 0;
 
     this._configure();
+    this._activated = false;
   }
 
   setStore(store) {
     this.store = store;
 
-    if (this.options.autoActivate) {
+    if (this.options.isActivated) {
       this.activate();
       this.clientCount++;
     }
   }
 
   activate() {
-    if (this.options.activate) {
-      this.options.activate();
-    }
+    if(!this._activated) {
+      this._activated = true;
 
-    if (this.watchCb && this.store) {
-      this.store.watch((state) => {
-        return this.watchCb(this.module.getState(state));
-      }, this._autorun.bind(this), {
-        immediate: true
-      });
-    } else {
-      this._autorun();
-    }
+      if (this.options.activate) {
+        this.options.activate();
+      }
 
-    if (Meteor.isDevelopment) {
-      console.log(`Vuex tracker activated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
+      if (this.watchCb && this.store) {
+        this.store.watch((state) => {
+          return this.watchCb(this.module.getState(state));
+        }, this._autorun.bind(this), {
+          immediate: true
+        });
+      } else {
+        this._autorun();
+      }
+
+      if (Meteor.isDevelopment) {
+        console.log(`Vuex tracker activated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
+      }
     }
   }
 
   deactivate() {
-    if (this.options.deactivate) {
-      this.options.deactivate();
-    }
+    if(this._activated) {
+      this._activated = false;
 
-    this._stopComputation();
+      if (this.options.deactivate) {
+        this.options.deactivate();
+      }
 
-    if (Meteor.isDevelopment) {
-      console.log(`Vuex tracker deactivated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
+      this._stopComputation();
+
+      if (Meteor.isDevelopment) {
+        console.log(`Vuex tracker deactivated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
+      }
     }
   }
 
@@ -316,7 +340,6 @@ const PreVuexPlugin = {
           store = options.parent.$store
         }
         options.vuex = vuexCb(store.root);
-        console.log(options.vuex);
       }
     }
   }
