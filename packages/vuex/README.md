@@ -489,7 +489,7 @@ export default {
 
 #### Tracker activation
 
-The tracker will be activated if at last one component use it and deactivated if it is no longer used.
+The tracker will be activated if at last one component use it and deactivated if it is no longer used automatically.
 
 You can activate and deactivate a tracker with the following methods:
 
@@ -516,7 +516,7 @@ export default {
 }
 ```
 
-In the tracker declaration, you can set the `isActivated` boolean to `true` so you don't need to use it in a component for it to be activated (this will call the `activate` callback automatically).
+In the tracker declaration, you can set the `isActivated` boolean to `true` if you want it to be activated right away (this will call the `activate` callback).
 
 ---
 
