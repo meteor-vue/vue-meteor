@@ -14,10 +14,12 @@ export default {
       amount: 1
     }
   },
-  vuex: {
-    actions: {
-      increment: Store.actions.increment
-    }
+  vuex(root) {
+    return {
+      actions: {
+        increment: root.actions.increment
+      }
+    };
   }
 }
 </script>

@@ -20,15 +20,15 @@
 </template>
 
 <script>
-import CollectionTest from '/imports/vuex/modules/collection-test';
-
 export default {
-  vuex: {
-    trackers: {
-      threads: CollectionTest.trackers.threads.getThreads
-    },
-    getters: CollectionTest.getters,
-    actions: CollectionTest.actions
+  vuex({collection}) {
+    return {
+      trackers: {
+        threads: collection.trackers.getThreads
+      },
+      getters: collection.getters,
+      actions: collection.actions
+    }
   },
   filters: {
     date(value) {

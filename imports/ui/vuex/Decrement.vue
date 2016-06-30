@@ -6,18 +6,18 @@
 </template>
 
 <script>
-import Store from '/imports/vuex/store';
-
 export default {
   data() {
     return {
       amount: 1
     }
   },
-  vuex: {
-    actions: {
-      decrement: Store.actions.decrement
-    }
+  vuex(root) {
+    return {
+      actions: {
+        decrement: root.actions.decrement
+      }
+    };
   }
 }
 </script>

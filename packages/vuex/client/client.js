@@ -5,8 +5,6 @@ import _ from 'lodash';
 
 import { getWatcher, getDep } from './util';
 
-Vue.use(Vuex);
-
 export class StoreModule {
   constructor(name) {
     this.name = name;
@@ -103,7 +101,7 @@ export class Store extends StoreModule {
   }
 
   addModule(module) {
-    this._modules[module.name] = module;
+    this[module.name] = this._modules[module.name] = module;
     module.root = this;
   }
 
@@ -166,8 +164,9 @@ export class Store extends StoreModule {
 }
 
 class ExtendedStore extends Vuex.Store {
-  constructor(store, options) {
+  constructor(root, options) {
     super(options);
+    this.root = root;
   }
 }
 
@@ -276,7 +275,7 @@ class StoreTracker {
         }
         let getter = this.options.getters[k];
         getter.tracker = this;
-        this[k] = getter;
+        this.module.trackers[k] = getter;
       }
     }
   }
@@ -297,24 +296,49 @@ class StoreTracker {
 
 // Vue plugin
 
-const VuePlugin = {
+const PreVuexPlugin = {
   install(Vue) {
-
     // Init override
     const _init = Vue.prototype._init
     Vue.prototype._init = function(options = {}) {
-      options.init = options.init ? [vuexInit].concat(options.init) :
-        vuexInit
-      _init.call(this, options)
+      options.init = options.init ? [vuexInit].concat(options.init) : vuexInit;
+
+      _init.call(this, options);
     }
 
     function vuexInit() {
       const options = this.$options;
 
-      this._vuex_trackers = [];
+      if(typeof options.vuex === 'function') {
+        let vuexCb = options.vuex;
+        let {store} = options;
+        if (!store && options.parent && options.parent.$store) {
+          store = options.parent.$store
+        }
+        options.vuex = vuexCb(store.root);
+        console.log(options.vuex);
+      }
+    }
+  }
+}
+
+const VuexPlugin = {
+  install(Vue) {
+
+    // Init override
+    const _init = Vue.prototype._init
+    Vue.prototype._init = function(options = {}) {
+      options.init = options.init ? [vuexInit].concat(options.init) : vuexInit;
+
+      _init.call(this, options);
+    }
+
+    function vuexInit() {
+      const options = this.$options;
 
       const { vuex } = options;
       if (vuex) {
+        this._vuex_trackers = [];
         const { trackers } = vuex;
         if (trackers) {
           for (let t in trackers) {
@@ -371,20 +395,24 @@ const VuePlugin = {
 
     Vue.mixin({
       beforeCompile: function() {
-        for (let tracker of this._vuex_trackers) {
-          tracker.addClient();
+        if(this._vuex_trackers) {
+          for (let tracker of this._vuex_trackers) {
+            tracker.addClient();
+          }
         }
       },
 
       destroyed: function() {
-        for (let tracker of this._vuex_trackers) {
-          tracker.removeClient();
+        if(this._vuex_trackers) {
+          for (let tracker of this._vuex_trackers) {
+            tracker.removeClient();
+          }
         }
       }
     })
 
     // option merging
-    const merge = Vue.config.optionMergeStrategies.computed
+    /*const merge = Vue.config.optionMergeStrategies.computed
     Vue.config.optionMergeStrategies.vuex = (toVal, fromVal) => {
       if (!toVal) return fromVal
       if (!fromVal) return toVal
@@ -394,8 +422,10 @@ const VuePlugin = {
         actions: merge(toVal.actions, fromVal.actions),
         trackers: merge(toVal.trackers, fromVal.trackers)
       }
-    }
+    }*/
   }
 }
 
-Vue.use(VuePlugin);
+Vue.use(PreVuexPlugin);
+Vue.use(Vuex);
+Vue.use(VuexPlugin);

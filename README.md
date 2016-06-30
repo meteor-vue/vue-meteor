@@ -24,8 +24,8 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Sass official integration in .vue files
  - [x] Easy routing with vue-router out-of-the-box integration & fast-render
  - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui
+ - [x] Easy state management with vuex integration
  - [ ] *Typescript official integration in .vue files*
- - [ ] *Easy state management with vuex integration (needs discussion, suggestions welcomed)*
  - [ ] *Lazy-loading of components*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
@@ -82,6 +82,12 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 [Premade selection ui in akryum:vue-i18n-ui package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n-ui)
 
 [Example app](https://github.com/Akryum/meteor-vue-example-i18n)
+
+### State management with vuex
+
+Manage the state of your app with a centralized data store.
+
+[See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
 
 ## Get involved
 

@@ -1,15 +1,16 @@
 <template>
   <div>
-    <h3>{{ $t('pages.vuex.counter.count', {count: counter}) }}</h3>
+    <h3>{{ $t('pages.vuex.counter.count', {count: counter}) }} ({{status}})</h3>
   </div>
 </template>
 
 <script>
 export default {
-  vuex: {
-    getters: {
-      counter: state => state.counter
-    }
+  vuex(root) {
+    console.log(root);
+    return {
+      getters: root.getters
+    };
   }
 }
 </script>
