@@ -13,7 +13,7 @@ Package.onUse(function(api) {
   api.use('reload');
   api.use('autoupdate');
   api.use('reactive-var');
-  api.use('akryum:vue@1.0.2');
+  api.use('akryum:vue@1.0.3');
   api.mainModule('client/dev-client.js', 'client');
 });
 
