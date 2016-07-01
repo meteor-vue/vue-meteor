@@ -2,7 +2,9 @@
 
 > Flux-inspired Application Architecture for your Vue Meteor app
 
-![graph](https://raw.githubusercontent.com/vuejs/vuex/master/docs/en/vuex.png)
+<p align="center">
+  <img width="700px" src="https://raw.githubusercontent.com/vuejs/vuex/master/docs/en/vuex.png">
+</p>
 
 Manage the state of your app with a centralized data store using [vuex](https://github.com/vuejs/vuex).
 
