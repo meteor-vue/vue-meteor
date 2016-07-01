@@ -1,5 +1,9 @@
 # Vuex integration for Meteor
 
+> Flux-inspired Application Architecture for your Vue Meteor app
+
+![graph](https://raw.githubusercontent.com/vuejs/vuex/master/docs/en/vuex.png)
+
 Manage the state of your app with a centralized data store using [vuex](https://github.com/vuejs/vuex).
 
 [Why do I need a vuex store?](http://vuex.vuejs.org/en/intro.html)
