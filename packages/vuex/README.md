@@ -2,7 +2,7 @@
 
 Manage the state of your app with a centralized data store using [vuex](https://github.com/vuejs/vuex).
 
-[Example app](https://github.com/Akryum/meteor-vuex-example)
+See the [example app](https://github.com/Akryum/meteor-vuex-example)
 
 ## Installation
 
@@ -518,6 +518,15 @@ export default {
 ```
 
 In the tracker declaration, you can set the `isActivated` boolean to `true` if you want it to be activated right away (this will call the `activate` callback).
+
+---
+
+## Next steps
+
+- [Example project](https://github.com/Akryum/meteor-vuex-example)
+- [Add routing to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
+- [Add internationalization to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n#installation)
+- [Integrate apollo](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
 
 ---
 

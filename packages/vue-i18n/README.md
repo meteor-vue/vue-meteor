@@ -2,14 +2,14 @@
 
 Vue internationalization integrated in your meteor app using [vue-i18n](https://github.com/kazupon/vue-i18n).
 
+See the [example app](https://github.com/Akryum/meteor-vue-example-i18n)
+
 ## Installation
 
 
     meteor add akryum:vue-i18n
 
 ## Usage
-
-[Example app](https://github.com/Akryum/meteor-vue-example-i18n)
 
 ### Locale files
 
@@ -346,6 +346,15 @@ console.log(IsoLangs['fr']);
 ### Premade ui
 
 See the [akryum:vue-i18n-ui](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n-ui) package.
+
+---
+
+## Next steps
+
+- [Example project](https://github.com/Akryum/meteor-vue-example-i18n)
+- [Add routing to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
+- [Manage your app state with a vuex store](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
+- [Integrate apollo](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
 
 ---
 

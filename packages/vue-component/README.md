@@ -133,4 +133,15 @@ It will be null if the components is in your application code.
 
 ---
 
+## Next steps
+
+- [Example project without blaze](https://github.com/Akryum/meteor-vue-example)
+- [Example project with blaze](https://github.com/Akryum/meteor-vue-blaze)
+- [Add routing to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
+- [Add internationalization to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n#installation)
+- [Manage your app state with a vuex store](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
+- [Integrate apollo](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
+
+---
+
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)

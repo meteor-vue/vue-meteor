@@ -2,6 +2,8 @@
 
 Declarative subscriptions and meteor reactive data (subscriptions, collections, tracker...)
 
+[Example project](https://github.com/Akryum/meteor-vue-example)
+
 ## Installation
 
 
@@ -166,6 +168,18 @@ computed: {
 ```
 
 The complete example is in the `imports/ui/App.vue` [file](https://github.com/Akryum/meteor-vue-component/blob/master/imports/ui/App.vue#L11).
+
+---
+
+## Next steps
+
+- [Write your components in vue files](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
+- [Example project without blaze](https://github.com/Akryum/meteor-vue-example)
+- [Example project with blaze](https://github.com/Akryum/meteor-vue-blaze)
+- [Add routing to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
+- [Add internationalization to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n#installation)
+- [Manage your app state with a vuex store](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
+- [Integrate apollo](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
 
 ---
 

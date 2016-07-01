@@ -204,4 +204,13 @@ This will send the `threads` subscription data along side the html if the user o
 
 ---
 
+## Next steps
+
+- [Example project](https://github.com/Akryum/meteor-vue-example-routing)
+- [Add internationalization to your app](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n#installation)
+- [Manage your app state with a vuex store](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
+- [Integrate apollo](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
+
+---
+
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)
