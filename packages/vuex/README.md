@@ -385,6 +385,18 @@ export default {
 }
 ```
 
+With ES6 arrow function:
+
+```javascript
+export default {
+  vuex: ({forum}) => ({
+    getters: {
+      sortDate: forum.getters.sortDate
+    }
+  })
+}
+```
+
 ### Meteor data integration
 
 To use meteor reactive data with your store, use *trackers* on your module with the `addTrackers(map)` method:
@@ -425,13 +437,11 @@ To use this tracker in your component, use the `vuex.trackers` option:
 
 ```javascript
 export default {
-  vuex({forum}) {
-    return {
-      trackers: {
-        message: forum.trackers.getMessage
-      }
+  vuex: ({forum}) => ({
+    trackers: {
+      message: forum.trackers.getMessage
     }
-  }
+  })
 }
 ```
 
@@ -525,13 +535,11 @@ And in the component:
 
 <script>
 export default {
-  vuex({forum}) {
-    return {
-      trackers: {
-        threads: forum.trackers.getThreads
-      }
+  vuex: ({forum}) => ({
+    trackers: {
+      threads: forum.trackers.getThreads
     }
-  }
+  })
 }
 </script>
 ```
@@ -580,7 +588,7 @@ subModule.addActions({
 });
 ```
 
-The `callMethod()` module method takes the same exact parameters as `Meteor.call()` used to call meteor method ([see the doc here](https://docs.meteor.com/api/methods.html#Meteor-call)). It also return a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can return back to the ui component that called the action:
+The `callMethod()` module method takes the same exact parameters as `Meteor.call()` used to call meteor method ([see the doc here](https://docs.meteor.com/api/methods.html#Meteor-call)). It also returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can return back to the ui component that called the action:
 
 ```javascript
 subModule.addActions({
@@ -611,20 +619,16 @@ In you vue component, you can add ui-specific logic with the [promise](https://d
 
 <script>
 export default {
-  data () {
-    return {
-      // Vue data
-      newThreadName: ''
-    }
-  },
+  data: () => ({
+    // Vue data
+    newThreadName: ''
+  }),
   // Vuex options
-  vuex({forum}) {
-    return {
-      actions: {
-        createThread: forum.actions.createThread
-      }
+  vuex: ({forum}) => ({
+    actions: {
+      createThread: forum.actions.createThread
     }
-  },
+  }),
   methods: {
     handleCreateThread () {
       // Call a vuex action that returns a promise
