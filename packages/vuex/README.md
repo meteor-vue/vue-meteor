@@ -51,6 +51,25 @@ Use the `addGetters(map)` method to add getters:
 
 ```javascript
 root.addGetters({
+  counter(state) {
+    return state.counter;
+  },
+  status(state) {
+    if(state.counter === 0) {
+      return 'None'
+    } else if(state.counter === 1) {
+      return 'One'
+    } else {
+      return 'Many'
+    }
+  }
+});
+```
+
+With ES6 arrow functions:
+
+```javascript
+root.addGetters({
   counter: state => state.counter,
   status: state => {
     if(state.counter === 0) {
