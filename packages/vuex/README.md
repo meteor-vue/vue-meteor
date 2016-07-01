@@ -94,21 +94,61 @@ Use the `addActions(map)` method to add actions to the module:
 ```javascript
 // Using centralized actions is good practice
 root.addActions({
-  increment(store, state, amount) {
+  increment(arg, amount) {
     // state is immutable
-    store.dispatch('INCREMENT', amount);
+    arg.store.dispatch('INCREMENT', amount);
   },
-  decrement(store, state, amount) {
+  decrement(arg, amount) {
     // state is immutable
-    store.dispatch('DECREMENT', amount);
+    arg.store.dispatch('DECREMENT', amount);
   }
 });
 ```
 
-Unlike in native vuex, the actions takes two mandatory parameters:
+Unlike in native vuex, the actions takes minimum one object parameter with the following attributes:
 
- - `store` is the vuex native store instance implementing the `dispatch()` method
- - `state` is the current state *relative to the module* and should not be modified inside actions
+ - `store` is the vuex native store instance implementing the `dispatch()` method,
+ - `state` is the current state *relative to the module* and should not be modified inside actions.
+
+Thanks to ES6 destructuring, you can simplify the syntax:
+
+```javascript
+root.addActions({
+  // Here we use store and state
+  toggleSortDate({store, state}) {
+    // state is immutable
+    store.dispatch('FORUM_SORT_DATE', -1*state.sortDate);
+  },
+  // Here we only use store
+  selectThread({store}, id) {
+    store.dispatch('FORUM_SELECTED_THREAD_ID', id);
+  }
+});
+```
+
+If you don't need either of them:
+```javascript
+root.addActions({
+  removePost(_, id) {
+    // Call to your api or do something else
+    return this.callMethod('posts.remove', id)
+  }
+});
+```
+
+Inside the action, `this` is the action's store module. You can call another action like this:
+
+```javascript
+root.addActions({
+  createThread(_, name) {
+    // Create the thread using your api
+    // {...}
+
+    // Call another action on the submodule
+    this.actions.selectThread(result);
+  }
+});
+```
 
 Actions will be accessible with `root.actions.<name>`.
 
@@ -526,6 +566,81 @@ export default {
 ```
 
 In the tracker declaration, you can set the `isActivated` boolean to `true` if you want it to be activated right away (this will call the `activate` callback).
+
+### Meteor methods
+
+The recommended way to use methods is to put them in your store actions:
+
+```javascript
+subModule.addActions({
+  removePost(_, id) {
+    // 'this' is the current store module
+    return this.callMethod('posts.remove', id)
+  }
+});
+```
+
+The `callMethod()` module method takes the same exact parameters as `Meteor.call()` used to call meteor method ([see the doc here](https://docs.meteor.com/api/methods.html#Meteor-call)). It also return a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can return back to the ui component that called the action:
+
+```javascript
+subModule.addActions({
+  createThread(_, name) {
+    // Returns a promise to the ui component
+    return this.callMethod('threads.create', name, (err, result) => {
+      if(err) {
+        console.error(err);
+      } else {
+        // Call another action on the submodule
+        this.actions.selectThread(result);
+      }
+    });
+  }
+});
+```
+
+In you vue component, you can add ui-specific logic with the [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) returned by `callMethod()`:
+
+```html
+<template>
+  <div class="forum">
+    <form @submit.prevent="handleCreateThread">
+      <input v-model="newThreadName" placeholder="Type new thread name" required/>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      // Vue data
+      newThreadName: ''
+    }
+  },
+  // Vuex options
+  vuex({forum}) {
+    return {
+      actions: {
+        createThread: forum.actions.createThread
+      }
+    }
+  },
+  methods: {
+    handleCreateThread () {
+      // Call a vuex action that returns a promise
+      // because it used `return this.callMethod()` inside
+      this.createThread(this.newThreadName).then(() => {
+        // Success, we empty the text input
+        this.newThreadName = '';
+      }).catch((e) => {
+        // Error, we show an error dialog
+        alert('An error occured while creating thread.');
+      });
+    }
+  },
+}
+</script>
+```
 
 ---
 

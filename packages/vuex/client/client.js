@@ -52,6 +52,37 @@ export class StoreSubModule {
     return state[this.name];
   }
 
+  callMethod(...args) {
+    return new Promise((resolve, reject) => {
+      // Last arg can be a callback
+      let cb;
+      if(args.length !== 0) {
+        let lastArg = args[args.length - 1];
+        if(typeof lastArg === 'function') {
+          cb = args.pop();
+        }
+      }
+
+      // Method callback
+      args.push((err, result) => {
+        if(err) {
+          reject(err);
+          if(cb) {
+            cb(err, null);
+          }
+        } else {
+          resolve(result);
+          if(cb) {
+            cb(null, result);
+          }
+        }
+      });
+
+      // Call the meteor method
+      Meteor.call.apply(null, args);
+    });
+  }
+
   _checkExported() {
     if(this._exported) {
       throw new Error(`The store has been exported, you can't change the modules anymore.`);
@@ -99,7 +130,15 @@ export class StoreSubModule {
 
   _addAction(action) {
     return (store, ...args) => {
-      return action.call(this, store, this.getState(store.state), ...args);
+      if(!(store instanceof ExtendedStore)) {
+        args.unshift(store);
+        store = this.store;
+      }
+
+      return action.call(this, {
+        store,
+        state: this.getState(store.state)
+      }, ...args);
     }
   }
 }
@@ -108,6 +147,7 @@ export class StoreModule extends StoreSubModule {
   constructor() {
     super("root");
     this._modules = {};
+    this.root = this;
   }
 
   getState(state) {
