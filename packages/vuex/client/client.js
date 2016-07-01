@@ -262,10 +262,6 @@ class StoreTracker {
       } else {
         this._autorun();
       }
-
-      if (Meteor.isDevelopment) {
-        console.log(`Vuex tracker activated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
-      }
     }
   }
 
@@ -278,10 +274,6 @@ class StoreTracker {
       }
 
       this._stopComputation();
-
-      if (Meteor.isDevelopment) {
-        console.log(`Vuex tracker deactivated: ${this.module.name==='root'?'':this.module.name+'.'}${this.id}`);
-      }
     }
   }
 
