@@ -6,6 +6,14 @@ Tested with Meteor 1.3.4.1
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 
+## Examples
+
+- [Simple example project](https://github.com/Akryum/meteor-vue-example)
+- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze)
+- [Routing example project](https://github.com/Akryum/meteor-vue-example-routing)
+- [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
+- [Vuex example project](https://github.com/Akryum/meteor-vuex-example)
+
 ## Features
 
 Currently supported and possible future features (in no particular order) are:
