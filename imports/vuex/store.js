@@ -34,11 +34,11 @@ root.addMutations({
 
 // Using centralized actions is good practice
 root.addActions({
-  increment(store, state, amount) {
+  increment({store}, amount) {
     // state is immutable
     store.dispatch('INCREMENT', amount);
   },
-  decrement(store, state, amount) {
+  decrement({store}, amount) {
     // state is immutable
     store.dispatch('DECREMENT', amount);
   }

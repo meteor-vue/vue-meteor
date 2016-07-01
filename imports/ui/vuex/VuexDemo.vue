@@ -11,13 +11,11 @@ import {store} from '/imports/vuex/store'
 
 export default {
   store,
-  data() {
-    return {
-      links: [
-        { name: 'vuex', exact: true, lb: 'pages.vuex.counter.title' },
-        { name: 'vuex.tracker', lb: 'pages.vuex.tracker.title' }
-      ]
-    }
-  }
+  data: () => ({
+    links: [
+      { name: 'vuex', exact: true, lb: 'pages.vuex.counter.title' },
+      { name: 'vuex.tracker', lb: 'pages.vuex.tracker.title' }
+    ]
+  })
 }
 </script>

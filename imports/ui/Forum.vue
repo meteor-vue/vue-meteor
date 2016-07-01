@@ -19,17 +19,15 @@ import {Threads, Posts} from '/imports/api/collections';
 import ThreadItem from './ThreadItem.vue';
 
 export default {
-  data () {
-    return {
-      // Vue data
-      newThreadName: '',
-      selectedThreadId: null,
+  data: () => ({
+    // Vue data
+    newThreadName: '',
+    selectedThreadId: null,
 
-      // Initialize your meteor data
-      selectedThread: null,
-      threads: []
-    }
-  },
+    // Initialize your meteor data
+    selectedThread: null,
+    threads: []
+  }),
   computed: {
     count () {
       return this.threads.length;

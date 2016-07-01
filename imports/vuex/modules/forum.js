@@ -17,7 +17,7 @@ subModule.addMutations({
 });
 
 subModule.addActions({
-  toggleSortDate(store, state) {
+  toggleSortDate({store, state}) {
     // state is immutable
     store.dispatch('THREADS_SORT_DATE', -1*state.sortDate);
   }
@@ -76,9 +76,7 @@ subModule.addTrackers({
       // These are computed properties and are cached by vue
       getters: {
         // Getters should follow the get<Name> naming convention
-        getThreads(data) {
-          return data.threads;
-        }
+        getThreads: data => data.threads
       },
       // If true, the tracker will be activated right away
       // Else, you need to add it on a vue component or call tracker.addClient()

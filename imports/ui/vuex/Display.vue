@@ -6,10 +6,8 @@
 
 <script>
 export default {
-  vuex(root) {
-    return {
-      getters: root.getters
-    };
-  }
+  vuex: root => ({
+    getters: root.getters
+  })
 }
 </script>

@@ -7,18 +7,14 @@
 
 <script>
 export default {
-  data() {
-    return {
-      amount: 1
+  data: () => ({
+    amount: 1
+  }),
+  vuex: root => ({
+    actions: {
+      increment: root.actions.increment
     }
-  },
-  vuex(root) {
-    return {
-      actions: {
-        increment: root.actions.increment
-      }
-    };
-  }
+  })
 }
 </script>
 

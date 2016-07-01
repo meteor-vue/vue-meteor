@@ -36,18 +36,16 @@
 
 <script>
 export default {
-  data () {
-    return {
-      // Vue data
-      pingInput: '',
-      tagLabel: '',
+  data: () => ({
+    // Vue data
+    pingInput: '',
+    tagLabel: '',
 
-      // Initialize your apollo data
-      hello: '',
-      pingMessage: '',
-      tags: []
-    }
-  },
+    // Initialize your apollo data
+    hello: '',
+    pingMessage: '',
+    tags: []
+  }),
   // Apollo-specific options
   apollo: {
     // Non-reactive query

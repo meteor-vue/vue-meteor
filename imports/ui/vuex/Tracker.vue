@@ -21,15 +21,13 @@
 
 <script>
 export default {
-  vuex({forum}) {
-    return {
-      trackers: {
-        threads: forum.trackers.getThreads
-      },
-      getters: forum.getters,
-      actions: forum.actions
-    }
-  },
+  vuex: ({forum}) => ({
+    trackers: {
+      threads: forum.trackers.getThreads
+    },
+    getters: forum.getters,
+    actions: forum.actions
+  }),
   filters: {
     date(value) {
       if(!value) {

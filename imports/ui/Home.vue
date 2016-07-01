@@ -12,11 +12,9 @@
 
 <script>
 export default {
-  data() {
-    return {
-      clicked: false
-    }
-  }
+  data: () => ({
+    clicked: false
+  })
 }
 </script>
 

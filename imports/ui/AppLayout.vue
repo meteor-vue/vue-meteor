@@ -10,16 +10,14 @@
 import {LocaleSelect} from 'meteor/akryum:vue-i18n-ui';
 
 export default {
-  data() {
-    return {
-      links: [
-        { name: 'home', exact: true, lb: 'pages.home.title' },
-        { name: 'forum', lb: 'pages.forum.title' },
-        { name: 'apollo', lb: 'pages.apollo.title' },
-        { name: 'vuex', lb: 'pages.vuex.title' }
-      ]
-    }
-  },
+  data: () => ({
+    links: [
+      { name: 'home', exact: true, lb: 'pages.home.title' },
+      { name: 'forum', lb: 'pages.forum.title' },
+      { name: 'apollo', lb: 'pages.apollo.title' },
+      { name: 'vuex', lb: 'pages.vuex.title' }
+    ]
+  }),
   components: {
     LocaleSelect
   }
