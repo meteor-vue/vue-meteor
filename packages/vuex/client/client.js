@@ -254,7 +254,7 @@ class StoreTracker {
       }
 
       if (this.watchCb && this.store) {
-        this.store.watch((state) => {
+        this.storeUnwatch = this.store.watch((state) => {
           return this.watchCb(this.module.getState(state));
         }, this._autorun.bind(this), {
           immediate: true
@@ -271,6 +271,11 @@ class StoreTracker {
 
       if (this.options.deactivate) {
         this.options.deactivate();
+      }
+
+      if(this.storeUnwatch) {
+        this.storeUnwatch();
+        this.storeUnwatch = null;
       }
 
       this._stopComputation();
