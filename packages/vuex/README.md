@@ -2,6 +2,8 @@
 
 Manage the state of your app with a centralized data store using [vuex](https://github.com/vuejs/vuex).
 
+[Why do I need a vuex store?](http://vuex.vuejs.org/en/intro.html)
+
 See the [example app](https://github.com/Akryum/meteor-vuex-example)
 
 ## Installation
