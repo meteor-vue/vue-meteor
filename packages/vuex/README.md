@@ -200,6 +200,16 @@ export default {
 }
 ```
 
+With ES6 arrow function:
+
+```javascript
+export default {
+  vuex: root => ({
+    /* Vuex options here */
+  })
+}
+```
+
 That way, you can access the root module attributes (like getters and actions) while declaring the vuex options, without the need of imports.
 
 #### Display state
@@ -226,6 +236,18 @@ export default {
 </script>
 ```
 
+With ES6 arrow function:
+
+```javascript
+export default {
+  vuex: root => ({
+    getters: {
+      counter: root.getters.counter
+    }
+  })
+}
+```
+
 You can use all the getters at once:
 
 ```javascript
@@ -235,6 +257,16 @@ export default {
       getters: root.getters
     };
   }
+}
+```
+
+With ES6 arrow function:
+
+```javascript
+export default {
+  vuex: root => ({
+    getters: root.getters
+  })
 }
 ```
 
@@ -281,6 +313,21 @@ export default {
 </script>
 ```
 
+With ES6 arrow function:
+
+```javascript
+export default {
+  data: () => ({
+    amount: 1
+  }),
+  vuex: root => ({
+    actions: {
+      increment: root.actions.increment
+    }
+  })
+}
+```
+
 You can use all the actions at once:
 
 ```javascript
@@ -290,6 +337,16 @@ export default {
       actions: root.actions
     };
   }
+}
+```
+
+With ES6 arrow function:
+
+```javascript
+export default {
+  vuex: root => ({
+    actions: root.actions
+  })
 }
 ```
 
@@ -418,9 +475,7 @@ subModule.addTrackers({
       // These are computed properties and are cached by vue
       getters: {
         // Getters should follow the get<Name> naming convention
-        getMessage(data) {
-          return data.message;
-        }
+        getMessage: data => data.message
       }
     }
   }
@@ -510,9 +565,7 @@ subModule.addTrackers({
       // These are computed properties and are cached by vue
       getters: {
         // Getters should follow the get<Name> naming convention
-        getThreads(data) {
-          return data.threads;
-        }
+        getThreads: data => data.threads
       },
       // If true, the tracker will be activated right away
       // Else, you need to add it on a vue component or call t.addClient()
