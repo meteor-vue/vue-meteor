@@ -26,7 +26,6 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui
  - [x] Easy state management with vuex integration
  - [ ] *Typescript official integration in .vue files*
- - [ ] *Lazy-loading of components*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
 
@@ -85,7 +84,7 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 ### State management with vuex
 
-Manage the state of your app with a centralized data store.
+Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
 
 [See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
 
