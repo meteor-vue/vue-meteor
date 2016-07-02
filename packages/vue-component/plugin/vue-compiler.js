@@ -223,7 +223,9 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
               // Export
               js += `module.export('default', exports.default = __vue_script__);`;
 
-              global._dev_server.emit('js', {hash: vueId, js, template});
+              let path = (inputFile.getPackageName()?`packages/${inputFile.getPackageName()}`:'') + inputFile.getPathInPackage();
+
+              global._dev_server.emit('js', {hash: vueId, js, template, path});
             }
 
             // Cache

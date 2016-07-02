@@ -81,7 +81,7 @@ Meteor.startup(function() {
   });
 
   // JS
-  _socket.on('js', Meteor.bindEnvironment(function({hash, js, template}) {
+  _socket.on('js', Meteor.bindEnvironment(function({hash, js, template, path}) {
     let args = ['meteor/akryum:vue'];
     let regResult;
     let error = null;
@@ -96,7 +96,7 @@ Meteor.startup(function() {
         error = e;
       }
     });
-    let id = `_component${(new Date()).getTime()}.js`;
+    let id = `${path}.js`;
     let require = meteorInstall({[id]:args});
     let result = require('./' + id);
     let needsReload = false;
@@ -105,7 +105,6 @@ Meteor.startup(function() {
     }
 
     _suppressNextReload = !error && !needsReload;
-    //_suppressNextReload = true;
   }));
 
   // CSS
@@ -135,5 +134,5 @@ Meteor.startup(function() {
   });
 
   // Reg
-  const jsImportsReg = /module\.import\((['"])(.+)\1/g;
+  const jsImportsReg = /module\.import\((['"])(.+?)\1/g;
 })

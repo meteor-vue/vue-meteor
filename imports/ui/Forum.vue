@@ -14,7 +14,8 @@
 
 <script>
 import {Meteor} from 'meteor/meteor';
-import {Threads, Posts} from '/imports/api/collections';
+//import {Threads, Posts} from '/imports/api/collections';
+import {Threads, Posts} from '../api/collections';
 
 import ThreadItem from './ThreadItem.vue';
 
