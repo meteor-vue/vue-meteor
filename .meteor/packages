@@ -23,12 +23,8 @@ apollo
 ccorcos:subs-cache
 meteorhacks:fast-render
 
-akryum:vue
-akryum:vue-component
+akryum:vue-app
 akryum:vue-apollo
-akryum:vuex
-akryum:vue-router
-akryum:vue-i18n
 akryum:vue-i18n-ui
 akryum:vue-less
 akryum:vue-sass
