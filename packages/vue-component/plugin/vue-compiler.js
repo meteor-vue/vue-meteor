@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import Future from 'fibers/future';
+import async from 'async';
 import { Meteor } from 'meteor/meteor';
 
 global._vue_cache = global._vue_cache || {};
@@ -12,6 +14,64 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     });
 
     this.babelOptions = Babel.getDefaultOptions();
+  }
+
+  processFilesForTarget(inputFiles) {
+    const cacheMisses = [];
+
+    //console.log(`Found ${inputFiles.length} files.`);
+
+    const future = new Future;
+    async.eachLimit(inputFiles, this._maxParallelism, (inputFile, cb) => {
+      if(!this.isIgnored(inputFile)) {
+        let error = null;
+        try {
+          const cacheKey = this._deepHash(this.getCacheKey(inputFile));
+          let compileResult = this._cache.get(cacheKey);
+
+          if (!compileResult) {
+            compileResult = this._readCache(cacheKey);
+            if (compileResult) {
+              this._cacheDebug(`Loaded ${ inputFile.getDisplayPath() }`);
+            }
+          }
+
+          if (!compileResult) {
+            cacheMisses.push(inputFile.getDisplayPath());
+            compileResult = this.compileOneFile(inputFile);
+
+            if (!compileResult) {
+              // compileOneFile should have called inputFile.error.
+              //  We don't cache failures for now.
+              return;
+            }
+
+            // Save what we've compiled.
+            this._cache.set(cacheKey, compileResult);
+            this._writeCacheAsync(cacheKey, compileResult);
+          }
+
+          this.addCompileResult(inputFile, compileResult);
+        } catch (e) {
+          error = e;
+        } finally {
+          cb(error);
+        }
+      } else {
+        cb();
+      }
+    }, future.resolver());
+    future.wait();
+
+    if (this._cacheDebugEnabled) {
+      cacheMisses.sort();
+      this._cacheDebug(
+        `Ran (#${ ++this._callCount }) on: ${ JSON.stringify(cacheMisses) }`);
+    }
+  }
+
+  isIgnored(inputFile) {
+    return /node_modules/.test(inputFile.getPathInPackage())
   }
 
   getCacheKey(inputFile) {
@@ -54,7 +114,6 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   }
 
   addCompileResult(inputFile, compileResult) {
-
     let inputFilePath = inputFile.getPathInPackage();
     let hash = FileHash(inputFile);
     let vueId = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
@@ -74,9 +133,9 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
       //console.log(`css hash: ${cssHash}`);
 
-      if(isDev) {
+      if (isDev) {
         // Add style to client first-connection style list
-        global._dev_server.__addStyle({hash: vueId, css}, false);
+        global._dev_server.__addStyle({ hash: vueId, css }, false);
       } else {
         this.addStylesheet(inputFile, {
           data: css
@@ -92,7 +151,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     js = 'var __vue_script__, __vue_template__;' + js;
 
     let templateHash;
-    if(compileResult.template) {
+    if (compileResult.template) {
       js += "__vue_template__ = '" + compileResult.template + "';";
       templateHash = Hash(compileResult.template);
 
@@ -129,7 +188,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     let isGlobalName = globalFileNameReg.test(inputFilePath);
     let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1;
     if (isOutsideImports || isGlobalName) {
-      let ext = (isGlobalName?'.global':'') + '.vue';
+      let ext = (isGlobalName ? '.global' : '') + '.vue';
 
       let name = Plugin.path.basename(inputFilePath);
       name = name.substring(0, name.lastIndexOf(ext));
@@ -158,14 +217,14 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       sourceMap: compileResult.map
     });
 
-    if(isDev) {
+    if (isDev) {
       // Hot-reloading
       let sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
       let filePath = path.resolve(sourceRoot, inputFilePath);
 
       // Listener
       let fileChanged = Meteor.bindEnvironment((event) => {
-        if(event === 'change') {
+        if (event === 'change') {
           try {
             let cached = global._vue_cache[hash] || {};
             let contents = Plugin.fs.readFileSync(filePath, {
@@ -183,8 +242,8 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
               // Hot-reloading
               cssHash = Hash(css);
-              if(isDev && cached.css !== cssHash) {
-                global._dev_server.__addStyle({hash: vueId, css});
+              if (isDev && cached.css !== cssHash) {
+                global._dev_server.__addStyle({ hash: vueId, css });
               }
             }
 
@@ -193,17 +252,17 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
             let jsHash = Hash(js);
             let template = compileResult.template;
             let templateHash;
-            if(template) {
+            if (template) {
               templateHash = Hash(template);
             }
-            if(cached.js !== jsHash || cached.template !== templateHash) {
+            if (cached.js !== jsHash || cached.template !== templateHash) {
 
               // Require to absolute
               js = js.replace(requireRelativeFileReg, `require('/${inputFilePath}/`);
 
               js = 'var __vue_script__, __vue_template__;' + js;
 
-              if(template) {
+              if (template) {
                 js += "__vue_template__ = '" + template + "';";
               }
 
@@ -223,9 +282,9 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
               // Export
               js += `module.export('default', exports.default = __vue_script__);`;
 
-              let path = (inputFile.getPackageName()?`packages/${inputFile.getPackageName()}`:'') + inputFile.getPathInPackage();
+              let path = (inputFile.getPackageName() ? `packages/${inputFile.getPackageName()}` : '') + inputFile.getPathInPackage();
 
-              global._dev_server.emit('js', {hash: vueId, js, template, path});
+              global._dev_server.emit('js', { hash: vueId, js, template, path });
             }
 
             // Cache
@@ -235,14 +294,14 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
               template: templateHash,
               watcher
             };
-          }catch(e) {
+          } catch (e) {
             console.error(e);
           }
         }
       });
 
       // Fast file change detection
-      if(cached.watcher) {
+      if (cached.watcher) {
         cached.watcher.close();
       }
       let watcher = fs.watch(filePath, {
