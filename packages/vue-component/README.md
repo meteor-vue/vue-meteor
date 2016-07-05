@@ -86,6 +86,7 @@ Official packages for `<style>` tag:
 
  - [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)
  - [akryum:vue-sass](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-sass)
+ - [akryum:vue-stylus](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-stylus)
 
 Community packages welcomed (add a your package with a PR)!
 

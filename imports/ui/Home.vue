@@ -18,13 +18,13 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
-.home {
-  text-align: center;
-}
+<style scoped lang="stylus">
+@import '~imports/ui/pixels.styl'
 
-img.logo {
-  max-width: 101px;
-  margin: 12px;
-}
+.home
+  text-align center
+
+  img.logo
+    max-width 101px
+    margin margin
 </style>

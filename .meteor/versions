@@ -13,6 +13,7 @@ akryum:vue-jade@0.0.1
 akryum:vue-less@0.0.3
 akryum:vue-router@0.1.2
 akryum:vue-sass@0.0.1
+akryum:vue-stylus@0.0.1
 akryum:vuex@0.2.2
 allow-deny@1.0.5
 apollo@0.0.3

@@ -28,6 +28,7 @@ akryum:vue-apollo
 akryum:vue-i18n-ui
 akryum:vue-less
 akryum:vue-sass
+akryum:vue-stylus
 akryum:vue-jade
 akryum:vue-coffee
 
