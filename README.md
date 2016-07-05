@@ -20,16 +20,16 @@ Currently supported and possible future features (in no particular order) are:
 
  - [x] Declarative subscriptions and meteor reactive data
  - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute)
+ - [x] Instant Hot-reloading of components
  - [x] `lang` attribute on `<style>` in .vue files
  - [x] Less official integration in .vue files
- - [x] Apollo client integration
- - [x] Auto register components with file name ending with .global.vue
- - [x] Instant Hot-reloading of components
+ - [x] Sass official integration in .vue files
+ - [x] Stylus official integration in .vue files
  - [x] `lang` attribute on `<template>` in .vue files
  - [x] Jade official integration in .vue file
  - [x] `lang` attribute on `<script>` in .vue files
  - [x] Coffeescript official integration in .vue files
- - [x] Sass official integration in .vue files
+ - [x] Apollo client integration
  - [x] Easy routing with vue-router out-of-the-box integration & fast-render
  - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui
  - [x] Easy state management with vuex integration
