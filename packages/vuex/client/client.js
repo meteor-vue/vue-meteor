@@ -19,6 +19,7 @@ export class StoreSubModule {
     this._trackers = {};
     this._meteorData = {};
     this._trackerHandlers = {};
+    this._modules = {};
     this._vm = null;
     this._exported = false;
   }
@@ -48,8 +49,15 @@ export class StoreSubModule {
     _.merge(this._trackers, map);
   }
 
+  addModule(module) {
+    this._checkExported();
+    this[module.name] = this._modules[module.name] = module;
+    module.$parent = this;
+    module.$root = this.$root;
+  }
+
   getState(state) {
-    return state[this.name];
+    return this.$parent.getState(state)[this.name];
   }
 
   callMethod(...args) {
@@ -83,6 +91,23 @@ export class StoreSubModule {
     });
   }
 
+  _generateExportOptions() {
+    // Modules
+    let modules = {};
+    for (let m in this._modules) {
+      let module = this._modules[m];
+      modules[module.name] = module._generateExportOptions();
+    }
+
+    const options = {
+      state: this._state,
+      mutations: this._mutations,
+      modules
+    };
+
+    return options;
+  }
+
   _checkExported() {
     if(this._exported) {
       throw new Error(`The store has been exported, you can't change the modules anymore.`);
@@ -99,6 +124,10 @@ export class StoreSubModule {
     this._vm = new Vue({
       data: this._meteorData
     });
+
+    for (let m in this._modules) {
+      this._modules[m]._createTrackers();
+    }
   }
 
   _setStore(store) {
@@ -108,11 +137,19 @@ export class StoreSubModule {
     }
 
     this._exported = true;
+
+    for (let m in this._modules) {
+      this._modules[m]._setStore(store);
+    }
   }
 
   _processGetters() {
     for (let g in this._getters) {
       this.getters[g] = this._addGetter(this._getters[g]);
+    }
+
+    for (let m in this._modules) {
+      this._modules[m]._processGetters();
     }
   }
 
@@ -125,6 +162,10 @@ export class StoreSubModule {
   _processActions() {
     for (let g in this._actions) {
       this.actions[g] = this._addAction(this._actions[g]);
+    }
+
+    for (let m in this._modules) {
+      this._modules[m]._processActions();
     }
   }
 
@@ -146,82 +187,31 @@ export class StoreSubModule {
 export class StoreModule extends StoreSubModule {
   constructor() {
     super("root");
-    this._modules = {};
-    this.root = this;
+    this.$root = this;
   }
 
   getState(state) {
     return state;
   }
 
-  addModule(module) {
-    this._checkExported();
-    this[module.name] = this._modules[module.name] = module;
-    module.root = this;
-  }
-
   exportStore() {
-
+    // Process options
     this._processGetters();
     this._processActions();
-
     this._createTrackers();
 
-    // Modules
-    let modules = {};
-    for (let m in this._modules) {
-      let module = this._modules[m];
-      modules[module.name] = {
-        state: module._state,
-        mutations: module._mutations
-      }
-    }
-
-    let options = {
-      state: this._state,
-      mutations: this._mutations,
-      modules
-    };
-    let store = new ExtendedStore(this, options);
-
+    // Create native vuex store
+    let store = new ExtendedStore(this, this._generateExportOptions());
     this._setStore(store);
 
     return store;
   }
-
-  _createTrackers() {
-    super._createTrackers();
-    for (let m in this._modules) {
-      this._modules[m]._createTrackers();
-    }
-  }
-
-  _setStore(store) {
-    super._setStore(store);
-    for (let m in this._modules) {
-      this._modules[m]._setStore(store);
-    }
-  }
-
-  _processGetters() {
-    super._processGetters();
-    for (let m in this._modules) {
-      this._modules[m]._processGetters();
-    }
-  }
-
-  _processActions() {
-    super._processActions();
-    for (let m in this._modules) {
-      this._modules[m]._processActions();
-    }
-  }
 }
 
 class ExtendedStore extends Vuex.Store {
-  constructor(root, options) {
+  constructor($root, options) {
     super(options);
-    this.root = root;
+    this.$root = $root;
   }
 }
 
@@ -376,7 +366,7 @@ const PreVuexPlugin = {
         if (!store && options.parent && options.parent.$store) {
           store = options.parent.$store
         }
-        options.vuex = vuexCb(store.root);
+        options.vuex = vuexCb(store.$root);
       }
     }
   }

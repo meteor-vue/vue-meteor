@@ -1,5 +1,5 @@
 {
   "devDependencies": {
-    "vuex": "^0.8.0"
+    "vuex": "^1.0.0-rc.2"
   }
 }

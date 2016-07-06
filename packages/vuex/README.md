@@ -473,6 +473,29 @@ export default {
 }
 ```
 
+### Nested submodules
+
+You can add nested submodules to your submodules with the same `addModule()` method as the root module:
+
+```javascript
+// Inside the 'forum' submodule
+// Add a nested submodule
+import thread from './thread';
+subModule.addModule(thread);
+```
+
+In your vue components, you can access the nested submodules by calling them on their parent module:
+
+```javascript
+export default {
+  vuex: ({forum}) => ({
+    trackers: {
+      selectedThread: forum.thread.trackers.getSelectedThread
+    }
+  })
+}
+```
+
 ### Meteor data integration
 
 To use meteor reactive data with your store, use *trackers* on your module with the `addTrackers(map)` method:
@@ -634,12 +657,12 @@ Example for the tracker we created above:
 export default {
   methods: {
     needTracker() {
-      // this.$store.root.<submodule>.trackers.<tracker_name>.addClient();
-      this.$store.root.forum.trackers.threads.addClient();
+      // this.$store.$root.<submodule>.trackers.<tracker_name>.addClient();
+      this.$store.$root.forum.trackers.threads.addClient();
     },
     noLongerNeedTracker() {
-      // this.$store.root.<submodule>.trackers.<tracker_name>.removeClient();
-      this.$store.root.forum.trackers.threads.removeClient();
+      // this.$store.$root.<submodule>.trackers.<tracker_name>.removeClient();
+      this.$store.$root.forum.trackers.threads.removeClient();
     }
   }
 }
