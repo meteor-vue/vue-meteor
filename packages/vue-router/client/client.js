@@ -3,36 +3,27 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-class RouterClass {
-  constructor() {
-    this._defs = [];
-  }
+export class Router extends VueRouter {
+  constructor(options) {
+    super(options);
 
-  map(def) {
-    this._defs.push(def);
-  }
-
-  on(path, options) {
-    this._defs.push({
-      [path]: options
-    });
-  }
-
-  start(options, App, el, callback) {
-    this.lib = new VueRouter(options);
-    for(let def of this._defs) {
-      this.lib.map(def);
-    }
-    this.lib.start(App, el, callback);
+    Router.instance = this;
+    Router._init(this);
   }
 }
 
+const _initCbs = [];
 
-export const Router = new RouterClass();
+Router._init = function(instance) {
+  _initCbs.forEach(cb => {
+    cb(instance);
+  });
+};
 
-/*export function getData(id) {
-  let fastData = window.__fast_data__;
-  if(fastData) {
-    return fastData[id];
+Router.configure = function(cb) {
+  if(Router.instance) {
+    cb(Router.instance);
+  } else {
+    _initCbs.push(cb);
   }
-}*/
+}

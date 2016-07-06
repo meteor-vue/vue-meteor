@@ -32,7 +32,7 @@ class VueRouterCompiler extends CachingCompiler  {
     code = code.replace(componentReg, 'component: require($1).default');
     code = 'let r = (()=>{' + code + `})();
     import {Router} from 'meteor/akryum:vue-router';
-    Router.map(r);`;
+    Router.configure(router => { router.map(r); })`;
     let map = '';
 
     let babelOptions = Babel.getDefaultOptions();

@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-router',
-  version: '0.1.2',
+  version: '0.2.0',
   summary: 'Easy vue routing for Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -24,8 +24,6 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use('akryum:npm-check@0.0.2');
   api.use('akryum:vue@1.0.2');
-  //api.use('webapp', 'server');
-  //api.mainModule('server/server.js', 'server');
   api.mainModule('client/client.js', 'client');
   api.export('Router', 'client');
 });

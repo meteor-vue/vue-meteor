@@ -14,7 +14,7 @@ See the [example here](https://github.com/Akryum/meteor-vue-example-routing).
 
 ### Route definition
 
-In your client, add some routes (for more info about route definition, check the [vue-router documentation](http://router.vuejs.org/en/nested.html)):
+In your client, add some routes with the `Router.configure()` method (for more info about route definition, check the [vue-router documentation](http://router.vuejs.org/en/nested.html)):
 
 ```javascript
 /* /client/routes.js */
@@ -27,22 +27,26 @@ import Home from '/imports/ui/Home.vue';
 import Forum from '/imports/ui/Forum.vue';
 import Apollo from '/imports/ui/Apollo.vue';
 
-// Simple routes
-Router.map({
-  '/': {
-    name: 'home',
-    component: Home
-  },
-  '/forum': {
-    name: 'forum',
-    component: Forum
-  },
-  '/apollo': {
-    name: 'apollo',
-    component: Apollo
-  }
+Router.configure(router => {
+  // Simple routes
+  router.map({
+    '/': {
+      name: 'home',
+      component: Home
+    },
+    '/forum': {
+      name: 'forum',
+      component: Forum
+    },
+    '/apollo': {
+      name: 'apollo',
+      component: Apollo
+    }
+  });
 });
 ```
+
+The callbacks you pass to the `Router.configure()` calls will be called before the router is started, regardless of the file load order.
 
 #### Simple syntax
 
@@ -132,12 +136,18 @@ export default {
 To add a 'not found' page, add a `*` route in your client code:
 
 ```javascript
-/* /client/client.js */
+/* /client/routes.js */
+
+// Import the router
+import {Router} from 'meteor/akryum:vue-router';
 
 // Not found
 import NotFound from '/imports/ui/NotFound.vue';
-Router.on('*', {
-  component: NotFound
+
+Router.configure(router => {
+  router.on('*', {
+    component: NotFound
+  });
 });
 ```
 
@@ -152,37 +162,33 @@ Then import the routes and start the router in your client:
 import {Meteor} from 'meteor/meteor';
 import {Router} from 'meteor/akryum:vue-router';
 
+// Create the router instance
+const router = new Router({
+  history: true,
+  saveScrollPosition: true
+});
+
 // App layout
 import AppLayout from '/imports/ui/AppLayout.vue';
 
 // App start
 Meteor.startup(() => {
-  // Start the router and create root vue instance
-  Router.start({
-    history: true,
-    saveScrollPosition: true
-  }, AppLayout, 'app');
+  // Start the router
+  router.start(AppLayout, 'app');
 });
 ```
 
 **If you put your routes files in the `/imports` folder, you need to import them manually.**
 
-The most important method is `Router.start(options, App, el, callback)` that takes these parameters:
+When you create the router instance, you can pass `options` that allow you to customize the router behavior ([more info](http://router.vuejs.org/en/options.html)).
 
- - `options` allow you to customize the router behavior ([more info](http://router.vuejs.org/en/options.html)).
+To start the router, use the `router.start(App, el, callback)` method inside a `Meteor.startup()` call. It takes these parameters:
+
  - `App` is a vue component definition that will be used as the main layout and root instance. **Note that the router cannot be started with Vue instances.**
  - `el` determines which HTML element the root instance will be attached on ([more info](https://vuejs.org/api/#el)). Can be a CSS selector string or an actual element.
  - `callback` is an optional function which will be called when the router app's initial render is complete.
 
 For more info about router start, check the [vue-router documentation](http://router.vuejs.org/en/api/start.html).
-
-### Access all the `vue-router` methods
-
-Use the `lib` property:
-
-```javascript
-Router.lib.on('/home', {...});
-```
 
 ### Fast-render
 
