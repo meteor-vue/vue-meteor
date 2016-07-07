@@ -238,5 +238,5 @@ const jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
 const jsExportDefaultReg = /export\s+default/g;
 const quoteReg = /'/g;
 const lineReg = /\r?\n|\r/g;
-const tagReg = /<([\w\d-]+)(\s+.*?)?\/?>/ig;
+const tagReg = /<([\w\d-]+)((\s+.*?)*)?\/?>/ig;
 const classAttrReg = /\s+class=(['"])(.*?)\1/gi;
