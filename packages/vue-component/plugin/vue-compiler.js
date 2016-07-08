@@ -81,12 +81,10 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
         const contents = normalizeCarriageReturns(inputFile.getContentsAsString());
         const lines = contents.split('\n');
         let dirname = getFullDirname(inputFile);
-        console.log(`dirname:'${dirname}'`);
         if(dirname === '.') {
           dirname = '';
         }
         for(let line of lines) {
-          console.log(`line:'${line}'`);
           if(line !== '') {
             this.ignoreRules.push({
               dirname,
