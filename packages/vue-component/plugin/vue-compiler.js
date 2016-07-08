@@ -4,6 +4,8 @@ import Future from 'fibers/future';
 import async from 'async';
 import { Meteor } from 'meteor/meteor';
 
+IGNORE_FILE = '.vueignore';
+
 global._vue_cache = global._vue_cache || {};
 
 VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
@@ -18,6 +20,8 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
 
   processFilesForTarget(inputFiles) {
     const cacheMisses = [];
+
+    this.updateIgnoredConfig(inputFiles);
 
     //console.log(`Found ${inputFiles.length} files.`);
 
@@ -70,8 +74,42 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
     }
   }
 
+  updateIgnoredConfig(inputFiles) {
+    this.ignoreRules = [];
+    for(let inputFile of inputFiles) {
+      if(inputFile.getBasename() === IGNORE_FILE) {
+        const contents = normalizeCarriageReturns(inputFile.getContentsAsString());
+        const lines = contents.split('\n');
+        let dirname = getFullDirname(inputFile);
+        console.log(`dirname:'${dirname}'`);
+        if(dirname === '.') {
+          dirname = '';
+        }
+        for(let line of lines) {
+          console.log(`line:'${line}'`);
+          if(line !== '') {
+            this.ignoreRules.push({
+              dirname,
+              reg: new RegExp(line),
+            });
+          }
+        }
+      }
+    }
+  }
+
   isIgnored(inputFile) {
-    return /node_modules/.test(inputFile.getPathInPackage())
+    if(inputFile.getBasename() === IGNORE_FILE) {
+      return true;
+    }
+
+    for(let rule of this.ignoreRules) {
+      const dirname = getFullDirname(inputFile);
+      if(dirname.indexOf(rule.dirname) === 0 && rule.reg.test(inputFile.getPathInPackage())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   getCacheKey(inputFile) {
@@ -333,7 +371,7 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
   }
 
   addStylesheet(inputFile, options) {
-    const data = options.data.replace(rnReg, "\n").replace(rReg, "\n");
+    const data = normalizeCarriageReturns(options.data);
     inputFile.addStylesheet({
       path: inputFile.getPathInPackage() + '.css',
       sourcePath: inputFile.getPathInPackage(),
@@ -341,6 +379,20 @@ VueComponentCompiler = class VueComponentCompiler extends CachingCompiler {
       sourceMap: options.map
     });
   }
+}
+
+function normalizeCarriageReturns(contents) {
+  return contents.replace(rnReg, "\n").replace(rReg, "\n");
+}
+
+function getFullDirname(inputFile) {
+  const packageName = inputFile.getPackageName();
+  return (packageName? packageName + '/' : '') + inputFile.getDirname();
+}
+
+function getFullPathInApp(inputFile) {
+  const packageName = inputFile.getPackageName();
+  return (packageName? packageName + '/' : '') + inputFile.getPathInPackage();
 }
 
 const rnReg = new RegExp("\r\n", "g");

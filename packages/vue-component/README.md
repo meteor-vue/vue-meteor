@@ -132,6 +132,16 @@ let packageName = this.$options.packageName;
 
 It will be null if the components is in your application code.
 
+### Ignore files
+
+You can create `.vueignore` files with a RegEx on each line to exclude `.vue` files from the compilation based on their path. If the `.vueignore` is inside a folder, it only applies to that folder.
+
+For example, you can add the following `.vueignore` file to your app inorder to ignore `.vue` files in the `node_modules` folders:
+
+```
+node_modules/
+```
+
 ---
 
 ## Next steps

@@ -1,6 +1,7 @@
 Plugin.registerCompiler({
   extensions: ['vue'],
-  archMatching: 'web'
+  filenames: [IGNORE_FILE],
+  archMatching: 'web',
 }, () => new VueComponentCompiler());
 
 

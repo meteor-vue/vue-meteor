@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1 - 2016/07/08
+
+ - The `.vueignore` file inside a folder will only apply to that folder, similar to `.gitignore` files.
+
+## 0.6.0 - 2016/07/08
+
+ - The compiler now parses `.vueignores` files that contains regexes for each line. The `.vue` files matching theses regexes will be ignored by the compiler.
+
 ## 0.5.4 - 2016/07/07
 
  - Fixed [Issue #41](https://github.com/Akryum/meteor-vue-component/issues/41).
