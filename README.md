@@ -9,7 +9,7 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 ## Examples
 
 - [Simple example project](https://github.com/Akryum/meteor-vue-example)
-- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze)
+- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)
 - [Routing example project](https://github.com/Akryum/meteor-vue-example-routing)
 - [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
 - [Vuex example project](https://github.com/Akryum/meteor-vuex-example)
@@ -33,6 +33,7 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Easy routing with vue-router out-of-the-box integration & fast-render
  - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui
  - [x] Easy state management with vuex integration
+ - [x] Use Blaze templates in your vue app
  - [ ] *Typescript official integration in .vue files*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
@@ -97,6 +98,14 @@ Manage the state of your app with a centralized data store with [vuex](https://g
 [See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
 
 [Example app](https://github.com/Akryum/meteor-vuex-example)
+
+### Embed Blaze template
+
+Use Blaze templates inside your vue components.
+
+[See Installation & Usage in akryum:vue-blaze-template](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-blaze-template)
+
+[Example app](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)
 
 ## Get involved
 
