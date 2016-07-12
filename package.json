@@ -5,17 +5,18 @@
     "meteor-node-stubs": "~0.2.0"
   },
   "devDependencies": {
-    "casual": "^1.5.3",
-    "express": "^4.13.4",
+    "apollo-client": "^0.3.30",
     "apollo-server": "^0.1.5",
+    "express": "^4.13.4",
+    "faker": "^3.1.0",
+    "graphql": "^0.6.1",
+    "graphql-tag": "^0.1.9",
     "graphql-tools": "^0.6.0",
-    "vue": "^1.0.24",
-    "apollo-client": "^0.3.13",
-    "vue-router": "^0.7.13",
-    "vue-i18n": "^4.0.1",
-    "locale": "^0.1.0",
     "js-cookie": "^2.1.2",
-    "graphql-tag": "^0.1.7",
+    "locale": "^0.1.0",
+    "vue": "^1.0.24",
+    "vue-i18n": "^4.0.1",
+    "vue-router": "^0.7.13",
     "vuex": "^1.0.0-rc.2"
   }
 }

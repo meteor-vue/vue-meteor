@@ -1,7 +1,6 @@
 <template lang="jade">
 .app-layout
   locale-select.lang-select
-    span(slot="arrow") v
   links-menu(:links="links")
   router-view
 </template>

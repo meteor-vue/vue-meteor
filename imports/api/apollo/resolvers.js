@@ -1,11 +1,11 @@
 // Fake word generator
-import casual from 'casual';
+import faker from 'faker';
 
 // Let's generate some tags
 var id = 0;
 var tags = [];
 for (let i = 0; i < 42; i++) {
-  addTag(casual.word);
+  addTag(faker.random.word());
 }
 
 function addTag(label) {
