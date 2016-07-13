@@ -57,7 +57,7 @@ ready () {
 ```
 
 
-You can also change the default subcription method be defining the `Vue.config.meteor.subscribe` function:
+You can also change the default subscription method by defining the `Vue.config.meteor.subscribe` function:
 
 
 ```javascript
@@ -79,8 +79,8 @@ Vue.config.meteor.subscribe = function(...args) {
 
 You can make your component `data` properties update from any Meteor reactive sources (like collections or session) by putting an object for each property in the `data` object. The object key is the name of the property, and the value is either a function or an object with the following attributes:
 
- - `params()` (optionnal), a function returning an object, which can use any *Vue* reactive property,
- - `update([params])`, a function with optionnal `params` argument, that returns the value to update the corresponding `data` property of the component. Here you can use *Meteor* reactive sources, but **no Vue reactive property getters**. The `params` argument is the object returned by the `params()` function described above.
+ - `params()` (optional), a function returning an object, which can use any *Vue* reactive property,
+ - `update([params])`, a function with optional `params` argument, that returns the value to update the corresponding `data` property of the component. Here you can use *Meteor* reactive sources, but **no Vue reactive property getters**. The `params` argument is the object returned by the `params()` function described above.
 
 Here is an example:
 
