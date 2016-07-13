@@ -61,7 +61,7 @@ You can also change the default subscription method by defining the `Vue.config.
 
 
 ```javascript
-// You can replace the default subcription function with our own
+// You can replace the default subcription function with your own
 // Here we replace the native subscribe() with a cached one
 // with the ccorcos:subs-cache package
 const subsCache = new SubsCache({
