@@ -167,8 +167,6 @@ computed: {
 }
 ```
 
-The complete example is in the `imports/ui/App.vue` [file](https://github.com/Akryum/meteor-vue-component/blob/master/imports/ui/App.vue#L11).
-
 ---
 
 ## Next steps
