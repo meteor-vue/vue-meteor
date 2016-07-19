@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.4 - 2016/07/19
+
+ - Revamped the error logging: errors are now less verbose and a lot more detailed and useful.
+
 ## 0.6.3 - 2016/07/18
 
  - The compiler can now watch imported files and hot-reload/rebuild the components that uses them.

@@ -505,29 +505,6 @@ class DependencyManager {
   }
 }
 
-function normalizeCarriageReturns(contents) {
-  return contents.replace(rnReg, "\n").replace(rReg, "\n");
-}
-
-function getFullDirname(inputFile) {
-  const packageName = inputFile.getPackageName();
-  return (packageName? packageName + '/' : '') + inputFile.getDirname();
-}
-
-function getFullPathInApp(inputFile) {
-  const packageName = inputFile.getPackageName();
-  return (packageName? packageName + '/' : '') + inputFile.getPathInPackage();
-}
-
-function getFilePath(inputFile) {
-  const sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
-  return path.resolve(sourceRoot, inputFile.getPathInPackage());
-}
-
-function isDevelopment() {
-  return Meteor.isDevelopment;
-}
-
 function compileTags(inputFile, tags, babelOptions, dependencyManager) {
   var handler = new VueComponentTagHandler({
     inputFile,
@@ -556,7 +533,7 @@ function compileOneFileWithContents(inputFile, contents, babelOptions) {
 
     return compileTags(inputFile, tags, babelOptions, cache.dependencyManager);
   } catch (e) {
-    if (e instanceof CompileError) {
+    if (e.message && e.line) {
       inputFile.error({
         message: e.message,
         line: e.line
@@ -567,11 +544,3 @@ function compileOneFileWithContents(inputFile, contents, babelOptions) {
     }
   }
 }
-
-const rnReg = new RegExp("\r\n", "g");
-const rReg = new RegExp("\r", "g");
-const globalFileNameReg = /\.global\.vue$/;
-const capitalLetterReg = /([A-Z])/g;
-const trimDashReg = /^-/;
-const nonWordCharReg = /\W/g;
-const requireRelativeFileReg = /require\(["']\.\//ig

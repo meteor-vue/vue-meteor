@@ -20,35 +20,39 @@ VueComponentTagHandler = class VueComponentTagHandler {
   addTagToResults(tag) {
     this.tag = tag;
 
-    try {
-      if (this.tag.tagName === "template") {
-        if (this.component.template) {
-          this.throwCompileError("Only one <template> allowed in component file", this.tag.tagStartIndex)
-        }
-
-        this.component.template = this.tag;
-
-      } else if (this.tag.tagName === "script") {
-        if (this.component.script) {
-          this.throwCompileError("Only one <script> allowed in component file", this.tag.tagStartIndex)
-        }
-
-        this.component.script = this.tag;
-
-      } else if (this.tag.tagName === "style") {
-
-        this.component.styles.push(this.tag);
-
-      } else {
-        this.throwCompileError("Expected <template>, <script>, or <style> tag in template file", this.tag.tagStartIndex);
+    if (this.tag.tagName === 'template') {
+      if (this.component.template) {
+        throwCompileError({
+          inputFile: this.inputFile,
+          message: 'Only one <template> allowed in component file',
+          tag: 'template',
+          charIndex: this.tag.tagStartIndex,
+        })
       }
-    } catch (e) {
-      if (e.scanner) {
-        // The error came from Spacebars
-        this.throwCompileError(e.message, this.tag.contentsStartIndex + e.offset);
-      } else {
-        throw e;
+
+      this.component.template = this.tag;
+
+    } else if (this.tag.tagName === 'script') {
+      if (this.component.script) {
+        throwCompileError({
+          inputFile: this.inputFile,
+          message: 'Only one <script> allowed in component file',
+          tag: 'script',
+          charIndex: this.tag.tagStartIndex,
+        });
       }
+
+      this.component.script = this.tag;
+
+    } else if (this.tag.tagName === 'style') {
+
+      this.component.styles.push(this.tag);
+
+    } else {
+      throwCompileError({
+        inputFile: this.inputFile,
+        message: 'Expected <template>, <script>, or <style> tag in template file',
+      });
     }
   }
 
@@ -76,7 +80,14 @@ VueComponentTagHandler = class VueComponentTagHandler {
         try {
           let compile = global.vue.lang[lang];
           if (!compile) {
-            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <script>. Did you install it?`);
+            throwCompileError({
+              inputFile: this.inputFile,
+              tag: 'script',
+              charIndex: tag.tagStartIndex,
+              action: 'compiling',
+              lang,
+              message: `Can't find handler for lang ${lang}, did you install it?`,
+            });
           } else {
             //console.log(`Compiling <script> in lang ${lang}...`);
             let result = compile({
@@ -88,7 +99,15 @@ VueComponentTagHandler = class VueComponentTagHandler {
             useBabel = result.useBabel;
           }
         } catch (e) {
-          console.error(`Error while compiling script with lang ${lang} in file ${inputFilePath} in <script>`, e);
+          throwCompileError({
+            inputFile: this.inputFile,
+            tag: 'script',
+            charIndex: tag.tagStartIndex,
+            action: 'compiling',
+            lang,
+            error: e,
+            showError: true
+          });
         }
       }
 
@@ -100,13 +119,38 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // Babel options
         this.babelOptions.sourceMap = true;
         this.babelOptions.filename =
-          this.babelOptions.sourceFileName = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
-        this.babelOptions.sourceMapTarget = this.babelOptions.filename + ".map";
+          this.babelOptions.sourceFileName = packageName ? '/packages/' + packageName + '/' + inputFilePath : '/' + inputFilePath;
+        this.babelOptions.sourceMapTarget = this.babelOptions.filename + '.map';
 
         // Babel compilation
-        let output = Babel.compile(script, this.babelOptions);
-        script = output.code;
-        map = output.map;
+        try {
+          let output = Babel.compile(script, this.babelOptions);
+          script = output.code;
+          map = output.map;
+        } catch(e) {
+          let errorOptions = {
+            inputFile: this.inputFile,
+            tag: 'script',
+            charIndex: tag.tagStartIndex,
+            action: 'compiling',
+            message: (e.message?e.message:`An Babel error occured`),
+            error: e,
+          };
+
+          if(e.loc) {
+            errorOptions.line = e.loc.line;
+            errorOptions.column = e.loc.column;
+          } else {
+            errorOptions.charIndex = tag.tagStartIndex;
+            if(!e.message) {
+              errorOptions.showError = true;
+            } else {
+              errorOptions.showStack = true;
+            }
+          }
+
+          throwCompileError(errorOptions);
+        }
       }
 
       js += '__vue_script__ = (function(){' + script + '\n})();';
@@ -124,7 +168,14 @@ VueComponentTagHandler = class VueComponentTagHandler {
         try {
           let compile = global.vue.lang[lang];
           if (!compile) {
-            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <template>. Did you install it?`);
+            throwCompileError({
+              inputFile: this.inputFile,
+              tag: 'template',
+              charIndex: tag.tagStartIndex,
+              action: 'compiling',
+              lang,
+              message: `Can't find handler for lang ${lang}, did you install it?`,
+            });
           } else {
             //console.log(`Compiling <template> in lang ${lang}...`);
             let result = compile({
@@ -134,7 +185,15 @@ VueComponentTagHandler = class VueComponentTagHandler {
             template = result.template;
           }
         } catch (e) {
-          console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath} in <template>`, e);
+          throwCompileError({
+            inputFile: this.inputFile,
+            tag: 'template',
+            charIndex: tag.tagStartIndex,
+            action: 'compiling',
+            lang,
+            error: e,
+            showError: true
+          });
         }
       }
 
@@ -150,7 +209,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         }
       });
 
-      template = template.replace(quoteReg, "&#39;").replace(lineReg, '');
+      template = template.replace(quoteReg, '&#39;').replace(lineReg, '');
     }
 
     // Styles
@@ -164,7 +223,14 @@ VueComponentTagHandler = class VueComponentTagHandler {
         try {
           let compile = global.vue.lang[lang];
           if (!compile) {
-            this.throwCompileError(`Can't find handler for lang ${lang} in vue component ${inputFilePath} in <style>. Did you install it?`);
+            throwCompileError({
+              inputFile: this.inputFile,
+              tag: 'style',
+              charIndex: tag.tagStartIndex,
+              action: 'compiling',
+              lang,
+              message: `Can't find handler for lang ${lang}, did you install it?`,
+            });
           } else {
             //console.log(`Compiling <style> in lang ${lang}...`);
             let result = compile({
@@ -172,12 +238,20 @@ VueComponentTagHandler = class VueComponentTagHandler {
               inputFile: this.inputFile,
               dependencyManager: this.dependencyManager
             });
-            //console.log("Css result", result);
+            //console.log('Css result', result);
             css = result.css;
             cssMap = result.map;
           }
         } catch (e) {
-          console.error(`Error while compiling style with lang ${lang} in file ${inputFilePath} in <style>`, e);
+          throwCompileError({
+            inputFile: this.inputFile,
+            tag: 'style',
+            charIndex: tag.tagStartIndex,
+            action: 'compiling',
+            lang,
+            error: e,
+            showError: true
+          });
         }
       }
 
@@ -224,20 +298,8 @@ VueComponentTagHandler = class VueComponentTagHandler {
       template
     };
 
-    //console.log("Result", compileResult);
+    //console.log('Result', compileResult);
 
     return compileResult;
   }
-
-  throwCompileError(message, overrideIndex) {
-    throwCompileError(this.tag, message, overrideIndex);
-  }
 }
-
-
-const jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
-const jsExportDefaultReg = /export\s+default/g;
-const quoteReg = /'/g;
-const lineReg = /\r?\n|\r/g;
-const tagReg = /<([\w\d-]+)((\s+.*?)*)?\/?>/ig;
-const classAttrReg = /\s+class=(['"])(.*?)\1/gi;

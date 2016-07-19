@@ -25,7 +25,8 @@ class HtmlScan {
         tagNames
       }) {
     this.sourceName = sourceName;
-    this.contents = contents.replace(rnRegex, '\n').replace(rRegex, '\n').replace(tagCommentRegex, '');
+    this.originalContents = contents;
+    this.contents = normalizeCarriageReturns(contents).replace(tagCommentRegex, '');
     this.tagNames = tagNames;
 
     this.tags = [];
@@ -65,35 +66,28 @@ class HtmlScan {
       }
     }
 
+    const originalContents = this.originalContents;
+
     const tag = {
       tagName: tagName,
       attribs: tagAttribs,
       contents: tagContents,
       fileContents: this.contents,
       sourceName: this.sourceName,
+      _tagStartIndex: null,
+      get tagStartIndex() {
+        if(this._tagStartIndex === null) {
+          this._tagStartIndex = originalContents.indexOf(tagContents.substr(0, 10));
+        }
+        return this._tagStartIndex;
+      }
     };
 
     // save the tag
     this.tags.push(tag);
   }
 
-  throwCompileError(msg) {
-    const err = new CompileError();
-    err.message = msg || "bad formatting in component file";
-    err.file = this.sourceName;
-    err.line = this.contents.substring(0, finalIndex).split('\n').length;
-
-    throw err;
-  }
-
   getTags() {
     return this.tags;
   }
 }
-
-const rnRegex = /\r\n/g;
-const rRegex = /\r/g;
-const tagCommentRegex = /<!--([\s\S]+?)-->/igm;
-const expandedTagRegex = /<(template|script)(\s+.*)?>\n([\s\S]+)<\/\1>/igm;
-const limitedTagRegex = /<(style)(\s+.*)?>\n([\s\S]+?)<\/\1>/igm;
-const attrsRegex = /\s+(\w+)(=(["'])([\w\/~$@:.-]*)\3)?/ig;
