@@ -39,7 +39,7 @@ You can access the `ApolloClient` instance used by the package with the `client`
 console.log(VueApollo.client);
 ```
 
-The first time this property is used an instance of `ApolloClient` will be automatically created with the options you set. Note that if you change the options with `setMeteorClientConfig()` or `setApolloClientOptions()` afterwards, they will not be applied.
+The first time this property is used an instance of `ApolloClient` will be automatically created with the options you set. Note that if you change the options with `setMeteorClientConfig()` or `setApolloClientOptions()` afterwards, they won't be applied.
 
 You can also tell the package to use your own `ApolloClient` instance by setting it on the `client` property **before you start your Vue app**:
 
