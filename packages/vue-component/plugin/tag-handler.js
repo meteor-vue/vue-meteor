@@ -5,10 +5,10 @@ global._vue_js_cache = global._vue_js_cache || {};
 
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
-  constructor({ inputFile, allFiles, babelOptions }) {
+  constructor({ inputFile, babelOptions, dependencyManager }) {
     this.inputFile = inputFile;
-    this.allFiles = allFiles;
     this.babelOptions = babelOptions;
+    this.dependencyManager = dependencyManager;
 
     this.component = {
       template: null,
@@ -169,7 +169,8 @@ VueComponentTagHandler = class VueComponentTagHandler {
             //console.log(`Compiling <style> in lang ${lang}...`);
             let result = compile({
               source: css,
-              inputFile: this.inputFile
+              inputFile: this.inputFile,
+              dependencyManager: this.dependencyManager
             });
             //console.log("Css result", result);
             css = result.css;

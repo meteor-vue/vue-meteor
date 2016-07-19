@@ -7,19 +7,20 @@ import less from 'less';
 import {Meteor} from 'meteor/meteor';
 
 class MeteorImportLessPlugin {
-  constructor() {
+  constructor(dependencyManager) {
     this.minVersion = [2, 5, 0];
+    this.dependencyManager = dependencyManager;
   }
 
   install(less, pluginManager) {
-    pluginManager.addFileManager(
-      new MeteorImportLessFileManager());
+    pluginManager.addFileManager(new MeteorImportLessFileManager(this.dependencyManager));
   }
 }
 
 class MeteorImportLessFileManager extends less.AbstractFileManager {
-  constructor() {
+  constructor(dependencyManager) {
     super();
+    this.dependencyManager = dependencyManager;
   }
 
   // We want to be the only active FileManager, so claim to support everything.
@@ -35,6 +36,9 @@ class MeteorImportLessFileManager extends less.AbstractFileManager {
   }
 
   loadFile(filename, currentDirectory, options, environment, cb) {
+    //console.log(filename, currentDirectory);
+    //console.log("### options", options, "### env", environment, "###");
+
     let resolvedFilename;
     if (filename.indexOf('~') === 0) {
       resolvedFilename = filename.substr(1);
@@ -58,8 +62,13 @@ class MeteorImportLessFileManager extends less.AbstractFileManager {
         contents,
         filename: resolvedFilename
       });
-    }
 
+      if(this.dependencyManager) {
+        this.dependencyManager.addDependency(resolvedFilename);
+      } else {
+        console.error('this.dependencyManager undefined');
+      }
+    }
   }
 }
 
@@ -76,16 +85,29 @@ function decodeFilePath(filePath) {
   return 'packages/' + match[1] + '/' + match[2];
 }
 
-const importPlugin = new MeteorImportLessPlugin();
+const importPlugins = {};
 
+function getKey(inputFile) {
+  return `${inputFile.getPackageName()}:${inputFile.getPathInPackage()}`;
+}
+
+function getImportPlugin(inputFile, dependencyManager) {
+  const key = getKey(inputFile);
+  let result = importPlugins[key];
+  if(!result) {
+    result = importPlugins[key] = new MeteorImportLessPlugin(dependencyManager);
+  }
+  return result;
+}
 
 global.vue.lang.less = Meteor.wrapAsync(function({
   source,
-  inputFile
+  inputFile,
+  dependencyManager
 }, cb) {
   less.render(source, {
     filename: inputFile.getPathInPackage(),
-    plugins: [importPlugin],
+    plugins: [getImportPlugin(inputFile, dependencyManager)],
     sourceMap: {
       outputSourceFiles: true
     }

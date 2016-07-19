@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.3 - 2016/07/18
+
+ - The compiler can now watch imported files and hot-reload/rebuild the components that uses them.
+ - The dependency watching has been implemented for less.
+
 ## 0.6.1 - 2016/07/08
 
  - The `.vueignore` file inside a folder will only apply to that folder, similar to `.gitignore` files.
