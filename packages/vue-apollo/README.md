@@ -13,7 +13,43 @@ Integrates [apollo](http://www.apollostack.com/) in your vue components with dec
 
 ## Usage
 
-Set the environment variable `APOLLO_CLIENT_URL` to the URL of your apollo serveur (default is `/graphql`).
+### Configuration
+
+By default, the URL used to connect to the GraphQL server is `/graphql`. Set the environment variable `APOLLO_CLIENT_URL` to change it.
+
+An `ApolloClient` instance will be created internally when needed. You can add your own options to the `meteorClientConfig` method ([more in the apollo doc](http://docs.apollostack.com/apollo-client/meteor.html#meteorClientConfig)) and the `ApolloClient` constructor ([more in the apollo doc](http://docs.apollostack.com/apollo-client/index.html#ApolloClient)).
+
+```javascript
+import { VueApollo } from 'meteor/akryum:vue-apollo';
+
+VueApollo.setMeteorClientConfig({
+  path: '/graphql',
+  options: { ... },
+  useMeteorAccounts: true
+});
+
+VueApollo.setApolloClientOptions({
+  shouldBatch: true
+});
+```
+
+You can access the `ApolloClient` instance used by the package with the `client` static property:
+
+```javascript
+console.log(VueApollo.client);
+```
+
+The first time this property is used an instance of `ApolloClient` will be automatically created with the options you set. Note that if you change the options with `setMeteorClientConfig()` or `setApolloClientOptions()` afterwards, they will not be applied.
+
+You can also tell the package to use your own `ApolloClient` instance by setting it on the `client` property **before you start your Vue app**:
+
+```javascript
+import ApolloClient from 'apollo-client';
+
+VueApollo.client = new ApolloClient(options);
+```
+
+### Usage in components
 
 To declare apollo queries in your Vue component, add an `apollo` object :
 
@@ -108,7 +144,7 @@ You can then use your property as usual in your vue component:
 
 #### Query with parameters
 
-You can add variables (read parameters) to your `gql` query:
+You can add variables (read parameters) to your `gql` query by declaring `query` and `variables` in an object:
 
 ```javascript
 // Apollo-specific options
@@ -125,6 +161,32 @@ apollo: {
       variables: {
         message: 'Meow'
       }
+    }
+  }
+}
+```
+
+You can use the following apollo options in the object:
+ - `forceFetch`
+ - `fragments`
+
+See the [apollo doc](http://docs.apollostack.com/apollo-client/queries.html#query) for more details.
+
+For example, you could add the `forceFetch` apollo option like this:
+
+```javascript
+apollo: {
+  data: {
+    // Query with parameters
+    ping: {
+      query: gql`query PingMessage($message: String!) {
+        ping(message: $message)
+      }`,
+      variables: {
+        message: 'Meow'
+      },
+      // Additional options here
+      forceFetch: true
     }
   }
 }
@@ -218,12 +280,12 @@ This will re-fetch the query each time a parameter changes, for example:
 
 #### Advanced options
 
-Available advanced options:
-
- - `forceFetch: true` see the [apollo doc](http://docs.apollostack.com/apollo-client/core.html#forceFetch)
- - `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match
- - `result(data)` is a hook called when a result is received
- - `error(errors, type)` is a hook called when there are errors, `type` value can either be `'sending'` or `'execution'`
+These are the available advanced options you can use:
+- `update(data) {return ...}` to customize the value that is set in the vue property, for example if the field names don't match
+- `result(data)` is a hook called when a result is received
+- `error(errors, type)` is a hook called when there are errors, `type` value can either be `'sending'` or `'execution'`
+- `loadingKey` will update the component data property you pass as the value. You should initialize this property to `0` in the component `data()` hook. When the query is loading, this property will be incremented by 1 and as soon as it no longer is, the property will be decremented by 1. That way, the property can represent a counter of currently loading queries.
+- `watchLoading(isLoading, countModifier)` is a hook called when the loading state of the query changes. The `countModifier` parameter is either equal to `1` when the query is now loading, or `-1` when the query is no longer loading.
 
 
 ```javascript
@@ -263,10 +325,26 @@ apollo: {
       // Error handling
       error(errors, type) {
         console.error(`We've got ${errors.length} errors of type '${type}'`);
+      },
+      // Loading state
+      // loadingKey is the name of the data property
+      // that will be incremented when the query is loading
+      // and decremented when it no longer is.
+      loadingKey: 'loadingQueriesCount',
+      // watchLoading will be called whenever the loading state changes
+      watchLoading(isLoading, countModifier) {
+        // isLoading is a boolean
+        // countModifier is either 1 or -1
       }
     }
   }
 }
+```
+
+If you use ES2015, you can also write the `update` like this:
+
+```javascript
+update: data => data.ping
 ```
 
 ### Reactive Queries
@@ -296,7 +374,17 @@ apollo: {
 }
 ```
 
-And server-side:
+You can use the following apollo options:
+ - `forceFetch`
+ - `returnPartialData`
+ - `pollInterval`
+ - `fragments`
+
+See the [apollo doc](http://docs.apollostack.com/apollo-client/queries.html#watchQuery) for more details.
+
+You can also use the advanced options detailed above, like `result` or `watchLoading`.
+
+Here is how the server-side looks like:
 
 ```javascript
 export const schema = `
@@ -398,13 +486,13 @@ schema {
 `;
 
 // Fake word generator
-import casual from 'casual';
+import faker from 'faker';
 
 // Let's generate some tags
 var id = 0;
 var tags = [];
 for (let i = 0; i < 42; i++) {
-  addTag(casual.word);
+  addTag(faker.random.word());
 }
 
 function addTag(label) {
