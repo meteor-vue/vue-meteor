@@ -5,7 +5,7 @@
     "meteor-node-stubs": "~0.2.0"
   },
   "devDependencies": {
-    "apollo-client": "^0.3.30",
+    "apollo-client": "^0.4.4",
     "apollo-server": "^0.1.5",
     "express": "^4.13.4",
     "faker": "^3.1.0",

@@ -25,7 +25,7 @@ class VueRouterCompiler extends CachingCompiler  {
     let source = inputFile.getContentsAsString();
     let packageName = inputFile.getPackageName();
     let inputFilePath = inputFile.getPathInPackage();
-    let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+    let sourcePath = packageName ? "packages/" + packageName + "/" + inputFilePath : inputFilePath;
 
     let code = source;
     code = code.replace(jsExportDefaultReg, 'return');
@@ -54,10 +54,10 @@ class VueRouterCompiler extends CachingCompiler  {
   addCompileResult(inputFile, compileResult) {
     let packageName = inputFile.getPackageName();
     let inputFilePath = inputFile.getPathInPackage();
-    let sourcePath = packageName ? "/packages/" + packageName + "/" + inputFilePath : "/" + inputFilePath;
+    let sourcePath = packageName ? "packages/" + packageName + "/" + inputFilePath : inputFilePath;
 
     inputFile.addJavaScript({
-      path: sourcePath,
+      path: inputFilePath,
       sourcePath,
       data: compileResult.code,
       sourceMap: compileResult.map
