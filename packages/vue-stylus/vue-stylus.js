@@ -17,7 +17,8 @@ function statOrNull(path) {
 
 global.vue.lang.stylus = Meteor.wrapAsync(function({
   source,
-  inputFile
+  inputFile,
+  dependencyManager
 }, cb) {
 
   function parseImportPath(filePath, importerDir) {
@@ -49,6 +50,8 @@ global.vue.lang.stylus = Meteor.wrapAsync(function({
       if(!filePath) {
         return null;
       }
+
+      dependencyManager.addDependency(filePath);
 
       return [filePath];
     },
