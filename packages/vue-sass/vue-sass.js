@@ -6,24 +6,28 @@ import fs from 'fs';
 import sass from 'node-sass';
 import {Meteor} from 'meteor/meteor';
 
-function resolveImport(url, prev, done) {
-  let resolvedFilename;
-  if (url.indexOf('~') === 0) {
-    resolvedFilename = url.substr(1);
-  /*} else if (url.indexOf('{') === 0) {
-    resolvedFilename = decodeFilePath(url);*/
-  } else {
-    let currentDirectory = path.dirname(this.options.outFile);
-    resolvedFilename = path.resolve(currentDirectory, url);
-  }
+function resolveImport(dependencyManager) {
+  return function (url, prev, done) {
+    let resolvedFilename;
+    if (url.indexOf('~') === 0) {
+      resolvedFilename = url.substr(1);
+    /*} else if (url.indexOf('{') === 0) {
+      resolvedFilename = decodeFilePath(url);*/
+    } else {
+      let currentDirectory = path.dirname(this.options.outFile);
+      resolvedFilename = path.resolve(currentDirectory, url);
+    }
 
-  if (!fs.existsSync(resolvedFilename)) {
-    done(new Error('Unknown import (file not found): ' + url));
-  } else {
-    done({
-      file: resolvedFilename
-    });
-  }
+    if (!fs.existsSync(resolvedFilename)) {
+      done(new Error('Unknown import (file not found): ' + url));
+    } else {
+      dependencyManager.addDependency(resolvedFilename);
+
+      done({
+        file: resolvedFilename
+      });
+    }
+  };
 }
 
 function decodeFilePath(filePath) {
@@ -41,11 +45,12 @@ function decodeFilePath(filePath) {
 
 global.vue.lang.scss = Meteor.wrapAsync(function({
   source,
-  inputFile
+  inputFile,
+  dependencyManager
 }, cb) {
   sass.render({
     data: source,
-    importer: resolveImport,
+    importer: resolveImport(dependencyManager),
     outFile: inputFile.getPathInPackage() + '.css',
     sourceMap: true,
     sourceMapContents: true
@@ -63,11 +68,12 @@ global.vue.lang.scss = Meteor.wrapAsync(function({
 
 global.vue.lang.sass = Meteor.wrapAsync(function({
   source,
-  inputFile
+  inputFile,
+  dependencyManager
 }, cb) {
   sass.render({
     data: source,
-    importer: resolveImport,
+    importer: resolveImport(dependencyManager),
     outFile: inputFile.getPathInPackage() + '.css',
     sourceMap: true,
     sourceMapContents: true,

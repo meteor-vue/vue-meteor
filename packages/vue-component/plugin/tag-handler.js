@@ -246,7 +246,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           throwCompileError({
             inputFile: this.inputFile,
             tag: 'style',
-            charIndex: tag.tagStartIndex,
+            charIndex: styleTag.tagStartIndex,
             action: 'compiling',
             lang,
             error: e,
