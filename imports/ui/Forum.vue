@@ -38,7 +38,7 @@ export default {
   meteor: {
     // Subscriptions
     subscribe: {
-      'threads': []
+      'lasts-threads': [2]
     },
     // Reactive Data
     data: {

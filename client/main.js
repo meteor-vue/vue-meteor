@@ -14,8 +14,7 @@ const subsCache = new SubsCache({
 // We can replace the default subcription function with our own
 // Here we replace the native subscribe() with a cached one
 Vue.config.meteor.subscribe = function(...args) {
-  args.unshift(subsCache.expireAfter); // First arg
-  return subsCache.subscribeFor.apply(subsCache, args);
+  return subsCache.subscribe(...args);
 };
 
 // Router

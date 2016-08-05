@@ -1,5 +1,13 @@
-import {Meteor} from 'meteor/meteor';
-import {Threads, Posts} from './collections';
+import { Meteor } from 'meteor/meteor';
+import { Threads, Posts } from './collections';
+
+Threads.lastsThreads = function(limit) {
+  return Threads.find({}, { sort: { date: -1 }, limit: limit });
+};
+
+Meteor.publish('lasts-threads', function(limit){
+    return Threads.lastsThreads(limit);
+});
 
 Meteor.publish('threads', function() {
   return Threads.find();

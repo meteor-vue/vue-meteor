@@ -1,8 +1,8 @@
-import {Meteor} from 'meteor/meteor'
-import {Tracker} from 'meteor/tracker'
+import { Meteor } from 'meteor/meteor'
+import { Tracker } from 'meteor/tracker'
 
 function defaultSubscription(...args) {
-  return Meteor.subscribe.apply(this, args)
+  return Meteor.subscribe(...args)
 }
 
 export default {
@@ -14,8 +14,8 @@ export default {
 
     const init = Vue.prototype._init
     Vue.prototype._init = function(options) {
-        this._trackerHandles = []
-        init.call(this, options)
+      this._trackerHandles = []
+      init.call(this, options)
     }
 
     Vue.mixin({
@@ -25,15 +25,15 @@ export default {
         if (meteor) {
 
           // Reactive data
-          if(meteor.data) {
+          if (meteor.data) {
             for (let key in meteor.data) {
               ((key, options) => {
                 let func, vueParams
-                if(typeof options === 'function') {
+                if (typeof options === 'function') {
                   func = options.bind(this)
-                } else if(typeof options.update === 'function') {
+                } else if (typeof options.update === 'function') {
                   func = options.update.bind(this)
-                  if(typeof options.params === 'function') {
+                  if (typeof options.params === 'function') {
                     vueParams = options.params.bind(this)
                   }
                 } else {
@@ -45,16 +45,16 @@ export default {
                 let autorun = (params) => {
                   computation = this.$autorun(() => {
                     let result = func(params)
-                    if(result && typeof result.fetch === 'function') {
+                    if (result && typeof result.fetch === 'function') {
                       result = result.fetch()
                     }
                     this.$set(key, result)
                   })
                 }
 
-                if(vueParams) {
+                if (vueParams) {
                   this.$watch(vueParams, (params) => {
-                    if(computation) {
+                    if (computation) {
                       this.$stopHandle(computation)
                     }
                     autorun(params)
@@ -69,24 +69,19 @@ export default {
           }
 
           // Subscriptions
-          if(meteor.subscribe) {
+          if (meteor.subscribe) {
             for (let key in meteor.subscribe) {
               ((key, options) => {
                 let sub
 
                 let subscribe = (params) => {
-                  if(sub) {
+                  if (sub) {
                     this.$stopHandle(sub)
                   }
-                  if(!params) {
-                    params = [key]
-                  } else {
-                    params.unshift(key)
-                  }
-                  sub = this.$subscribe.apply(this, params)
+                  sub = this.$subscribe(key, ...params)
                 }
 
-                if(typeof options === 'function') {
+                if (typeof options === 'function') {
                   this.$watch(options, (params) => {
                     subscribe(params)
                   }, {
@@ -115,22 +110,22 @@ export default {
 
 
       methods: {
-        $subscribe (...args) {
+        $subscribe(...args) {
           let handle = Vue.config.meteor.subscribe.apply(this, args)
           this._trackerHandles.push(handle)
           return handle
         },
 
-        $autorun (reactiveFunction) {
+        $autorun(reactiveFunction) {
           let handle = Tracker.autorun(reactiveFunction)
           this._trackerHandles.push(handle)
           return handle
         },
 
-        $stopHandle (handle) {
+        $stopHandle(handle) {
           handle.stop()
           let index = this._trackerHandles.indexOf(handle)
-          if(index !== -1) {
+          if (index !== -1) {
             this._trackerHandles.splice(index, 1)
           }
         }

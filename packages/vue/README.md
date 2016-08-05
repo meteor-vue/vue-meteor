@@ -68,9 +68,9 @@ const subsCache = new SubsCache({
     expireAfter: 15,
     cacheLimit: -1
 });
+
 Vue.config.meteor.subscribe = function(...args) {
-  args.unshift(subsCache.expireAfter); // First arg
-  return subsCache.subscribeFor.apply(subsCache, args);
+  return subsCache.subscribe(...args);
 };
 ```
 
