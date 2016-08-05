@@ -48,15 +48,19 @@ function reload(options) {
 // Reimplement client version check from autoupdate package
 var autoupdateVersion = __meteor_runtime_config__.autoupdateVersion || `unknown`;
 var ClientVersions = Autoupdate._ClientVersions;
-function checkNewVersionDocument (doc) {
-  if (doc._id === 'version' && doc.version !== autoupdateVersion) {
-    reload();
+if(ClientVersions) {
+  function checkNewVersionDocument (doc) {
+    if (doc._id === 'version' && doc.version !== autoupdateVersion) {
+      reload();
+    }
   }
+  ClientVersions.find().observe({
+    added: checkNewVersionDocument,
+    changed: checkNewVersionDocument
+  });
+} else {
+  console.log('[HMR] ClientVersions collection is not available, the app may gull reload.');
 }
-ClientVersions.find().observe({
-  added: checkNewVersionDocument,
-  changed: checkNewVersionDocument
-});
 
 // Hack https://github.com/socketio/socket.io-client/issues/961
 import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
