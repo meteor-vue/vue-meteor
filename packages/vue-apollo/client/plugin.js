@@ -16,7 +16,7 @@ class DollarApollo {
 
   watchQuery(options) {
     const vm = this.vm;
-    const observable = client.watchQuery(options);
+    const observable = this.client.watchQuery(options);
 
     return {
       observable,
