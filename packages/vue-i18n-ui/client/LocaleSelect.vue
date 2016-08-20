@@ -186,7 +186,10 @@ export default {
   }
 
   .vue-ui-select-btn {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     cursor: pointer;
     padding: 8px 10px;
     width: 120px;
