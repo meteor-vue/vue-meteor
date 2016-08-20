@@ -59,7 +59,7 @@ if(ClientVersions) {
     changed: checkNewVersionDocument
   });
 } else {
-  console.log('[HMR] ClientVersions collection is not available, the app may gull reload.');
+  console.log('[HMR] ClientVersions collection is not available, the app may full reload.');
 }
 
 // Hack https://github.com/socketio/socket.io-client/issues/961
