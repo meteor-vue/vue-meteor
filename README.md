@@ -79,7 +79,7 @@ Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-route
 
 Use apollo in your vue component!
 
-[See Installation & Usage in akryum:vue-apollo package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-apollo#installation)
+[See Installation & Usage in the vue-apollo npm package](https://github.com/Akryum/vue-apollo)
 
 ### Localization
 
