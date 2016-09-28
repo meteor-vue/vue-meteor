@@ -68,7 +68,7 @@ Router.configure(router => {
 });
 ```
 
-**Attention! The order of the routes matters during the route matching!***
+**Attention! The order of the routes matters during the route matching!**
 
 The callbacks you pass to the `Router.configure()` calls will be called before the router is started, regardless of the file load order.
 
