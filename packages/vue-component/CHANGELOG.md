@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1 - 2016-09-28
+
+ - Fixed single quote error in templates
+
+## 0.7.0 - 2016-09-28
+
+ - Compatible with Vue 2.x
+
 ## 0.6.7 - 2016-09-28
 
  - Try to use the meteor port + 3

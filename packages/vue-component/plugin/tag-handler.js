@@ -5,7 +5,7 @@ global._vue_js_cache = global._vue_js_cache || {};
 
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
-  constructor({ inputFile, babelOptions, dependencyManager }) {
+  constructor({ inputFile, babelOptions, dependencyManager}) {
     this.inputFile = inputFile;
     this.babelOptions = babelOptions;
     this.dependencyManager = dependencyManager;
@@ -208,8 +208,6 @@ VueComponentTagHandler = class VueComponentTagHandler {
           return match.replace(p2, attributes);
         }
       });
-
-      template = template.replace(quoteReg, '&#39;').replace(lineReg, '');
     }
 
     // Styles

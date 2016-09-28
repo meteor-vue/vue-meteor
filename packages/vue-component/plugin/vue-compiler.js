@@ -205,6 +205,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     let templateHash;
     if (compileResult.template) {
       if(vueVersion === 1) {
+        // Fix quotes
+        compileResult.template = compileResult.template.replace(quoteReg, '&#39;').replace(lineReg, '');
         js += "__vue_template__ = '" + compileResult.template + "';";
 
         // Template option
@@ -453,6 +455,8 @@ function hotCompile() {
 
     if (template) {
       if(vueVersion === 1) {
+        // Fix quotes
+        compileResult.template = compileResult.template.replace(quoteReg, '&#39;').replace(lineReg, '');
         js += "__vue_template__ = '" + compileResult.template + "';";
 
         // Template option
