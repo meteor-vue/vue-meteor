@@ -1,7 +1,18 @@
 // Libs
 import {Meteor} from 'meteor/meteor';
-import {Vue} from 'meteor/akryum:vue';
+import Vue from 'vue';
 import {Router} from 'meteor/akryum:vue-router';
+import ApolloClient from 'apollo-client';
+import { meteorClientConfig } from 'meteor/apollo';
+import gql from 'graphql-tag';
+import VueApollo from 'vue-apollo';
+
+// Apollo
+const apolloClient = new ApolloClient(meteorClientConfig());
+window.gql = gql;
+Vue.use(VueApollo, {
+  apolloClient,
+});
 
 // Api
 import '/imports/api/methods';

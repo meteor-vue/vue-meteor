@@ -295,7 +295,8 @@ VueComponentTagHandler = class VueComponentTagHandler {
       code: js,
       map,
       styles,
-      template
+      template,
+      hash,
     };
 
     //console.log('Result', compileResult);

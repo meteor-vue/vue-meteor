@@ -1,11 +1,22 @@
 
-import {Vue} from 'meteor/akryum:vue';
-import VueHotReloadApi from './vue-hot';
+import Vue from 'vue';
 import {Reload} from 'meteor/reload';
 import {Meteor} from 'meteor/meteor';
 import {Tracker} from 'meteor/tracker';
 import {Autoupdate} from 'meteor/autoupdate';
 import {ReactiveVar} from 'meteor/reactive-var';
+import VueHot1 from './vue-hot';
+import VueHot2 from './vue2-hot';
+
+let VueHotReloadApi;
+const vueVersion = parseInt(Vue.version.charAt(0));
+
+console.log('[HMR] Vue', Vue.version);
+if(vueVersion === 1) {
+  VueHotReloadApi = VueHot1;
+} else if(vueVersion === 2) {
+  VueHotReloadApi = VueHot2;
+}
 
 Vue.use(VueHotReloadApi);
 
@@ -100,16 +111,46 @@ Meteor.startup(function() {
         error = e;
       }
     });
-    let id = `${path}.js`;
-    let require = meteorInstall({[id]:args});
+
+    let id = `${path + Math.round(new Date().getTime())}.js`;
+    const files = id.split('/');
+    const fileObj = {};
+    let currentObj = fileObj;
+    const indexMax = files.length - 1;
+    files.forEach((file, index) => {
+      if(index === indexMax) {
+        currentObj[file] = args;
+      } else {
+        currentObj = currentObj[file] = {};
+      }
+    });
+
+    let require = meteorInstall(fileObj);
     let result = require('./' + id);
+
     let needsReload = false;
     if(!error) {
-       needsReload = VueHotReloadApi.update(hash, result.default, template);
+      console.log('[HMR] Reloading ' + path);
+      if(vueVersion === 1) {
+        needsReload = VueHotReloadApi.update(hash, result.default, template);
+      } else if(vueVersion === 2) {
+        needsReload = VueHotReloadApi.reload(hash, result.default, template);
+      }
     }
 
     _suppressNextReload = !error && !needsReload;
   }));
+
+  // Template
+  _socket.on('render', function({hash, template, path}) {
+    if(vueVersion === 2) {
+      console.log('[HMR] Rerendering ' + path);
+      var obj;
+      eval(`obj = ${template};`);
+      VueHotReloadApi.rerender(hash, obj);
+      _suppressNextReload = true;
+    }
+  });
 
   // CSS
   let _styleNodes = {};

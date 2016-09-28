@@ -7,15 +7,21 @@
   img.logo(src="/img/meteor.png")
 
   p
-    button2(:label="$t('pages.home.button')", @action="clicked=true", v-if="!clicked")
+    button2(:label="$t('pages.home.button')", @action="handleClick", v-if="!clicked")
+    .counter {{ count }}
 </template>
 
 <script>
 export default {
   data: () => ({
-    clicked: false
-  })
-}
+    count: 0,
+  }),
+  methods: {
+    handleClick() {
+      this.count += 42;
+    },
+  },
+};
 </script>
 
 <style scoped lang="stylus">
@@ -27,4 +33,8 @@ export default {
   img.logo
     max-width 101px
     margin margin
+
+  .counter
+    color grey
+    margin-top 32px
 </style>

@@ -7,6 +7,41 @@ import { EventEmitter } from 'events';
 import _ from 'lodash';
 
 IGNORE_FILE = '.vueignore';
+CWD = path.resolve('./');
+
+function getVueVersion() {
+  const packageFile = path.join(CWD, 'package.json');
+
+  if (fs.existsSync(packageFile)) {
+    const pkg = JSON.parse(fs.readFileSync(packageFile).toString());
+
+    const vue = pkg.dependencies && pkg.dependencies.vue
+    || pkg.devDependencies && pkg.devDependencies.vue
+    || pkg.peerDependencies && pkg.peerDependencies.vue;
+
+    if(vue) {
+      const reg = /\D*(\d).*/gi;
+      const result = reg.exec(vue);
+      if(result.length >= 2) {
+        return parseInt(result[1]);
+      }
+    }
+  }
+
+  return 1;
+}
+
+const vueVersion = getVueVersion();
+
+let templateCompiler;
+
+if(vueVersion === 2) {
+  templateCompiler = require('vue-template-compiler');
+}
+
+function toFunction (code) {
+  return 'function (){' + code + '}';
+}
 
 // Cache
 global._vue_cache = global._vue_cache || {};
@@ -130,7 +165,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
   addCompileResult(inputFile, compileResult) {
     let inputFilePath = inputFile.getPathInPackage();
-    let vueId = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
+    // let vueId = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
+    let vueId = compileResult.hash;
     let isDev = isDevelopment();
 
     // Style
@@ -161,27 +197,41 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     //console.log(`js hash: ${jsHash}`);
 
     js = 'var __vue_script__, __vue_template__;' + js;
+    js += `__vue_script__ = __vue_script__ || {};`;
+    js += `var __vue_options__ = (typeof __vue_script__ === "function" ?
+    (__vue_script__.options || (__vue_script__.options = {}))
+    : __vue_script__);`;
 
     let templateHash;
     if (compileResult.template) {
-      js += "__vue_template__ = '" + compileResult.template + "';";
+      if(vueVersion === 1) {
+        js += "__vue_template__ = '" + compileResult.template + "';";
+
+        // Template option
+        js += `__vue_options__.template = __vue_template__;`;
+      } else if(vueVersion === 2) {
+        const templateCompilationResult = templateCompiler.compile(compileResult.template);
+        if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
+          console.error(templateCompilationResult.errors);
+          js += `__vue_options__.render = function(){};\n`;
+          js += `__vue_options__.staticRenderFns = [];\n`;
+        } else {
+          js += `__vue_options__.render = ${toFunction(templateCompilationResult.render)};\n`;
+          js += `__vue_options__.staticRenderFns = [${templateCompilationResult.staticRenderFns.map(toFunction).join(',')}];\n`;
+        }
+      }
       templateHash = Hash(compileResult.template);
 
       //console.log(`template hash: ${templateHash}`);
     }
 
-    // Template option
-    js += `__vue_script__ = __vue_script__ || {};
-    if(__vue_template__) {
-      (typeof __vue_script__ === "function" ?
-      (__vue_script__.options || (__vue_script__.options = {}))
-      : __vue_script__).template = __vue_template__;
-    }`;
+    // Scope
+    if(vueVersion === 2) {
+      js += `__vue_options__._scopeId = '${vueId}';`;
+    }
 
     // Package context
-    js += `(typeof __vue_script__ === "function" ?
-    (__vue_script__.options || (__vue_script__.options = {}))
-    : __vue_script__).packageName = '${inputFile.getPackageName()}';`;
+    js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
 
     // Export
     js += `module.export('default', exports.default = __vue_script__);`;
@@ -215,10 +265,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       name = name.replace(trimDashReg, '');
 
       // Component registration
-      js += `\nvar _akryumVue = require('meteor/akryum:vue');
-      _akryumVue.Vue.component((typeof __vue_script__ === "function" ?
-      (__vue_script__.options || (__vue_script__.options = {}))
-      : __vue_script__).name || '${name}', __vue_script__);`;
+      js += `\nvar _Vue = require('vue');
+      _Vue.component(__vue_options__.name || '${name}', __vue_script__);`;
     }
 
     // Add JS Source file
@@ -311,72 +359,7 @@ class ComponentWatcher {
     this._fileChanged = _.debounce(Meteor.bindEnvironment((event) => {
       if (event === 'change') {
         try {
-          let inputFilePath = this.inputFile.getPathInPackage();
-          let vueId = this.inputFile.getPackageName() + ':' + this.inputFile.getPathInPackage();
-          let contents = Plugin.fs.readFileSync(this.filePath, {
-            encoding: 'utf8'
-          });
-          let compileResult = compileOneFileWithContents(this.inputFile, contents, babelOptions);
-
-          // CSS
-          let css = '';
-          let cssHash = '';
-          if (compileResult.styles.length !== 0) {
-            for (let style of compileResult.styles) {
-              css += style.css;
-            }
-
-            // Hot-reloading
-            cssHash = Hash(css);
-            if (this.cache.css !== cssHash) {
-              global._dev_server.__addStyle({ hash: vueId, css });
-            }
-          }
-
-          // JS & Template
-          let js = compileResult.code;
-          let jsHash = Hash(js);
-          let template = compileResult.template;
-          let templateHash;
-          if (template) {
-            templateHash = Hash(template);
-          }
-          if (this.cache.js !== jsHash || this.cache.template !== templateHash) {
-
-            // Require to absolute
-            js = js.replace(requireRelativeFileReg, `require('/${inputFilePath}/`);
-
-            js = 'var __vue_script__, __vue_template__;' + js;
-
-            if (template) {
-              js += "__vue_template__ = '" + template + "';";
-            }
-
-            // Template option & Export
-            js += `__vue_script__ = __vue_script__ || {};
-            if(__vue_template__) {
-              (typeof __vue_script__ === "function" ?
-              (__vue_script__.options || (__vue_script__.options = {}))
-              : __vue_script__).template = __vue_template__;
-            }`;
-
-            // Package context
-            js += `(typeof __vue_script__ === "function" ?
-            (__vue_script__.options || (__vue_script__.options = {}))
-            : __vue_script__).packageName = '${this.inputFile.getPackageName()}';`;
-
-            // Export
-            js += `module.export('default', exports.default = __vue_script__);`;
-
-            let path = (this.inputFile.getPackageName() ? `packages/${this.inputFile.getPackageName()}` : '') + this.inputFile.getPathInPackage();
-
-            global._dev_server.emit('js', { hash: vueId, js, template, path });
-          }
-
-          // Cache
-          this.cache.js = jsHash;
-          this.cache.css = cssHash;
-          this.cache.template = templateHash;
+          hotCompile.bind(this)();
         } catch (e) {
           console.error(e);
         }
@@ -418,6 +401,100 @@ class ComponentWatcher {
     }
     this.filePath = filePath;
   }
+}
+
+function hotCompile() {
+  let inputFilePath = this.inputFile.getPathInPackage();
+  //let vueId = this.inputFile.getPackageName() + ':' + this.inputFile.getPathInPackage();
+  let contents = Plugin.fs.readFileSync(this.filePath, {
+    encoding: 'utf8'
+  });
+  let compileResult = compileOneFileWithContents(this.inputFile, contents, babelOptions);
+  let vueId = compileResult.hash;
+
+  // CSS
+  let css = '';
+  let cssHash = '';
+  if (compileResult.styles.length !== 0) {
+    for (let style of compileResult.styles) {
+      css += style.css;
+    }
+
+    // Hot-reloading
+    cssHash = Hash(css);
+    if (this.cache.css !== cssHash) {
+      global._dev_server.__addStyle({ hash: vueId, css });
+    }
+  }
+
+  // JS & Template
+  let js = compileResult.code;
+  let jsHash = Hash(js);
+  let template = compileResult.template;
+  let templateHash;
+  if (template) {
+    templateHash = Hash(template);
+  }
+
+  if (this.cache.js !== jsHash || this.cache.template !== templateHash) {
+
+    const path = (this.inputFile.getPackageName() ? `packages/${this.inputFile.getPackageName()}` : '') + this.inputFile.getPathInPackage();
+
+    // Require to absolute
+    js = js.replace(requireRelativeFileReg, `require('/${inputFilePath}/`);
+
+    js = 'var __vue_script__, __vue_template__;' + js;
+    js += `__vue_script__ = __vue_script__ || {};`;
+    js += `var __vue_options__ = (typeof __vue_script__ === "function" ?
+    (__vue_script__.options || (__vue_script__.options = {}))
+    : __vue_script__);`;
+
+    let render, staticRenderFns;
+
+    if (template) {
+      if(vueVersion === 1) {
+        js += "__vue_template__ = '" + compileResult.template + "';";
+
+        // Template option
+        js += `__vue_options__.template = __vue_template__;`;
+      } else if(vueVersion === 2) {
+        const templateCompilationResult = templateCompiler.compile(compileResult.template);
+        if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
+          console.error(templateCompilationResult.errors);
+          js += `__vue_options__.render = function(){};\n`;
+          js += `__vue_options__.staticRenderFns = [];\n`;
+        } else {
+          js += `__vue_options__.render = ${render = toFunction(templateCompilationResult.render)};\n`;
+          js += `__vue_options__.staticRenderFns = ${staticRenderFns = `[${templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`};\n`;
+        }
+      }
+    }
+
+    if(vueVersion === 2 && this.cache.js === jsHash) {
+      global._dev_server.emit('render', { hash: vueId, template:`{
+        render: ${render},
+        staticRenderFns: ${staticRenderFns}
+      }`, path });
+    } else {
+      // Scope
+      if(vueVersion === 2) {
+        js += `__vue_options__._scopeId = '${vueId}';`;
+      }
+
+      // Package context
+      js += `__vue_options__.packageName = '${this.inputFile.getPackageName()}';`;
+
+      // Export
+      js += `module.export('default', exports.default = __vue_script__);`;
+
+      global._dev_server.emit('js', { hash: vueId, js, template, path });
+    }
+  }
+
+  // Cache
+  this.cache.js = jsHash;
+  this.cache.css = cssHash;
+  this.cache.template = templateHash;
 }
 
 class DependencyWatcher {

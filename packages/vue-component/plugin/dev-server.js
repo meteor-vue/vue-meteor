@@ -28,11 +28,20 @@ if(Meteor.isDevelopment) {
     }
   });
 
-  PORT = parseInt(process.env.VUE_DEV_SERVER_PORT) || 3003;
+  function getMeteorPort() {
+    const argv = this.process.argv;
+    const index = argv.indexOf('--port');
+    if(index !== -1 && argv.length > index) {
+      return parseInt(argv[index+1])+3;
+    }
+  }
+
+  PORT = parseInt(process.env.HMR_PORT) || parseInt(process.env.VUE_DEV_SERVER_PORT) || getMeteorPort() || 3003;
 
   try {
     server.listen(PORT);
-    console.log(`\nDev server (vue-components) listening on port ${PORT}`);
+    process.stdout.clearLine();
+    process.stdout.write(`\r   [HMR] Dev server listening on port ${PORT}\n`);
     global._dev_server = io;
     global._dev_server_http = server;
   } catch(e) {

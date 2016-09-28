@@ -28,9 +28,9 @@ Dev client connected
 
 Now, whenever you save a component file, it will be instantly updated on all the connected clients.
 
-You can change the port used by the hot-reloading server with the `VUE_DEV_SERVER_PORT` environment variable:
+By default, the package will try to use the Meteor port + 3, but you can override the port used by the hot-reloading server with the `HMR_PORT` environment variable:
 
-    set VUE_DEV_SERVER_PORT=4242
+    set HMR_PORT=4242
 
 
 ### File structure

@@ -34,7 +34,7 @@ export default {
 
 <style>
 body, input {
-    font-family: sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 12pt;
 }
 

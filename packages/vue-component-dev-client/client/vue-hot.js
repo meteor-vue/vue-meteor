@@ -185,10 +185,6 @@ exports.update = function (id, newOptions, newTemplate) {
     console.log('[HMR] Root or manually-mounted instance modified. Full reload may be required.')
     return true;
   }
-  if (!isBrowserify) {
-    // browserify-hmr already logs this
-    console.log('[HMR] Updating component: ' + format(id))
-  }
   var Component = record.Component
   let oldComponent = Component;
   // update constructor
@@ -336,8 +332,4 @@ function updateInstanceWatchers (vm) {
   while (i--) {
     vm._watchers[i].update(true) // shallow updates
   }
-}
-
-function format (id) {
-  return id.match(/[^\/]+\.vue$/)[0]
 }
