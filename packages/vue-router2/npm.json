@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "vue": "^2.0.0-rc.8",
+    "vue-router": "^2.0.0-rc.5"
+  }
+}
