@@ -19,22 +19,22 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 
 Currently supported and possible future features (in no particular order) are:
 
- - [x] Declarative subscriptions and meteor reactive data *(Vue 1.x, Vue 2.x)*
- - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute) *(Vue 1.x, Vue 2.x)*
- - [x] Instant Hot-reloading of components *(Vue 1.x, Vue 2.x)*
- - [x] `lang` attribute on `<style>` in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] Less official integration in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] Sass official integration in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] Stylus official integration in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] `lang` attribute on `<template>` in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] Jade official integration in .vue file *(Vue 1.x, Vue 2.x)*
- - [x] `lang` attribute on `<script>` in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] Coffeescript official integration in .vue files *(Vue 1.x, Vue 2.x)*
- - [x] Apollo client integration *(Vue 1.x, Vue 2.x)*
- - [x] Easy routing with vue-router out-of-the-box integration & fast-render *(Vue 1.x, Vue 2.x)*
- - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui *(Vue 1.x)*
- - [x] Easy state management with vuex integration *(Vue 1.x)*
- - [x] Use Blaze templates in your vue app *(Vue 1.x)*
+ - [x] Declarative subscriptions and meteor reactive data **(Vue 1.x, Vue 2.x)**
+ - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute) **(Vue 1.x, Vue 2.x)**
+ - [x] Instant Hot-reloading of components **(Vue 1.x, Vue 2.x)**
+ - [x] `lang` attribute on `<style>` in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] Less official integration in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] Sass official integration in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] Stylus official integration in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] `lang` attribute on `<template>` in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] Jade official integration in .vue file **(Vue 1.x, Vue 2.x)**
+ - [x] `lang` attribute on `<script>` in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] Coffeescript official integration in .vue files **(Vue 1.x, Vue 2.x)**
+ - [x] Apollo client integration **(Vue 1.x, Vue 2.x)**
+ - [x] Easy routing with vue-router out-of-the-box integration & fast-render **(Vue 1.x, Vue 2.x)**
+ - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui **(Vue 1.x)**
+ - [x] Easy state management with vuex integration **(Vue 1.x)**
+ - [x] Use Blaze templates in your vue app **(Vue 1.x, Vue 2.x)**
  - [ ] *Typescript official integration in .vue files*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
@@ -56,13 +56,13 @@ Clone this repository and type in the project directory:
     meteor npm install
     meteor
 
-### Meteor & Tracker data integration
+### Meteor & Tracker data integration (Vue 1.x, 2.x)
 
 Declarative subscriptions and meteor reactive data
 
 [See Usage in akryum:vue package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue#usage)
 
-### Single-file component
+### Single-file component (Vue 1.x, 2.x)
 
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
 
@@ -86,13 +86,13 @@ Routing for Vue 2.x and Meteor using [vue-router](https://github.com/vuejs/vue-r
 
 [Example app](https://github.com/Akryum/meteor-vue2-example-routing)
 
-### Apollo integration
+### Apollo integration (Vue 1.x, 2.x)
 
 Use apollo in your vue component!
 
 [See Installation & Usage in the vue-apollo npm package](https://github.com/Akryum/vue-apollo)
 
-### Localization
+### Localization (Vue 1.x)
 
 Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon/vue-i18n).
 
@@ -102,7 +102,7 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 [Example app](https://github.com/Akryum/meteor-vue-example-i18n)
 
-### State management with vuex
+### State management with vuex (Vue 1.x)
 
 Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
 
@@ -110,7 +110,7 @@ Manage the state of your app with a centralized data store with [vuex](https://g
 
 [Example app](https://github.com/Akryum/meteor-vuex-example)
 
-### Embed Blaze template
+### Embed Blaze template (Vue 1.x, 2.x)
 
 Use Blaze templates inside your vue components.
 

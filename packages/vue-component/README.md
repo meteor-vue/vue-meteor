@@ -1,5 +1,7 @@
 # Vue Single-file component for Meteor
 
+Compatibility: **Vue 1.x, Vue 2.x**
+
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) (with hot-reloading support):
 ![screenshot](http://blog.evanyou.me/images/vue-component.png)
 

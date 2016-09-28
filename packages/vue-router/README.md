@@ -1,5 +1,7 @@
 # Vue-router integration for Meteor
 
+Compatibility: **Vue 1.x**
+
 ## Add routes in the blink of an eye.
 Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-router).
 

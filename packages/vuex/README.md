@@ -1,5 +1,7 @@
 # Vuex integration for Meteor
 
+Compatibility: **Vue 1.x**
+
 > Flux-inspired Application Architecture for your Vue Meteor app
 
 <p align="center">

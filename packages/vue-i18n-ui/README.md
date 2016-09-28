@@ -1,5 +1,7 @@
 # Premade ui components for akryum:vue-i18n
 
+Compatibility: **Vue 1.x**
+
 Key-in-hand vue components for [akryum:vue-i18n](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n)
 
 ## Installation

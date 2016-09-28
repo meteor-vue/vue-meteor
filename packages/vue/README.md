@@ -1,5 +1,7 @@
 # Vue integration for Meteor
 
+Compatibility: **Vue 1.x, Vue 2.x**
+
 Declarative subscriptions and meteor reactive data (subscriptions, collections, tracker...)
 
 [Example project](https://github.com/Akryum/meteor-vue-example)

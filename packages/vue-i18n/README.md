@@ -1,5 +1,7 @@
 # Internationalization for Vue in Meteor
 
+Compatibility: **Vue 1.x**
+
 Vue internationalization integrated in your meteor app using [vue-i18n](https://github.com/kazupon/vue-i18n).
 
 See the [example app](https://github.com/Akryum/meteor-vue-example-i18n)
