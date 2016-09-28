@@ -1,8 +1,8 @@
 # Vue as a Meteor UI layer
 
-**This project is experimental.**
+**This project is in beta.**
 
-Tested with Meteor 1.4.0.1
+Tested with Meteor 1.4.1.1
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 
