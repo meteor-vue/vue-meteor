@@ -11,6 +11,7 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 - [Simple example project](https://github.com/Akryum/meteor-vue-example)
 - [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
 - [Routing example project](https://github.com/Akryum/meteor-vue-example-routing)
+- [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
 - [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
 - [Vuex example project](https://github.com/Akryum/meteor-vuex-example)
 
@@ -18,22 +19,22 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 
 Currently supported and possible future features (in no particular order) are:
 
- - [x] Declarative subscriptions and meteor reactive data
- - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute)
- - [x] Instant Hot-reloading of components
- - [x] `lang` attribute on `<style>` in .vue files
- - [x] Less official integration in .vue files
- - [x] Sass official integration in .vue files
- - [x] Stylus official integration in .vue files
- - [x] `lang` attribute on `<template>` in .vue files
- - [x] Jade official integration in .vue file
- - [x] `lang` attribute on `<script>` in .vue files
- - [x] Coffeescript official integration in .vue files
- - [x] Apollo client integration
- - [x] Easy routing with vue-router out-of-the-box integration & fast-render
- - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui
- - [x] Easy state management with vuex integration
- - [x] Use Blaze templates in your vue app
+ - [x] Declarative subscriptions and meteor reactive data *(Vue 1.x, Vue 2.x)*
+ - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute) *(Vue 1.x, Vue 2.x)*
+ - [x] Instant Hot-reloading of components *(Vue 1.x, Vue 2.x)*
+ - [x] `lang` attribute on `<style>` in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] Less official integration in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] Sass official integration in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] Stylus official integration in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] `lang` attribute on `<template>` in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] Jade official integration in .vue file *(Vue 1.x, Vue 2.x)*
+ - [x] `lang` attribute on `<script>` in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] Coffeescript official integration in .vue files *(Vue 1.x, Vue 2.x)*
+ - [x] Apollo client integration *(Vue 1.x, Vue 2.x)*
+ - [x] Easy routing with vue-router out-of-the-box integration & fast-render *(Vue 1.x, Vue 2.x)*
+ - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui *(Vue 1.x)*
+ - [x] Easy state management with vuex integration *(Vue 1.x)*
+ - [x] Use Blaze templates in your vue app *(Vue 1.x)*
  - [ ] *Typescript official integration in .vue files*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
@@ -69,11 +70,21 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 ### Routing
 
-Routing for vue and meteor using [vue-router](https://github.com/vuejs/vue-router).
+#### Vue 1.x
+
+Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
 
 [See Installation & Usage in arkyum:vue-router package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
 
 [Example app](https://github.com/Akryum/meteor-vue-example-routing)
+
+#### Vue 2.x
+
+Routing for Vue 2.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
+
+[See Installation & Usage in arkyum:vue-router2 package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router2#installation)
+
+[Example app](https://github.com/Akryum/meteor-vue2-example-routing)
 
 ### Apollo integration
 
