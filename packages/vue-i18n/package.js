@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-i18n',
-  version: '0.0.3',
+  version: '0.0.4',
   summary: 'Internationalization for vue',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'

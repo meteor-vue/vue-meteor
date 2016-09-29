@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue',
-  version: '1.0.5',
+  version: '1.0.6',
   summary: 'Integrate Vue with Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'

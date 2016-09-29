@@ -1,5 +1,5 @@
 {
-  "devDependencies": {
+  "dependencies": {
     "vue-router": "^0.7.13"
   }
 }
