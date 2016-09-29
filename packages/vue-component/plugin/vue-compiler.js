@@ -165,8 +165,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
   addCompileResult(inputFile, compileResult) {
     let inputFilePath = inputFile.getPathInPackage();
-    // let vueId = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
-    let vueId = compileResult.hash;
+    let vueId = Hash(inputFile.getPackageName() + ':' + inputFile.getPathInPackage());
     let isDev = isDevelopment();
 
     // Style
@@ -407,12 +406,11 @@ class ComponentWatcher {
 
 function hotCompile() {
   let inputFilePath = this.inputFile.getPathInPackage();
-  //let vueId = this.inputFile.getPackageName() + ':' + this.inputFile.getPathInPackage();
   let contents = Plugin.fs.readFileSync(this.filePath, {
     encoding: 'utf8'
   });
   let compileResult = compileOneFileWithContents(this.inputFile, contents, babelOptions);
-  let vueId = compileResult.hash;
+  let vueId = Hash(inputFile.getPackageName() + ':' + inputFile.getPathInPackage());
 
   // CSS
   let css = '';

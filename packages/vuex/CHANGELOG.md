@@ -2,7 +2,7 @@
 
 ## 0.4.0 - 2016-09-29
 
- - Trackers are now replaced by Resources, that are automatically activated and deactivated when needed.
+ - Module trackers are now replaced by resources, that are not using Tracker by default.
 
 ## 0.3.0 - 2016-07-06
 

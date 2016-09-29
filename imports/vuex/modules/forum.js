@@ -42,6 +42,7 @@ subModule.addTrackers({
       init(data) {
         data.threads = []
       },
+      /*
       // When the tracker is being used
       activate() {
         // Subscribe to the publication
@@ -51,6 +52,10 @@ subModule.addTrackers({
       deactivate() {
         // Stop the subscription
         sub.stop();
+      },
+      */
+      subscribe: {
+        threads: [],
       },
       // Watch store changes
       // State is relative to the module
@@ -63,6 +68,7 @@ subModule.addTrackers({
       // Update the meteor data
       // Data is relative to the module
       update(data, {sortDate}) {
+        console.log(data);
         // Meteor data query
         let threads = Threads.find({}, {
           sort: {date: sortDate}

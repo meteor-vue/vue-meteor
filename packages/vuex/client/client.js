@@ -10,7 +10,7 @@ export class StoreSubModule {
     this.name = name;
     this.getters = {};
     this.actions = {};
-    this.resources = {};
+    this.trackers = this.resources = {};
 
     this._modules = {};
     this._state = {};
@@ -18,7 +18,6 @@ export class StoreSubModule {
     this._mutations = {};
     this._actions = {};
     this._resources = {};
-    this._resourceHandlers = {};
     this._initData = {};
     this._vm = null;
     this._exported = false;
@@ -53,8 +52,8 @@ export class StoreSubModule {
 
   addTrackers(map) {
     this._checkExported();
-    for (const res of map) {
-      res.tracker = true;
+    for (const res in map) {
+      map[res].tracker = true;
     }
     _.merge(this._resources, map);
   }
@@ -157,8 +156,8 @@ export class StoreSubModule {
 
   _setStore(store) {
     this.store = store;
-    for (const t in this._resourceHandlers) {
-      this._resourceHandlers[t].setStore(store);
+    for (const t in this._resources) {
+      this._resources[t].setStore(store);
     }
 
     this._exported = true;
@@ -341,9 +340,7 @@ class StoreResource {
 
   _configure() {
     let update, init, watch, activate, deactivate, grab, release;
-    if (typeof this.options === 'function') {
-      update = this.options;
-    } else if (typeof this.options.update === 'function') {
+    if (typeof this.options.update === 'function') {
       update = this.options.update;
 
       if (typeof this.options.init === 'function') {
@@ -370,7 +367,7 @@ class StoreResource {
         release = this.options.release;
       }
     } else {
-      throw Error('You must provide either a function or an object with the update() method.');
+      throw Error('You must provide an object with the update() method.');
     }
 
     this.updateCb = update;
@@ -546,10 +543,15 @@ const VuexPlugin = {
       const { vuex } = options;
       if (vuex) {
         this._vuexResources = [];
-        const { resources } = vuex;
+        const { resources, trackers } = vuex;
         if (resources) {
           for (const t in resources) {
             defineVuexResource(this, t, resources[t]);
+          }
+        }
+        if (trackers) {
+          for (const t in trackers) {
+            defineVuexResource(this, t, trackers[t]);
           }
         }
       }
@@ -601,7 +603,7 @@ const VuexPlugin = {
 
 
     Vue.mixin({
-      beforeCompile() {
+      created() {
         if (this._vuexResources) {
           for (const resource of this._vuexResources) {
             resource.addClient(this);

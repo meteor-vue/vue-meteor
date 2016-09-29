@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vuex',
-  version: '0.4.0',
+  version: '0.4.1',
   summary: 'State management with vuex for Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'

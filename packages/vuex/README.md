@@ -390,11 +390,11 @@ export default subModule;
 And add it to the root module:
 
 ```javascript
-import forum from './modules/tracker';
+import forum from './modules/forum';
 root.addModule(forum);
 ```
 
-All the `state` parameters in the `addState`, `addGetters`, `addMutations`, `addActions`, `addTrackers` methods are relative to the module.
+All the `state` parameters in the `addState`, `addGetters`, `addMutations`, `addActions`, `addResources` methods are relative to the module.
 
 For example, let's add some state to our submodule:
 
@@ -489,21 +489,23 @@ In your vue components, you can access the nested submodules by calling them on 
 ```javascript
 export default {
   vuex: ({forum}) => ({
-    trackers: {
-      selectedThread: forum.thread.trackers.getSelectedThread
+    resources: {
+      selectedThread: forum.thread.resources.getSelectedThread
     }
   })
 }
 ```
 
-### Meteor data integration
+### Generic resources and Meteor data integration
 
-To use meteor reactive data with your store, use *trackers* on your module with the `addTrackers(map)` method:
+Resources are automatically activated and deactivated when components use them. They are also useful to get Meteor reactive data.
+
+To use meteor reactive data with your store, use *ressources* on your module with the `addResources(map)` method:
 
 ```javascript
-// Add trackers to the store module
-subModule.addTrackers({
-  // Name of the tracker
+// Add resources to the store module
+subModule.addResources({
+  // Name of the resource
   message() {
     return {
       // Update the meteor data
@@ -518,25 +520,27 @@ subModule.addTrackers({
       getters: {
         // Getters should follow the get<Name> naming convention
         getMessage: data => data.message
-      }
+      },
+      // Use Meteor Tracker to watch Meteor changes
+      tracker: true,
     }
   }
 });
 ```
 
-The trackers added this way will be accessible in the `trackers` attribute of the module.
+The resources added this way will be accessible in the `resources` attribute of the module.
 
-The `update` method will be autorun by the `Tracker` meteor package when a meteor reactive data in the method has been changed. The parameter is a `data` object that represents the meteor data in the module, and is vue-reactive.
+If you set the `tracker` option to `true` (default is `false`), the `update` method will be autorun by the `Tracker` meteor package when a meteor reactive data in the method has been changed. The parameter is a `data` object that represents the meteor data in the module, and is vue-reactive. You can also use `addTrackers` instead of `addResources`.
 
-The tracker getters are working like vue computed properties (thus efficiently cached) and can be accessed on the module in the `trackers` attribute.
+The resource getters are working like vue computed properties (thus efficiently cached) and can be accessed on the module in the `resources` attribute.
 
-To use this tracker in your component, use the `vuex.trackers` option:
+To use this resource in your component, use the `vuex.resources` option:
 
 ```javascript
 export default {
   vuex: ({forum}) => ({
-    trackers: {
-      message: forum.trackers.getMessage
+    resources: {
+      message: forum.resources.getMessage
     }
   })
 }
@@ -558,12 +562,12 @@ Here is a more advanced example with a subscription:
 // Import a meteor collection
 import {Threads} from '/imports/api/collections';
 
-// Add trackers to the store module
-subModule.addTrackers({
-  // Name of the tracker
+// Add resources to the store module
+subModule.addResources({
+  // Name of the resource
   threads() {
     // Context variables
-    let sub;
+    let updateCount = 0;
 
     // You can execute arbitrary code here
 
@@ -572,15 +576,18 @@ subModule.addTrackers({
       init(data) {
         data.threads = []
       },
-      // When the tracker is being used (optionnal)
+      // When the resource is being used (optionnal)
       activate() {
-        // Subscribe to the publication
-        sub = Meteor.subscribe('threads');
+        // Do something
       },
-      // When the tracker is no longer used (optionnal)
+      // When the resource is no longer used (optionnal)
       deactivate() {
-        // Stop the subscription
-        sub.stop();
+        // Do something
+      },
+      // Subscriptions
+      // See the 'akryum:vue' atmosphere package
+      subscribe: {
+        threads: [],
       },
       // Watch store changes
       // State is relative to the module (optionnal)
@@ -590,15 +597,21 @@ subModule.addTrackers({
           sortDate: state.sortDate
         }
       },
-      // Update the meteor data
+      // Update the resource data
       // Data is relative to the module
+      // This hook will be autorun by Tracker
+      // if you set `tracker` option to `true`
       update(data, {sortDate}) {
+        // You may use meteor reactive data here
         // Meteor data query
-        // Use meteor reactive data here
         let threads = Threads.find({}, {
           sort: {date: sortDate}
         }).fetch();
         console.log("updated threads", threads.length);
+
+        // Using the context variable
+        updateCount ++;
+        console.log("update count", updateCount);
 
         // Update the module meteor data
         data.threads = threads;
@@ -609,9 +622,11 @@ subModule.addTrackers({
         // Getters should follow the get<Name> naming convention
         getThreads: data => data.threads
       },
-      // If true, the tracker will be activated right away
+      // Use Meteor Tracker to watch Meteor changes
+      tracker: true,
+      // If true, the resource will be activated right away
       // Else, you need to add it on a vue component or call t.addClient()
-      isActivated: false
+      isActivated: false,
     }
   }
 });
@@ -631,44 +646,44 @@ And in the component:
 <script>
 export default {
   vuex: ({forum}) => ({
-    trackers: {
-      threads: forum.trackers.getThreads
+    resources: {
+      threads: forum.resources.getThreads
     }
   })
 }
 </script>
 ```
 
-#### Tracker activation
+#### Resource activation
 
-The tracker will be activated if at last one component use it and deactivated if it is no longer used automatically.
+The resource will be activated if at last one component use it and deactivated if it is no longer used automatically.
 
-You can activate and deactivate a tracker with the following methods:
+You can activate and deactivate a resource manually with the following methods:
 
- - `t.addClient()` will activate the tracker if it was not
+ - `t.addClient()` will activate the resource if it was not
  - `t.removeClient()` will deactivate it if there are no one else using it
  - `t.activate()` (not recommended) will activate it
  - `t.deactivate()` (not recommended) will deactivate it
 
-Example for the tracker we created above:
+Example for the resource we created above:
 
 ```javascript
 // In a vue component
 export default {
   methods: {
     needTracker() {
-      // this.$store.$root.<submodule>.trackers.<tracker_name>.addClient();
-      this.$store.$root.forum.trackers.threads.addClient();
+      // this.$store.$root.<submodule>.resources.<tracker_name>.addClient();
+      this.$store.$root.forum.resources.threads.addClient();
     },
     noLongerNeedTracker() {
-      // this.$store.$root.<submodule>.trackers.<tracker_name>.removeClient();
-      this.$store.$root.forum.trackers.threads.removeClient();
+      // this.$store.$root.<submodule>.resources.<tracker_name>.removeClient();
+      this.$store.$root.forum.resources.threads.removeClient();
     }
   }
 }
 ```
 
-In the tracker declaration, you can set the `isActivated` boolean to `true` if you want it to be activated right away (this will call the `activate` callback).
+In the resource declaration, you can set the `isActivated` boolean to `true` if you want it to be activated right away (this will call the `activate` callback).
 
 ### Meteor methods
 
