@@ -410,7 +410,7 @@ function hotCompile() {
     encoding: 'utf8'
   });
   let compileResult = compileOneFileWithContents(this.inputFile, contents, babelOptions);
-  let vueId = Hash(inputFile.getPackageName() + ':' + inputFile.getPathInPackage());
+  let vueId = Hash(this.inputFile.getPackageName() + ':' + this.inputFile.getPathInPackage());
 
   // CSS
   let css = '';
