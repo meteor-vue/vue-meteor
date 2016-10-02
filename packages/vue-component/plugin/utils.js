@@ -14,8 +14,8 @@ Hash = function(text) {
   return hash.digest('hex');
 }
 
-normalizeCarriageReturns = function(contents) {
-  return contents.replace(rnReg, "\n").replace(rReg, "\n");
+normalizeCarriageReturns = function(contents, str = "\n") {
+  return contents.replace(rnReg, str).replace(rReg, str);
 }
 
 getFullDirname = function(inputFile) {
