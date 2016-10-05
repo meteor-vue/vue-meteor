@@ -1,5 +1,4 @@
-<template lang="jade">
-.app-layout
+<template lang="jade">.app-layout
   locale-select.lang-select
   links-menu(:links="links")
   router-view
