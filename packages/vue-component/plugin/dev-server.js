@@ -30,7 +30,10 @@ if(Meteor.isDevelopment) {
 
   function getMeteorPort() {
     const argv = this.process.argv;
-    const index = argv.indexOf('--port');
+    let index = argv.indexOf('--port');
+    if(index === -1) {
+      index = argv.indexOf('-p');
+    }
     if(index !== -1 && argv.length > index) {
       return parseInt(argv[index+1])+3;
     }
