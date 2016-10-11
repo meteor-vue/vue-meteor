@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue',
-  version: '1.0.6',
+  version: '1.1.0',
   summary: 'Integrate Vue with Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -12,4 +12,8 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.mainModule('index.js', 'client');
   api.export('Vue', 'client');
+});
+
+Npm.depends({
+  'lodash.omit': '4.5.0',
 });

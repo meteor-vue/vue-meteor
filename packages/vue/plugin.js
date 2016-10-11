@@ -1,72 +1,84 @@
-import { Meteor } from 'meteor/meteor'
-import { Tracker } from 'meteor/tracker'
+import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
+import omit from 'lodash.omit';
 
 function defaultSubscription(...args) {
-  return Meteor.subscribe(...args)
+  return Meteor.subscribe(...args);
 }
 
 export default {
   install(Vue) {
 
-    Vue.config.meteor = {
-      subscribe: defaultSubscription
-    }
+    const vueVersion = parseInt(Vue.version.charAt(0));
 
-    /*const init = Vue.prototype._init
-    Vue.prototype._init = function(options) {
-      this._trackerHandles = []
-      init.call(this, options)
-    }*/
+    const { defineReactive } = Vue.util;
+
+    Vue.config.meteor = {
+      subscribe: defaultSubscription,
+    };
 
     function prepare() {
       this._trackerHandles = [];
+
+      // $subReady state
+      defineReactive(this, '$subReady', {});
     }
 
     function launch() {
-      let meteor = this.$options.meteor
+
+      let meteor = this.$options.meteor;
+
       if (meteor) {
 
+        const data = Object.assign({}, omit(meteor, [
+          'subscribe',
+          'data',
+        ]), meteor.data);
+
         // Reactive data
-        if (meteor.data) {
-          for (let key in meteor.data) {
+        if (data) {
+          for (let key in data) {
             ((key, options) => {
-              let func, vueParams
+              let func, vueParams;
               if (typeof options === 'function') {
-                func = options.bind(this)
+                func = options.bind(this);
               } else if (typeof options.update === 'function') {
-                func = options.update.bind(this)
+                func = options.update.bind(this);
                 if (typeof options.params === 'function') {
-                  vueParams = options.params.bind(this)
+                  vueParams = options.params.bind(this);
                 }
               } else {
-                throw Error('You must provide either a function or an object with the update() method.')
+                throw Error('You must provide either a function or an object with the update() method.');
               }
 
-              let computation
+              this.$data[key] = null;
+              defineReactive(this, key, null);
+
+              let computation;
 
               let autorun = (params) => {
                 computation = this.$autorun(() => {
-                  let result = func(params)
+                  let result = func(params);
                   if (result && typeof result.fetch === 'function') {
-                    result = result.fetch()
+                    result = result.fetch();
                   }
                   this[key] = result;
-                })
+                });
               }
 
               if (vueParams) {
                 this.$watch(vueParams, (params) => {
                   if (computation) {
-                    this.$stopHandle(computation)
+                    this.$stopHandle(computation);
                   }
-                  autorun(params)
+                  autorun(params);
                 }, {
-                  immediate: true
-                })
+                  immediate: true,
+                });
               } else {
-                autorun()
+                autorun();
               }
-            })(key, meteor.data[key])
+            })(key, data[key]);
           }
         }
 
@@ -74,25 +86,25 @@ export default {
         if (meteor.subscribe) {
           for (let key in meteor.subscribe) {
             ((key, options) => {
-              let sub
+              let sub;
 
               let subscribe = (params) => {
                 if (sub) {
-                  this.$stopHandle(sub)
+                  this.$stopHandle(sub);
                 }
-                sub = this.$subscribe(key, ...params)
-              }
+                sub = this.$subscribe(key, ...params);
+              };
 
               if (typeof options === 'function') {
                 this.$watch(options, (params) => {
-                  subscribe(params)
+                  subscribe(params);
                 }, {
-                  immediate: true
+                  immediate: true,
                 })
               } else {
-                subscribe(options)
+                subscribe(options);
               }
-            })(key, meteor.subscribe[key])
+            })(key, meteor.subscribe[key]);
           }
         }
       }
@@ -119,31 +131,41 @@ export default {
         this._trackerHandles = null
       },
 
-
       methods: {
         $subscribe(...args) {
-          let handle = Vue.config.meteor.subscribe.apply(this, args)
-          this._trackerHandles.push(handle)
-          return handle
+          if(args.length > 0) {
+            let handle = Vue.config.meteor.subscribe.apply(this, args);
+            this._trackerHandles.push(handle);
+            if(typeof handle.ready === 'function') {
+              const key = args[0];
+              defineReactive(this.$subReady, key, false);
+              this.$autorun(() => {
+                this.$subReady[key] = handle.ready();
+              });
+            }
+            return handle;
+          } else {
+            throw new Error('You must provide the publication name to $subscribe.');
+          }
         },
 
         $autorun(reactiveFunction) {
-          let handle = Tracker.autorun(reactiveFunction)
-          this._trackerHandles.push(handle)
-          return handle
+          let handle = Tracker.autorun(reactiveFunction);
+          this._trackerHandles.push(handle);
+          return handle;
         },
 
         $stopHandle(handle) {
-          handle.stop()
-          let index = this._trackerHandles.indexOf(handle)
+          handle.stop();
+          let index = this._trackerHandles.indexOf(handle);
           if (index !== -1) {
-            this._trackerHandles.splice(index, 1)
+            this._trackerHandles.splice(index, 1);
           }
-        }
+        },
 
-      }
+      },
 
-    })
+    });
 
   }
 }

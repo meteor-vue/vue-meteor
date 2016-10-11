@@ -13,8 +13,15 @@
       <input v-model="newPostMessage" :placeholder="$t('pages.forum.message.add')" required/>
     </form>
 
+    <!-- Loading -->
+    <div v-if="!$subReady.posts">
+      Loading...
+    </div>
+
     <!-- Posts -->
     <post v-for="post in posts" :data="post"></post>
+
+    {{ $subReady | json }}
   </div>
 </template>
 
@@ -27,8 +34,8 @@ export default {
   data () {
     return {
       newPostMessage: '', // Vue data
-      posts: [], // Initialize your meteor data
-      data: {} // Initialize your meteor data
+      /*posts: [], // Initialize your meteor data
+      data: {} // Initialize your meteor data*/
     }
   },
   // Meteor-specific options
@@ -99,6 +106,11 @@ export default {
       // Meteor method call
       Meteor.call('threads.remove', this.data._id);
     }
+  },
+  created() {
+    this.$watch('$subReady.posts', (val) => {
+      console.log('posts ready', val);
+    });
   }
 }
 </script>

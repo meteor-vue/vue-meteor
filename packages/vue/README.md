@@ -9,7 +9,7 @@ Declarative subscriptions and meteor reactive data (subscriptions, collections, 
 ## Installation
 
 
-    meteor add akryum:vue
+  meteor add akryum:vue
 
 ## Usage
 
@@ -18,9 +18,9 @@ In your Vue component, add a `meteor` object :
 
 ```javascript
 new Vue({
-    meteor: {
-        // Meteor specific options
-    }
+  meteor: {
+    // Meteor specific options
+  }
 });
 ```
 
@@ -31,19 +31,19 @@ Add an object for each subscription in a `subscribe` object. The object key is t
 
 ```javascript
 meteor: {
-    // Subscriptions
-    subscribe: {
-        // Subscribes to the 'threads' publication with no parameters
-        'threads': [],
-        // Subscribes to the 'threads' publication with static parameters
-        'threads': ['new', 10], // The 10 newest threads
-        // Subscribes to the 'posts' publication with dynamic parameters
-        // The subscription will be re-called when a vue reactive property changes
-        'posts': function() {
-            // Here you can use Vue reactive properties
-            return [this.selectedThreadId] // Subscription params
-        }
+  // Subscriptions
+  subscribe: {
+    // Subscribes to the 'threads' publication with no parameters
+    'threads': [],
+    // Subscribes to the 'threads' publication with static parameters
+    'threads': ['new', 10], // The 10 newest threads
+    // Subscribes to the 'posts' publication with dynamic parameters
+    // The subscription will be re-called when a vue reactive property changes
+    'posts': function() {
+      // Here you can use Vue reactive properties
+      return [this.selectedThreadId] // Subscription params
     }
+  }
 }
 ```
 
@@ -53,11 +53,22 @@ You can also use the `$subscribe(name, ...params)` method in you component code:
 
 ```javascript
 ready () {
-    // Subscribes to the 'threads' publication with two parameters
-    this.$subscribe('thread', 'new', 10);
+  // Subscribes to the 'threads' publication with two parameters
+  this.$subscribe('thread', 'new', 10);
 }
 ```
 
+The `$subReady` object on your component contains the state of your subscriptions. For example, to know if the 'thread' subscription is ready, use this *reactive* expression:
+
+```javascript
+console.log(this.$subReady.thread);
+```
+
+Or in your template:
+
+```html
+<div v-if="!$subReady.thread">Loading...</div>
+```
 
 You can also change the default subscription method by defining the `Vue.config.meteor.subscribe` function:
 
@@ -67,15 +78,14 @@ You can also change the default subscription method by defining the `Vue.config.
 // Here we replace the native subscribe() with a cached one
 // with the ccorcos:subs-cache package
 const subsCache = new SubsCache({
-    expireAfter: 15,
-    cacheLimit: -1
+  expireAfter: 15,
+  cacheLimit: -1
 });
 
 Vue.config.meteor.subscribe = function(...args) {
   return subsCache.subscribe(...args);
 };
 ```
-
 
 #### Reactive data
 
@@ -88,64 +98,118 @@ Here is an example:
 
  ```javascript
 new Vue({
-    data() {
-        return {
-            selectedThreadId: null,
-            // We init the property value in the data() component hook
-            threads: [],
-            selectedThread: null
-        };
+  data() {
+    return {
+      selectedThreadId: null,
+      // We can init the property value in the data() component hook
+      threads: [],
+      selectedThread: null
+    };
+  },
+  meteor: {
+    // Subscriptions
+    subscribe: {
+      // We subscribe to the 'threads' publication
+      'threads': []
     },
-    meteor: {
-        // Subscriptions
-        subscribe: {
-            // We subscribe to the 'threads' publication
-            'threads': []
+    data: {
+      // Threads list
+      // This will update the 'threads' array property on the Vue instance
+      // that we set in the data() hook earlier
+      // You can use a function directly if you don't need
+      // parameters coming from the Vue instance
+      threads () {
+        // Here you can use Meteor reactive sources
+        // like cursors or reactive vars
+        // as you would in a Blaze template helper
+        // However, Vue reactive properties will not update
+        return Threads.find({}, {
+          sort: {date: -1}
+        });
+      },
+      // Selected thread
+      // This will update the 'selectedThread' object property on component
+      selectedThread: {
+        //// Vue Reactivity
+        // We declare which params depends on reactive vue properties
+        params () {
+          // Here you can use Vue reactive properties
+          // Don't use Meteor reactive sources!
+          return {
+            id: this.selectedThreadId
+          };
         },
-        // Reactive Data
-        data: {
-            // Threads list
-            // This will update the 'threads' array property on the Vue instance
-            // that we set in the data() hook earlier
-            // You can use a function directly if you don't need
-            // parameters coming from the Vue instance
-            threads () {
-                // Here you can use Meteor reactive sources
-                // like cursors or reactive vars
-                // as you would in a Blaze template helper
-                // However, Vue reactive properties will not update
-                return Threads.find({}, {
-                    sort: {date: -1}
-                });
-            },
-            // Selected thread
-            // This will update the 'selectedThread' object property on component
-            selectedThread: {
-                //// Vue Reactivity
-                // We declare which params depends on reactive vue properties
-                params () {
-                    // Here you can use Vue reactive properties
-                    // Don't use Meteor reactive sources!
-                    return {
-                        id: this.selectedThreadId
-                    };
-                },
-                //// Meteor Reactivity
-                // This will be refresh each time above params changes from Vue
-                // Then it calls Tracker.autorun() to refresh the result
-                // each time a Meteor reactive source changes
-                update ({id}) {
-                    // Here you can use Meteor reactive sources
-                    // like cursors or reactive vars
-                    // Don't use Vue reactive properties!
-                    return Threads.findOne(id);
-                }
-            }
-        }
-    }
+        //// Meteor Reactivity
+        // This will be refresh each time above params changes from Vue
+        // Then it calls Tracker.autorun() to refresh the result
+        // each time a Meteor reactive source changes
+        update ({id}) {
+          // Here you can use Meteor reactive sources
+          // like cursors or reactive vars
+          // Don't use Vue reactive properties!
+          return Threads.findOne(id);
+        },
+      },
+    },
+  },
 });
 ```
 
+You can skip the data initialization (the default value will be `null`) and the `data` property (as long as none of your meteor props is named 'data'):
+
+```javascript
+new Vue({
+ data() {
+   return {
+     selectedThreadId: null,
+   };
+ },
+ meteor: {
+   // Subscriptions
+   subscribe: {
+     // We subscribe to the 'threads' publication
+     'threads': []
+   },
+   // Threads list
+   // This will update the 'threads' array property on the Vue instance
+   // that we set in the data() hook earlier
+   // You can use a function directly if you don't need
+   // parameters coming from the Vue instance
+   threads () {
+     // Here you can use Meteor reactive sources
+     // like cursors or reactive vars
+     // as you would in a Blaze template helper
+     // However, Vue reactive properties will not update
+     return Threads.find({}, {
+       sort: {date: -1}
+     });
+   },
+   // Selected thread
+   // This will update the 'selectedThread' object property on component
+   selectedThread: {
+     //// Vue Reactivity
+     // We declare which params depends on reactive vue properties
+     params () {
+       // Here you can use Vue reactive properties
+       // Don't use Meteor reactive sources!
+       return {
+         id: this.selectedThreadId
+       };
+     },
+     //// Meteor Reactivity
+     // This will be refresh each time above params changes from Vue
+     // Then it calls Tracker.autorun() to refresh the result
+     // each time a Meteor reactive source changes
+     update ({id}) {
+       // Here you can use Meteor reactive sources
+       // like cursors or reactive vars
+       // Don't use Vue reactive properties!
+       return Threads.findOne(id);
+     },
+   },
+ },
+});
+```
 
 You can then use the reactive data in the template since it's standard Vue component properties:
 
@@ -163,9 +227,9 @@ Or anywhere else in you Vue component:
 
 ```javascript
 computed: {
-    count () {
-        return this.threads.length;
-    }
+  count () {
+    return this.threads.length;
+  }
 }
 ```
 

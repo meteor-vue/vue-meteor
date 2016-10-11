@@ -36,6 +36,7 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Easy state management with vuex integration **(Vue 1.x)**
  - [x] Use Blaze templates in your vue app **(Vue 1.x, Vue 2.x)**
  - [ ] *Typescript official integration in .vue files*
+ - [ ] *Server-side rendering (Vue 2.x)*
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
 
