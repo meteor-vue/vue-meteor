@@ -9,6 +9,7 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 ## Examples
 
 - [Simple example project](https://github.com/Akryum/meteor-vue-example)
+- [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
 - [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
 - [Routing example project](https://github.com/Akryum/meteor-vue-example-routing)
 - [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
