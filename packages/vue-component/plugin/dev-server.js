@@ -3,22 +3,25 @@ import socket_io from 'socket.io';
 import {Meteor} from 'meteor/meteor';
 
 if(global._dev_server_http) {
+  global._dev_server.close();
   global._dev_server_http.close();
+  delete global._dev_server;
   delete global._dev_server_http;
 }
 
 if(Meteor.isDevelopment) {
   var server = http.createServer();
-  var io = socket_io(server);
+  var io = socket_io(server, {
+    serveClient: false,
+  });
 
   // Stored dynamic styles
   io.__styles = {};
   io.__addStyle = function({hash, css}, emit = true) {
-    io.__styles[hash] = css;
-
     if(emit) {
       io.emit('css', {hash, css});
     }
+    io.__styles[hash] = css;
   };
 
   // Send all stored dynamic styles to new clients

@@ -5,8 +5,9 @@ global._vue_js_cache = global._vue_js_cache || {};
 
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
-  constructor({ inputFile, babelOptions, dependencyManager}) {
+  constructor({ inputFile, parts, babelOptions, dependencyManager}) {
     this.inputFile = inputFile;
+    this.parts = parts;
     this.babelOptions = babelOptions;
     this.dependencyManager = dependencyManager;
 
@@ -68,7 +69,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let styles = [];
 
     // Script
-    if (this.component.script) {
+    if (this.parts.script && this.component.script) {
       let tag = this.component.script;
       let script = tag.contents;
       let useBabel = true;
@@ -158,7 +159,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
     // Template
     let template;
-    if (this.component.template) {
+    if (this.parts.template && this.component.template) {
       let templateTag = this.component.template;
       template = templateTag.contents;
 
@@ -211,82 +212,84 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
 
     // Styles
-    for (let styleTag of this.component.styles) {
-      let css = styleTag.contents;
-      let cssMap = null;
+    if(this.parts.style) {
+      for (let styleTag of this.component.styles) {
+        let css = styleTag.contents;
+        let cssMap = null;
 
-      // Lang
-      if (styleTag.attribs.lang !== undefined) {
-        let lang = styleTag.attribs.lang;
-        try {
-          let compile = global.vue.lang[lang];
-          if (!compile) {
+        // Lang
+        if (styleTag.attribs.lang !== undefined) {
+          let lang = styleTag.attribs.lang;
+          try {
+            let compile = global.vue.lang[lang];
+            if (!compile) {
+              throwCompileError({
+                inputFile: this.inputFile,
+                tag: 'style',
+                charIndex: tag.tagStartIndex,
+                action: 'compiling',
+                lang,
+                message: `Can't find handler for lang ${lang}, did you install it?`,
+              });
+            } else {
+              //console.log(`Compiling <style> in lang ${lang}...`);
+              let result = compile({
+                source: css,
+                inputFile: this.inputFile,
+                dependencyManager: this.dependencyManager
+              });
+              //console.log('Css result', result);
+              css = result.css;
+              cssMap = result.map;
+            }
+          } catch (e) {
             throwCompileError({
               inputFile: this.inputFile,
               tag: 'style',
-              charIndex: tag.tagStartIndex,
+              charIndex: styleTag.tagStartIndex,
               action: 'compiling',
               lang,
-              message: `Can't find handler for lang ${lang}, did you install it?`,
+              error: e,
+              showError: true
             });
-          } else {
-            //console.log(`Compiling <style> in lang ${lang}...`);
-            let result = compile({
-              source: css,
-              inputFile: this.inputFile,
-              dependencyManager: this.dependencyManager
-            });
-            //console.log('Css result', result);
-            css = result.css;
-            cssMap = result.map;
           }
-        } catch (e) {
-          throwCompileError({
-            inputFile: this.inputFile,
-            tag: 'style',
-            charIndex: styleTag.tagStartIndex,
-            action: 'compiling',
-            lang,
-            error: e,
-            showError: true
-          });
         }
-      }
 
-      // Postcss
-      let plugins = [];
-      let postcssOptions = {
-        form: inputFilePath,
-        to: inputFilePath,
-        map: {
-          inline: false,
-          annotation: false,
-          prev: cssMap
+        // Postcss
+        let plugins = [];
+        let postcssOptions = {
+          form: inputFilePath,
+          to: inputFilePath,
+          map: {
+            inline: false,
+            annotation: false,
+            prev: cssMap
+          }
         }
+
+        // Scoped
+        if (styleTag.attribs.scoped) {
+          plugins.push(addHash({
+            hash
+          }));
+        }
+
+        // Autoprefixer
+        if (styleTag.attribs.autoprefix !== 'off') {
+          // Removed - Performance issue while loading the plugin
+          //plugins.push(autoprefixer());
+        }
+
+        // Postcss result
+        let result = postcss(plugins).process(css, postcssOptions);
+        css = result.css;
+        cssMap = result.map;
+
+        styles.push({
+          css,
+          map: cssMap
+        })
       }
-
-      // Scoped
-      if (styleTag.attribs.scoped) {
-        plugins.push(addHash({
-          hash
-        }));
-      }
-
-      // Autoprefixer
-      if (styleTag.attribs.autoprefix !== 'off') {
-        // Removed - Performance issue while loading the plugin
-        //plugins.push(autoprefixer());
-      }
-
-      // Postcss result
-      let result = postcss(plugins).process(css, postcssOptions);
-      css = result.css;
-      cssMap = result.map;
-
-      styles.push({
-        css,
-        map: cssMap
-      })
     }
 
     let compileResult = {

@@ -35,7 +35,7 @@ var _suppressNextReload = false, _deferReload = 0;
 var _reload = Reload._reload;
 Reload._reload = function(options) {
   // Disable original reload for autoupdate package
-  if(Reload._reload.caller.name !== 'checkNewVersionDocument') {
+  if(Reload._reload.caller.name !== '' && Reload._reload.caller.name !== 'checkNewVersionDocument') {
     _reload(options);
   }
 }
@@ -47,7 +47,7 @@ function reload(options) {
     setTimeout(_reload, _deferReload);
     console.log(`[HMR] Client reload defered, will reload in ${_deferReload} ms`);
   } else if(_suppressNextReload) {
-    console.log(`[HMR] Client version changed, reload suppressed because of previously hot-reloaded resource`);
+    console.log(`[HMR] Client version changed, you may need to reload the page`);
   } else {
     console.log(`[HMR] Reloading app...`);
     _reload.call(Reload, options);
@@ -155,6 +155,7 @@ Meteor.startup(function() {
   // CSS
   let _styleNodes = {};
   _socket.on('css', function({hash, css}) {
+    // console.log('css', hash, css.length);
     let style = _styleNodes[hash];
     if(!style) {
       style = document.createElement('style');
