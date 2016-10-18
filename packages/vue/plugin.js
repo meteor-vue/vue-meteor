@@ -15,6 +15,7 @@ export default {
 
     Vue.config.meteor = {
       subscribe: defaultSubscription,
+      freeze: false,
     };
 
     function prepare() {
@@ -61,6 +62,9 @@ export default {
                   let result = func(params);
                   if (result && typeof result.fetch === 'function') {
                     result = result.fetch();
+                  }
+                  if(Vue.config.meteor.freeze) {
+                    result = Object.freeze(result);
                   }
                   this[key] = result;
                 });

@@ -233,6 +233,15 @@ computed: {
 }
 ```
 
+#### Freezing data
+
+This option will apply `Object.freeze` on the Meteor data to prevent Vue from setting up reactivity on it. This can improve the performance of Vue when rendering large collection lists for example. By default, this option is turned off.
+
+```javascript
+// Disable Vue reactivity on Meteor data
+Vue.config.meteor.freeze = true;
+```
+
 ---
 
 ## Next steps

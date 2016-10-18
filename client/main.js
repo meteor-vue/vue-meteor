@@ -28,6 +28,8 @@ Vue.config.meteor.subscribe = function(...args) {
   return subsCache.subscribe(...args);
 };
 
+Vue.config.meteor.freeze = true;
+
 // Router
 const router = new Router({
   history: true,

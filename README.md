@@ -2,7 +2,7 @@
 
 **This project is in beta.**
 
-Tested with Meteor 1.4.2-beta.7
+Tested with Meteor 1.4.2-rc.0
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 
