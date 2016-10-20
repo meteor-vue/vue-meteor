@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue',
-  version: '1.2.0',
+  version: '1.2.1',
   summary: 'Integrate Vue with Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -16,4 +16,5 @@ Package.onUse(function(api) {
 
 Npm.depends({
   'lodash.omit': '4.5.0',
+  'vue-meteor-tracker': '1.0.2',
 });
