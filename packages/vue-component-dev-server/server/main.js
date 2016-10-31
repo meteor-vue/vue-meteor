@@ -1,5 +1,5 @@
 function getMeteorPort() {
-  const reg = /:\/\/localhost:(\d+)/gi;
+  const reg = /:\/\/.+:(\d+)/gi;
   const result = reg.exec(Meteor.absoluteUrl());
   if(result.length >= 2) {
     return parseInt(result[1]) + 3;
