@@ -263,7 +263,13 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       name = name.substring(0, name.lastIndexOf(ext));
 
       // Remove special characters
-      name = name.replace(nonWordCharReg, '');
+      name = name.replace(nonWordCharReg, match => {
+        if (match !== '-') {
+          return ''
+        } else {
+          return match
+        }
+      });
 
       // Kebab case
       name = name.replace(capitalLetterReg, (match) => {
