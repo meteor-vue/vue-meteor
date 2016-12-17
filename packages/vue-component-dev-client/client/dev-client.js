@@ -85,7 +85,7 @@ Meteor.startup(function() {
   // Dev client
   let port = window.__hot_port__ || 3003;
   console.log('[HMR] Dev client port', port);
-  let _socket = require('socket.io-client')(`http://localhost:${port}`);
+  let _socket = require('socket.io-client')(`${Meteor.absoluteUrl().replace(/:\d+\//gi, '')}:${port}`);
   window.__dev_client__ = _socket;
 
   _socket.on('connect', function() {
