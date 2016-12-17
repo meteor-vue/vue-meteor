@@ -1,8 +1,9 @@
 # Vue as a Meteor UI layer
 
-**This project is in beta.**
+[![meteor](https://img.shields.io/badge/meteor-1.4.2.3-blue.svg)](https://meteor.com/)
+[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
-Tested with Meteor 1.4.2.3
+**This project is in beta.**
 
 This project contains new meteor packages to help build [meteor](http://meteor.com/) apps with first-class [vuejs](http://vuejs.org/) integration as the ui layer.
 
