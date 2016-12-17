@@ -59,13 +59,13 @@ Clone this repository and type in the project directory:
     meteor npm install
     meteor
 
-### Meteor & Tracker data integration (Vue 1.x, 2.x)
+### Meteor & Tracker data integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Declarative subscriptions and meteor reactive data
 
 [See Usage in akryum:vue package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue#usage)
 
-### Single-file component (Vue 1.x, 2.x)
+### Single-file component ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
 
@@ -73,7 +73,7 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 ### Routing
 
-#### Vue 1.x
+#### ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
 
@@ -81,7 +81,7 @@ Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-r
 
 [Example app](https://github.com/Akryum/meteor-vue-example-routing)
 
-#### Vue 2.x
+#### ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Routing for Vue 2.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
 
@@ -89,13 +89,13 @@ Routing for Vue 2.x and Meteor using [vue-router](https://github.com/vuejs/vue-r
 
 [Example app](https://github.com/Akryum/meteor-vue2-example-routing)
 
-### Apollo integration (Vue 1.x, 2.x)
+### Apollo integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Use apollo in your vue component!
 
 [See Installation & Usage in the vue-apollo npm package](https://github.com/Akryum/vue-apollo)
 
-### Localization (Vue 1.x)
+### Localization ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon/vue-i18n).
 
@@ -105,7 +105,9 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 [Example app](https://github.com/Akryum/meteor-vue-example-i18n)
 
-### State management with vuex (Vue 1.x)
+### State management with vuex
+
+![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
 
@@ -113,7 +115,7 @@ Manage the state of your app with a centralized data store with [vuex](https://g
 
 [Example app](https://github.com/Akryum/meteor-vuex-example)
 
-### Embed Blaze template (Vue 1.x, 2.x)
+### Embed Blaze template ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Use Blaze templates inside your vue components.
 
