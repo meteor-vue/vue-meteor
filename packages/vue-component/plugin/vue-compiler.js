@@ -169,7 +169,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
   addCompileResult(inputFile, compileResult) {
     let inputFilePath = inputFile.getPathInPackage();
-    let vueId = '__v' + FileHash(inputFile);;
+    let vueId = 'data-v-' + FileHash(inputFile);;
     let isDev = isDevelopment();
 
     // Style
@@ -421,7 +421,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
     encoding: 'utf8'
   });
   let compileResult = compileOneFileWithContents(inputFile, contents, parts, babelOptions);
-  let vueId = '__v' + FileHash(inputFile);
+  let vueId = 'data-v-' + FileHash(inputFile);
 
   // CSS
   let css = '', cssHash = '';

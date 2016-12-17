@@ -63,7 +63,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let source = this.inputFile.getContentsAsString();
     let packageName = this.inputFile.getPackageName();
     let inputFilePath = this.inputFile.getPathInPackage();
-    let hash = '__v' + FileHash(this.inputFile);
+    let hash = 'data-v-' + FileHash(this.inputFile);
 
     let js = '';
     let styles = [];

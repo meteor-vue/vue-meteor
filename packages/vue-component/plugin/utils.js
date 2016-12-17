@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
 import { Meteor } from 'meteor/meteor';
+import hash from 'hash-sum';
 
 FileHash = function(inputFile) {
   let filePath = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
@@ -9,9 +9,7 @@ FileHash = function(inputFile) {
 }
 
 Hash = function(text) {
-  let hash = crypto.createHash('sha256');
-  hash.update(text);
-  return hash.digest('hex');
+  return hash(text)
 }
 
 normalizeCarriageReturns = function(contents, str = "\n") {
