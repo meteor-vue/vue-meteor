@@ -6,18 +6,18 @@
 
 meteor-base@1.0.4             # Packages every Meteor app needs to have
 mobile-experience@1.0.4       # Packages for a great mobile UX
-mongo@1.1.12-6-rc.0                   # The database Meteor supports right now
-reactive-var@1.0.11-rc.0            # Reactive variable for tracker
-jquery@1.11.10-rc.0                  # Helpful client-side library
-tracker@1.1.1-rc.0                 # Meteor's client-side reactive programming library
+mongo@1.1.14                   # The database Meteor supports right now
+reactive-var@1.0.11            # Reactive variable for tracker
+jquery@1.11.10                  # Helpful client-side library
+tracker@1.1.1                 # Meteor's client-side reactive programming library
 
-standard-minifier-css@1.3.1   # CSS minifier run for production mode
-standard-minifier-js@1.2.1-rc.0    # JS minifier run for production mode
-es5-shim@4.6.15-rc.0                # ECMAScript 5 compatibility for older browsers.
-ecmascript@0.5.9-rc.0              # Enable ECMAScript2015+ syntax in app code
+standard-minifier-css@1.3.2   # CSS minifier run for production mode
+standard-minifier-js@1.2.1    # JS minifier run for production mode
+es5-shim@4.6.15                # ECMAScript 5 compatibility for older browsers.
+ecmascript@0.6.1              # Enable ECMAScript2015+ syntax in app code
 
 static-html@1.1.12_1
-check@1.2.4-rc.0
+check@1.2.4
 
 apollo
 

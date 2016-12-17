@@ -139,6 +139,10 @@ I18n.lib = VueI18n;
 
 // Init with server injected locale
 InjectData.getData('vue-i18n-lang', function(data) {
+  if (!data) {
+    console.error('vue-i18n-lang injected data undefined')
+    return
+  }
   languageList = data.langs;
   defaultLang = data.lang;
   defaultLocale = data.locale;
