@@ -105,9 +105,7 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 [Example app](https://github.com/Akryum/meteor-vue-example-i18n)
 
-### State management with vuex
-
-![vue](https://img.shields.io/badge/vue-1.x-green.svg)
+### State management with vuex ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
 
