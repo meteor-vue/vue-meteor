@@ -1,7 +1,7 @@
 # Vue as a Meteor UI layer
 
 [![meteor](https://img.shields.io/badge/meteor-1.4.2.3-blue.svg)](https://meteor.com/)
-[![vue1](https://img.shields.io/badge/vue-1.x-brightgreen.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+[![vue1](https://img.shields.io/badge/vue-1.x-green.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 **This project is in beta.**
 
@@ -21,22 +21,22 @@ This project contains new meteor packages to help build [meteor](http://meteor.c
 
 Currently supported and possible future features (in no particular order) are:
 
- - [x] Declarative subscriptions and meteor reactive data **(Vue 1.x, Vue 2.x)**
- - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute) **(Vue 1.x, Vue 2.x)**
- - [x] Instant Hot-reloading of components **(Vue 1.x, Vue 2.x)**
- - [x] `lang` attribute on `<style>` in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] Less official integration in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] Sass official integration in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] Stylus official integration in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] `lang` attribute on `<template>` in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] Jade official integration in .vue file **(Vue 1.x, Vue 2.x)**
- - [x] `lang` attribute on `<script>` in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] Coffeescript official integration in .vue files **(Vue 1.x, Vue 2.x)**
- - [x] Apollo client integration **(Vue 1.x, Vue 2.x)**
- - [x] Easy routing with vue-router out-of-the-box integration & fast-render **(Vue 1.x, Vue 2.x)**
- - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui **(Vue 1.x)**
- - [x] Easy state management with vuex integration **(Vue 1.x)**
- - [x] Use Blaze templates in your vue app **(Vue 1.x, Vue 2.x)**
+ - [x] Declarative subscriptions and meteor reactive data ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Single-file components (.vue) with basic support of `<template>`, `<script>` and `<style>` (with optional `scoped` attribute) ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Instant Hot-reloading of components ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] `lang` attribute on `<style>` in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Less official integration in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Sass official integration in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Stylus official integration in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] `lang` attribute on `<template>` in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Jade official integration in .vue file ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] `lang` attribute on `<script>` in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Coffeescript official integration in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Apollo client integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Easy routing with vue-router out-of-the-box integration & fast-render ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Easy localization with vue-i18n out-of-the-box integration, auto-detection, server-side injection and key-in-hand ui ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
+ - [x] Easy state management with vuex integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
+ - [x] Use Blaze templates in your vue app ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
  - [ ] *Typescript official integration in .vue files*
  - [ ] *Server-side rendering (Vue 2.x)*
 
