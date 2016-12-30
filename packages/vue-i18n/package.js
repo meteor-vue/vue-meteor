@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-i18n',
-  version: '0.0.4',
+  version: '0.0.5',
   summary: 'Internationalization for vue',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -28,7 +28,7 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use('webapp');
   api.use('akryum:vue@1.0.3');
-  api.use('meteorhacks:inject-data@2.0.0');
+  api.use('staringatlights:inject-data@2.0.5');
   api.mainModule('client/client.js', 'client');
   api.mainModule('server/server.js', 'server');
   api.export(['I18n', 'IsoLangs'], 'client');
