@@ -48,56 +48,49 @@ export default {
   }),
   // Apollo-specific options
   apollo: {
-    // Non-reactive query
-    data: {
-      // Simple query that will update the 'hello' vue property
-      hello: gql`{hello}`,
-      // Advanced query with parameters
-      // The 'variables' method is watched by vue
-      pingMessage: {
-        query: gql`query PingMessage($message: String!) {
-          ping(message: $message)
-        }`,
-        // Reactive parameters
-        variables() {
-          // Use vue reactive properties here
-          return {
-              message: this.pingInput
-          }
-        },
-        // We use a custom update callback because
-        // the field names don't match
-        // By default, the 'pingMessage' attribute
-        // would be used on the 'data' result object
-        // Here we know the result is in the 'ping' attribute
-        // considering the way the apollo server works
-        update(data) {
-          console.log(data);
-          return data.ping;
-        },
-        // Optional result hook
-        result(data) {
-          console.log("We got some result!");
-        },
-        // Error handling
-        error(errors, type) {
-          console.error(`We've got ${errors.length} errors of type '${type}'`);
+    // Simple query that will update the 'hello' vue property
+    hello: gql`{hello}`,
+    // Advanced query with parameters
+    // The 'variables' method is watched by vue
+    pingMessage: {
+      query: gql`query PingMessage($message: String!) {
+        ping(message: $message)
+      }`,
+      // Reactive parameters
+      variables() {
+        // Use vue reactive properties here
+        return {
+            message: this.pingInput
         }
+      },
+      // We use a custom update callback because
+      // the field names don't match
+      // By default, the 'pingMessage' attribute
+      // would be used on the 'data' result object
+      // Here we know the result is in the 'ping' attribute
+      // considering the way the apollo server works
+      update(data) {
+        console.log(data);
+        return data.ping;
+      },
+      // Optional result hook
+      result(data) {
+        console.log("We got some result!");
+      },
+      // Error handling
+      error(errors, type) {
+        console.error(`We've got ${errors.length} errors of type '${type}'`);
       }
     },
-    // Reactive query
-    watch: {
-      // 'tags' data property on vue instance
-      tags: {
-        query: gql`{
-          tags {
-            id,
-            label
-          }
-        }`,
-        pollInterval: 300 // Not working, should be fixed soon
-        // https://github.com/apollostack/apollo-client/pull/262
-      }
+    // 'tags' data property on vue instance
+    tags: {
+      query: gql`{
+        tags {
+          id,
+          label
+        }
+      }`,
+      pollInterval: 300
     }
   },
   methods: {
