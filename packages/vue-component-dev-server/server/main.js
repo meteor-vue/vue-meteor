@@ -9,6 +9,4 @@ function getMeteorPort() {
 const PORT = parseInt(process.env.HMR_PORT) || parseInt(process.env.VUE_DEV_SERVER_PORT) || getMeteorPort() || 3003;
 
 // Client-side config
-WebAppInternals.addStaticJs(`
-  window.__hot_port__ = ${PORT};
-`);
+__meteor_runtime_config__.VUE_DEV_SERVER_PORT = PORT;
