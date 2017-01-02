@@ -2,9 +2,9 @@ accounts-base@1.2.14
 akryum:npm-check@0.0.3
 akryum:vue@1.2.2
 akryum:vue-coffee@0.0.3
-akryum:vue-component@0.7.12
-akryum:vue-component-dev-client@0.2.2
-akryum:vue-component-dev-server@0.0.3
+akryum:vue-component@0.8.0
+akryum:vue-component-dev-client@0.2.3
+akryum:vue-component-dev-server@0.0.4
 akryum:vue-i18n@0.0.5
 akryum:vue-i18n-ui@0.0.5
 akryum:vue-jade@0.0.1

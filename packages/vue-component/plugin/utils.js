@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { Meteor } from 'meteor/meteor';
 import hash from 'hash-sum';
+import sourceMap from 'source-map';
+import generateIdentityMap from 'generate-source-map';
 
 FileHash = function(inputFile) {
   let filePath = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
@@ -42,6 +44,35 @@ getLineNumber = function(contents, charIndex) {
 
 getLineInInputFile = function(inputFile, charIndex) {
   return getLineNumber(inputFile.getContentsAsString(), charIndex);
+}
+
+generateSourceMap = function(filename, source, generated, offset) {
+  var map = new sourceMap.SourceMapGenerator()
+  map.setSourceContent(filename, source)
+  generated.split(splitRE).forEach((line, index) => {
+    if (!emptyRE.test(line)) {
+      map.addMapping({
+        source: filename,
+        original: {
+          line: index + offset,
+          column: 0
+        },
+        generated: {
+          line: index + 1,
+          column: 0
+        }
+      })
+    }
+  })
+  return map.toJSON()
+}
+
+printSourceMap = function(map) {
+  const consumer = new sourceMap.SourceMapConsumer(map)
+  consumer.eachMapping(m => {
+    console.log(m)
+  })
+  console.log(map)
 }
 
 throwCompileError = function throwCompileError({

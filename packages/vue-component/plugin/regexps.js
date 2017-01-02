@@ -15,3 +15,6 @@ capitalLetterReg = /([A-Z])/g;
 trimDashReg = /^-/;
 nonWordCharReg = /\W/g;
 requireRelativeFileReg = /require\(["']\.\//ig
+
+splitRE = /\r?\n/g
+emptyRE = /^(?:\/\/)?\s*$/

@@ -186,7 +186,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
       if (isDev) {
         // Add style to client first-connection style list
-        global._dev_server.__addStyle({ hash: vueId, css }, false);
+        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, false);
       } else {
         this.addStylesheet(inputFile, {
           data: css
@@ -254,38 +254,40 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     }
 
     // Auto register
+    let ext = (isGlobalName ? '.global' : '') + '.vue';
+
+    let name = Plugin.path.basename(inputFilePath);
+    name = name.substring(0, name.lastIndexOf(ext));
+
+    // Remove special characters
+    name = name.replace(nonWordCharReg, match => {
+      if (match !== '-') {
+        return ''
+      } else {
+        return match
+      }
+    });
+
+    // Kebab case
+    name = name.replace(capitalLetterReg, (match) => {
+      return '-' + match.toLowerCase();
+    });
+    name = name.replace(trimDashReg, '');
+
+    // Auto default name
+    js += `\n__vue_options__.name = __vue_options__.name || '${name}';`
+
     let isGlobalName = globalFileNameReg.test(inputFilePath);
     let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1;
     if (isOutsideImports || isGlobalName) {
-      let ext = (isGlobalName ? '.global' : '') + '.vue';
-
-      let name = Plugin.path.basename(inputFilePath);
-      name = name.substring(0, name.lastIndexOf(ext));
-
-      // Remove special characters
-      name = name.replace(nonWordCharReg, match => {
-        if (match !== '-') {
-          return ''
-        } else {
-          return match
-        }
-      });
-
-      // Kebab case
-      name = name.replace(capitalLetterReg, (match) => {
-        return '-' + match.toLowerCase();
-      });
-      name = name.replace(trimDashReg, '');
-
       // Component registration
       js += `\nvar _Vue = require('vue');
-      _Vue.component(__vue_options__.name || '${name}', __vue_script__);`;
+      _Vue.component(__vue_options__.name, __vue_script__);`;
     }
 
     // Add JS Source file
     inputFile.addJavaScript({
-      path: inputFile.getPathInPackage() + '.js',
-      sourcePath: inputFile.getPathInPackage(),
+      path: inputFile.getPathInPackage(),
       data: js,
       sourceMap: compileResult.map
     });
@@ -440,7 +442,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
       // Hot-reloading
       cssHash = Hash(css);
       if (cache.css !== cssHash) {
-        global._dev_server.__addStyle({ hash: vueId, css });
+        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath });
       }
     }
   }

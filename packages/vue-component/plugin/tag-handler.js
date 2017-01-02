@@ -1,5 +1,6 @@
 import postcss from 'postcss';
-//import autoprefixer from 'autoprefixer';
+import autoprefixer from 'autoprefixer';
+import SourceMapMerger from 'source-map-merger';
 
 global._vue_js_cache = global._vue_js_cache || {};
 
@@ -61,9 +62,11 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
     let map = '';
     let source = this.inputFile.getContentsAsString();
+    let fileName = this.inputFile.getBasename();
     let packageName = this.inputFile.getPackageName();
     let inputFilePath = this.inputFile.getPathInPackage();
-    let hash = 'data-v-' + FileHash(this.inputFile);
+    let fullInputFilePath = packageName ? '/packages/' + packageName + '/' + inputFilePath : '/' + inputFilePath;
+    let hash = 'data-v-' + Hash(fullInputFilePath);
 
     let js = '';
     let styles = [];
@@ -74,6 +77,10 @@ VueComponentTagHandler = class VueComponentTagHandler {
       let script = tag.contents;
       let useBabel = true;
       jsHash = Hash(script);
+
+      const maps = []
+
+      maps.push(generateSourceMap(inputFilePath, source, script, getLineNumber(source, tag.tagStartIndex)))
 
       // Lang
       if (tag.attribs.lang !== undefined) {
@@ -96,7 +103,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
               inputFile: this.inputFile
             });
             script = result.script;
-            map = result.map;
+            if (result.map) {
+              maps.push(result.map);
+            }
             useBabel = result.useBabel;
           }
         } catch (e) {
@@ -120,14 +129,16 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // Babel options
         this.babelOptions.sourceMap = true;
         this.babelOptions.filename =
-          this.babelOptions.sourceFileName = packageName ? '/packages/' + packageName + '/' + inputFilePath : '/' + inputFilePath;
+          this.babelOptions.sourceFileName = fullInputFilePath;
         this.babelOptions.sourceMapTarget = this.babelOptions.filename + '.map';
 
         // Babel compilation
         try {
           let output = Babel.compile(script, this.babelOptions);
           script = output.code;
-          map = output.map;
+          if (output.map) {
+            maps.push(output.map);
+          }
         } catch(e) {
           let errorOptions = {
             inputFile: this.inputFile,
@@ -153,6 +164,28 @@ VueComponentTagHandler = class VueComponentTagHandler {
           throwCompileError(errorOptions);
         }
       }
+
+      const lastMap = maps[maps.length - 1]
+
+      // Merge source maps
+      try {
+        if (maps.length > 1) {
+          map = SourceMapMerger.createMergedSourceMap(maps, true)
+        } else {
+          map = maps[0]
+        }
+      } catch (e) {
+        console.error(`Error while mergin sourcemaps for ${inputFilePath}`, e.message)
+        console.log(maps)
+        map = maps[0]
+      }
+
+      if (typeof map === 'string') {
+        map = JSON.parse(map)
+      }
+      map.sourcesContent = [ source ]
+      map.names = lastMap.names
+      map.file = this.inputFile.getPathInPackage()
 
       js += '__vue_script__ = (function(){' + script + '\n})();';
     }
@@ -276,8 +309,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
         // Autoprefixer
         if (styleTag.attribs.autoprefix !== 'off') {
-          // Removed - Performance issue while loading the plugin
-          //plugins.push(autoprefixer());
+          plugins.push(autoprefixer());
         }
 
         // Postcss result

@@ -80,6 +80,13 @@ class HtmlScan {
           this._tagStartIndex = originalContents.indexOf(tagContents.substr(0, 10));
         }
         return this._tagStartIndex;
+      },
+      _tagEndIndex: null,
+      get tagEndIndex() {
+        if(this._tagEndIndex === null) {
+          this._tagEndIndex = originalContents.indexOf('</script>') - 1;
+        }
+        return this._tagEndIndex;
       }
     };
 

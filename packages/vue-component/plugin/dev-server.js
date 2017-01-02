@@ -17,17 +17,21 @@ if(Meteor.isDevelopment) {
 
   // Stored dynamic styles
   io.__styles = {};
-  io.__addStyle = function({hash, css}, emit = true) {
+  io.__addStyle = function({hash, css, path}, emit = true) {
     if(emit) {
-      io.emit('css', {hash, css});
+      io.emit('css', {hash, css, path});
     }
-    io.__styles[hash] = css;
+    io.__styles[hash] = {
+      hash,
+      css,
+      path
+    };
   };
 
   // Send all stored dynamic styles to new clients
   io.on('connection', function (socket) {
     for(var hash in io.__styles) {
-      socket.emit('css', {hash, css:io.__styles[hash]});
+      socket.emit('css', io.__styles[hash]);
     }
   });
 

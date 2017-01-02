@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 - 2017-01-02
+
+ - The components `name` option will be set by default depending on the filename. #99
+ - Fix sourcemaps #46
+ - Enabled CSS autoprefixer. Turn it off with `<style autoprefix="off">`. #4
+ - New `data-v-source-file` attribute on development `<style>` tags.
+
 ## 0.7.1 - 2016-09-28
 
  - Fixed single quote error in templates

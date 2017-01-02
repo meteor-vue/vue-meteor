@@ -12,6 +12,8 @@ return {
   methods:
     removePost: ->
       Meteor.call 'posts.remove', @data._id
+  created:
+    console.log 'Post'
 }
 </script>
 

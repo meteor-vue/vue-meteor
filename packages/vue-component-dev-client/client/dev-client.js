@@ -154,11 +154,12 @@ Meteor.startup(function() {
 
   // CSS
   let _styleNodes = {};
-  _socket.on('css', function({hash, css}) {
+  _socket.on('css', function({hash, css, path}) {
     // console.log('css', hash, css.length);
     let style = _styleNodes[hash];
     if(!style) {
       style = document.createElement('style');
+      style.setAttribute('data-v-source-file', path);
       document.getElementsByTagName('head')[0].appendChild(style);
       _styleNodes[hash] = style;
     }

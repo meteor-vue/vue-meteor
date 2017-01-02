@@ -21,6 +21,9 @@ export default {
       this.count += 42;
     },
   },
+  created () {
+    console.log('Hello world!')
+  },
 };
 </script>
 
