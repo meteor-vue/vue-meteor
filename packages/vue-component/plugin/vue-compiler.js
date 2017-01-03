@@ -5,6 +5,7 @@ import async from 'async';
 import { Meteor } from 'meteor/meteor';
 import { EventEmitter } from 'events';
 import _ from 'lodash';
+import transpile from 'vue-template-es2015-compiler';
 
 IGNORE_FILE = '.vueignore';
 CWD = path.resolve('./');
@@ -168,9 +169,9 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
   }
 
   addCompileResult(inputFile, compileResult) {
-    let inputFilePath = inputFile.getPathInPackage();
-    let vueId = 'data-v-' + FileHash(inputFile);;
-    let isDev = isDevelopment();
+    const inputFilePath = inputFile.getPathInPackage();
+    const vueId = 'data-v-' + FileHash(inputFile);
+    const isDev = isDevelopment();
 
     // Style
     let css = '';
@@ -194,96 +195,11 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       }
     }
 
-    let js = compileResult.code;
-    let jsHash = Hash(js);
+    let jsHash = Hash(compileResult.code);
 
     //console.log(`js hash: ${jsHash}`);
 
-    js = 'var __vue_script__, __vue_template__;' + js;
-    js += `__vue_script__ = __vue_script__ || {};`;
-    js += `var __vue_options__ = (typeof __vue_script__ === "function" ?
-    (__vue_script__.options || (__vue_script__.options = {}))
-    : __vue_script__);`;
-
-    let templateHash;
-    if (compileResult.template) {
-
-      templateHash = Hash(compileResult.template);
-
-      if(vueVersion === 1) {
-        // Fix quotes
-        compileResult.template = compileResult.template.replace(quoteReg, '&#39;').replace(lineReg, '');
-        js += "__vue_template__ = '" + compileResult.template + "';";
-
-        // Template option
-        js += `__vue_options__.template = __vue_template__;`;
-      } else if(vueVersion === 2) {
-        const templateCompilationResult = templateCompiler.compile(compileResult.template);
-        if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
-          console.error(templateCompilationResult.errors);
-          js += `__vue_options__.render = function(){};\n`;
-          js += `__vue_options__.staticRenderFns = [];\n`;
-        } else {
-          js += `__vue_options__.render = ${toFunction(templateCompilationResult.render)};\n`;
-          js += `__vue_options__.staticRenderFns = [${templateCompilationResult.staticRenderFns.map(toFunction).join(',')}];\n`;
-        }
-      }
-
-      //console.log(`template hash: ${templateHash}`);
-    }
-
-    // Scope
-    if(vueVersion === 2) {
-      js += `__vue_options__._scopeId = '${vueId}';`;
-    }
-
-    // Package context
-    js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
-
-    // Export
-    js += `module.export('default', exports.default = __vue_script__);`;
-
-    // Hot-reloading
-    if (isDev) {
-      js += `\nif(!window.__vue_hot__){
-        window.__vue_hot_pending__ = window.__vue_hot_pending__ || {};
-        window.__vue_hot_pending__['${vueId}'] = __vue_script__;
-      } else {
-        window.__vue_hot__.createRecord('${vueId}', __vue_script__);
-      }`;
-    }
-
-    // Auto register
-    let ext = (isGlobalName ? '.global' : '') + '.vue';
-
-    let name = Plugin.path.basename(inputFilePath);
-    name = name.substring(0, name.lastIndexOf(ext));
-
-    // Remove special characters
-    name = name.replace(nonWordCharReg, match => {
-      if (match !== '-') {
-        return ''
-      } else {
-        return match
-      }
-    });
-
-    // Kebab case
-    name = name.replace(capitalLetterReg, (match) => {
-      return '-' + match.toLowerCase();
-    });
-    name = name.replace(trimDashReg, '');
-
-    // Auto default name
-    js += `\n__vue_options__.name = __vue_options__.name || '${name}';`
-
-    let isGlobalName = globalFileNameReg.test(inputFilePath);
-    let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1;
-    if (isOutsideImports || isGlobalName) {
-      // Component registration
-      js += `\nvar _Vue = require('vue');
-      _Vue.component(__vue_options__.name, __vue_script__);`;
-    }
+    const { js, templateHash } = generateJs(vueId, inputFile, compileResult)
 
     // Add JS Source file
     inputFile.addJavaScript({
@@ -448,11 +364,10 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
   }
 
   // JS & Template
-  let js, jsHash, template, templateHash;
+  let jsHash, template, templateHash;
   if(parts.script || parts.template) {
     if(parts.script) {
-      js = compileResult.code;
-      jsHash = Hash(js);
+      jsHash = Hash(compileResult.code);
     }
     if(parts.template) {
       template = compileResult.template;
@@ -468,37 +383,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
 
       const path = (inputFile.getPackageName() ? `packages/${inputFile.getPackageName()}` : '') + inputFile.getPathInPackage();
 
-      // Require to absolute
-      js = js.replace(requireRelativeFileReg, `require('/${inputFilePath}/`);
-
-      js = 'var __vue_script__, __vue_template__;' + js;
-      js += `__vue_script__ = __vue_script__ || {};`;
-      js += `var __vue_options__ = (typeof __vue_script__ === "function" ?
-      (__vue_script__.options || (__vue_script__.options = {}))
-      : __vue_script__);`;
-
-      let render, staticRenderFns;
-
-      if (template) {
-        if(vueVersion === 1) {
-          // Fix quotes
-          template = template.replace(quoteReg, '&#39;').replace(lineReg, '');
-          js += "__vue_template__ = '" + template + "';";
-
-          // Template option
-          js += `__vue_options__.template = __vue_template__;`;
-        } else if(vueVersion === 2) {
-          const templateCompilationResult = templateCompiler.compile(template);
-          if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
-            console.error(templateCompilationResult.errors);
-            js += `__vue_options__.render = function(){};\n`;
-            js += `__vue_options__.staticRenderFns = [];\n`;
-          } else {
-            js += `__vue_options__.render = ${render = toFunction(templateCompilationResult.render)};\n`;
-            js += `__vue_options__.staticRenderFns = ${staticRenderFns = `[${templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`};\n`;
-          }
-        }
-      }
+      const { js, render, staticRenderFns } = generateJs(vueId, inputFile, compileResult, true)
 
       if(vueVersion === 2 && cache.js === jsHash) {
         global._dev_server.emit('render', { hash: vueId, template:`{
@@ -506,17 +391,6 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
           staticRenderFns: ${staticRenderFns}
         }`, path });
       } else {
-        // Scope
-        if(vueVersion === 2) {
-          js += `__vue_options__._scopeId = '${vueId}';`;
-        }
-
-        // Package context
-        js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
-
-        // Export
-        js += `module.export('default', exports.default = __vue_script__);`;
-
         global._dev_server.emit('js', { hash: vueId, js, template, path });
       }
     }
@@ -673,5 +547,115 @@ function compileOneFileWithContents(inputFile, contents, parts, babelOptions) {
     } else {
       throw e;
     }
+  }
+}
+
+function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
+  const isDev = isDevelopment();
+  const inputFilePath = inputFile.getPathInPackage();
+
+  let js = 'var __vue_script__, __vue_template__;' + compileResult.code;
+  js += `__vue_script__ = __vue_script__ || {};`;
+  js += `var __vue_options__ = (typeof __vue_script__ === "function" ?
+  (__vue_script__.options || (__vue_script__.options = {}))
+  : __vue_script__);`;
+
+  let render, staticRenderFns;
+
+  let templateHash;
+  if (compileResult.template) {
+
+    if (!isHotReload) {
+      templateHash = Hash(compileResult.template);
+    }
+
+    if(vueVersion === 1) {
+      // Fix quotes
+      compileResult.template = compileResult.template.replace(quoteReg, '&#39;').replace(lineReg, '');
+      js += "__vue_template__ = '" + compileResult.template + "';";
+
+      // Template option
+      js += `__vue_options__.template = __vue_template__;\n`;
+    } else if(vueVersion === 2) {
+      const templateCompilationResult = templateCompiler.compile(compileResult.template);
+      if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
+        console.error(templateCompilationResult.errors);
+        js += `__vue_options__.render = function(){};\n`;
+        js += `__vue_options__.staticRenderFns = [];\n`;
+      } else {
+        render = toFunction(templateCompilationResult.render)
+        staticRenderFns = `[${ templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`
+        let renderJs = `__vue_options__.render = ${render};\n`;
+        renderJs += `__vue_options__.staticRenderFns = ${staticRenderFns};\n`;
+        renderJs = transpile(renderJs);
+        if (isDev) {
+          renderJs += `__vue_options__.render._withStripped = true;\n`
+        }
+        js += renderJs;
+      }
+    }
+
+    //console.log(`template hash: ${templateHash}`);
+  }
+
+  // Scope
+  if(vueVersion === 2) {
+    js += `__vue_options__._scopeId = '${vueId}';`;
+  }
+
+  // Package context
+  js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
+
+  // Export
+  js += `module.export('default', exports.default = __vue_script__);`;
+
+  if (!isHotReload) {
+    // Hot-reloading
+    if (isDev) {
+      js += `\nif(!window.__vue_hot__){
+        window.__vue_hot_pending__ = window.__vue_hot_pending__ || {};
+        window.__vue_hot_pending__['${vueId}'] = __vue_script__;
+      } else {
+        window.__vue_hot__.createRecord('${vueId}', __vue_script__);
+      }`;
+    }
+
+    // Auto register
+    let isGlobalName = globalFileNameReg.test(inputFilePath);
+    let ext = (isGlobalName ? '.global' : '') + '.vue';
+
+    let name = Plugin.path.basename(inputFilePath);
+    name = name.substring(0, name.lastIndexOf(ext));
+
+    // Remove special characters
+    name = name.replace(nonWordCharReg, match => {
+      if (match !== '-') {
+        return ''
+      } else {
+        return match
+      }
+    });
+
+    // Kebab case
+    name = name.replace(capitalLetterReg, (match) => {
+      return '-' + match.toLowerCase();
+    });
+    name = name.replace(trimDashReg, '');
+
+    // Auto default name
+    js += `\n__vue_options__.name = __vue_options__.name || '${name}';`
+    let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1;
+    if (isOutsideImports || isGlobalName) {
+      // Component registration
+      js += `\nvar _Vue = require('vue');
+      _Vue.component(__vue_options__.name, __vue_script__);`;
+    }
+  }
+
+  return {
+    js,
+    templateHash,
+    render,
+    staticRenderFns,
   }
 }

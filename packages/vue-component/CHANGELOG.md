@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1 - 2017-01-04
+
+ - Performance improvements and es2015 transpilation with `vue-template-es2015-compiler`.
+
 ## 0.8.0 - 2017-01-02
 
  - The components `name` option will be set by default depending on the filename. #99
