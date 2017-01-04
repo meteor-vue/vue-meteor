@@ -2,13 +2,13 @@
 
 ## 0.8.1 - 2017-01-04
 
- - Performance improvements and es2015 transpilation with `vue-template-es2015-compiler`.
+ - Performance improvements and es2015 transpilation in templates for `.vue` files with `vue-template-es2015-compiler`.
 
 ## 0.8.0 - 2017-01-02
 
- - The components `name` option will be set by default depending on the filename. #99
- - Fix sourcemaps #46
- - Enabled CSS autoprefixer. Turn it off with `<style autoprefix="off">`. #4
+ - The components `name` option will be set by default depending on the filename. [#99](https://github.com/Akryum/meteor-vue-component/issues/99)
+ - Fix sourcemaps [#46](https://github.com/Akryum/meteor-vue-component/issues/46)
+ - Enabled CSS autoprefixer. Turn it off with `<style autoprefix="off">`. [#4](https://github.com/Akryum/meteor-vue-component/issues/4)
  - New `data-v-source-file` attribute on development `<style>` tags.
 
 ## 0.7.1 - 2016-09-28
@@ -69,7 +69,7 @@
 
 ## 0.3.3 - 2016-06-15
 
- - Fix nested <template> tags for Vue conditional rendering [#29](https://github.com/Akryum/meteor-vue-component/issues/29)
+ - Fix nested `<template>` tags for Vue conditional rendering [#29](https://github.com/Akryum/meteor-vue-component/issues/29)
 
 ## 0.3.2 - 2016-06-15
 
