@@ -205,7 +205,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     inputFile.addJavaScript({
       path: inputFile.getPathInPackage(),
       data: js,
-      sourceMap: compileResult.map
+      sourceMap: compileResult.map,
+      lazy: false,
     });
 
     if (isDev) {
@@ -221,10 +222,11 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
   addStylesheet(inputFile, options) {
     const data = normalizeCarriageReturns(options.data);
     inputFile.addStylesheet({
-      path: inputFile.getPathInPackage() + '.css',
+      path: inputFile.getPathInPackage(),
       sourcePath: inputFile.getPathInPackage(),
       data: data,
-      sourceMap: options.map
+      sourceMap: options.map,
+      lazy: false,
     });
   }
 }
