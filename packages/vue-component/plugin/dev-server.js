@@ -50,7 +50,9 @@ if(Meteor.isDevelopment) {
 
   try {
     server.listen(PORT);
-    process.stdout.clearLine();
+    if (process.stdout.clearLine) {
+        process.stdout.clearLine();
+    }
     process.stdout.write(`\r   [HMR] Dev server listening on port ${PORT}\n`);
     global._dev_server = io;
     global._dev_server_http = server;
