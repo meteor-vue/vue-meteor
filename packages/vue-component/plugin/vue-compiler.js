@@ -5,10 +5,10 @@ import async from 'async';
 import { Meteor } from 'meteor/meteor';
 import { EventEmitter } from 'events';
 import _ from 'lodash';
-import transpile from 'vue-template-es2015-compiler';
 
 IGNORE_FILE = '.vueignore';
 CWD = path.resolve('./');
+
 
 function getVueVersion() {
   const packageFile = path.join(CWD, 'package.json');
@@ -34,10 +34,12 @@ function getVueVersion() {
 
 const vueVersion = getVueVersion();
 
-let templateCompiler;
+let templateCompiler, transpile;
 
 if(vueVersion === 2) {
-  templateCompiler = require('vue-template-compiler');
+  const VueCompiler = require('meteor/akryum:vue-compiler').default
+  templateCompiler = VueCompiler.compile;
+  transpile = VueCompiler.transpile;
 }
 
 function toFunction (code) {
@@ -173,6 +175,20 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     const vueId = 'data-v-' + FileHash(inputFile);
     const isDev = isDevelopment();
 
+    let jsHash = Hash(compileResult.code);
+
+    //console.log(`js hash: ${jsHash}`);
+
+    const { js, templateHash } = generateJs(vueId, inputFile, compileResult)
+
+    // Add JS Source file
+    inputFile.addJavaScript({
+      path: inputFile.getPathInPackage(),
+      data: js,
+      sourceMap: compileResult.map,
+      lazy: true,
+    });
+
     // Style
     let css = '';
     let cssHash = '';
@@ -194,20 +210,6 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
         });
       }
     }
-
-    let jsHash = Hash(compileResult.code);
-
-    //console.log(`js hash: ${jsHash}`);
-
-    const { js, templateHash } = generateJs(vueId, inputFile, compileResult)
-
-    // Add JS Source file
-    inputFile.addJavaScript({
-      path: inputFile.getPathInPackage(),
-      data: js,
-      sourceMap: compileResult.map,
-      lazy: false,
-    });
 
     if (isDev) {
       cache = Cache.getCache(inputFile);

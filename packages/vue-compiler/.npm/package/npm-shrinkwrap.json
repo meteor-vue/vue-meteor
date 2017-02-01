@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "de-indent": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/de-indent/-/de-indent-1.0.2.tgz",
+      "from": "de-indent@>=1.0.2 <2.0.0"
+    },
+    "he": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/he/-/he-1.1.1.tgz",
+      "from": "he@>=1.1.0 <2.0.0"
+    },
+    "vue-template-compiler": {
+      "version": "2.1.10",
+      "resolved": "https://registry.npmjs.org/vue-template-compiler/-/vue-template-compiler-2.1.10.tgz",
+      "from": "vue-template-compiler@2.1.10"
+    },
+    "vue-template-es2015-compiler": {
+      "version": "1.5.0",
+      "resolved": "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.5.0.tgz",
+      "from": "vue-template-es2015-compiler@1.5.0"
+    }
+  }
+}

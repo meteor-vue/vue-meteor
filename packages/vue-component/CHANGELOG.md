@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.3 - 2017-02-01
+
+ - Relaxed vue-template-compiler into `akryum:vue-compiler`
+ - Fixed manually imported component files in production mode. Need an upstream fix for auto-imported components.
+
 ## 0.8.1 - 2017-01-04
 
  - Performance improvements and es2015 transpilation in templates for `.vue` files with `vue-template-es2015-compiler`.
