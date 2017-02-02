@@ -186,7 +186,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       path: inputFile.getPathInPackage(),
       data: js,
       sourceMap: compileResult.map,
-      lazy: true,
+      lazy: false,
     });
 
     // Style

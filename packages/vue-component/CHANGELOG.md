@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.4 - 2017-02-02
+
+ - Fixed [#101](https://github.com/Akryum/meteor-vue-component/issues/101) (for Meteor 1.4.2.4+)
+
 ## 0.8.3 - 2017-02-01
 
  - Relaxed vue-template-compiler into `akryum:vue-compiler`
