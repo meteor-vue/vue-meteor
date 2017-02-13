@@ -293,7 +293,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // Postcss
         let plugins = [];
         let postcssOptions = {
-          form: inputFilePath,
+          from: inputFilePath,
           to: inputFilePath,
           map: {
             inline: false,
