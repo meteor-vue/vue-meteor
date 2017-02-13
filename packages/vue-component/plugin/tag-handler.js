@@ -309,27 +309,23 @@ VueComponentTagHandler = class VueComponentTagHandler {
           }));
         }
 
-        // Modules
+        // CSS Modules
         let isAsync = false;
         if (styleTag.attribs.module) {
           const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : '';
-          const generateScopedName = (function () {
-            const scopedModuleName = moduleName ? `_${moduleName}` : '';
-            return function generateScopedName(name, filename, css) {
-              const path  = require('path');
-              const i     = css.indexOf('.' + name);
-              const line  = css.substr(0, i).split(/[\r\n]/).length;
-              const file  = path.basename(filename, '.css');
-
-              return `_${file}${scopedModuleName}_${line}_${name}`;
-            }
-          })();
+          const scopedModuleName = moduleName ? `_${moduleName}` : '';
           plugins.push(postcssModules({
             getJSON(cssFilename, json) {
               console.log('getjson')
               cssModules = { ...(cssModules || {}), ...json };
             },
-            generateScopedName,
+            generateScopedName(exportedName, filePath) {
+              const path  = require('path');
+              let sanitisedPath = path.relative(process.cwd(), filePath).replace(/.*\{}[/\\]/, '').replace(/.*\{.*?}/, 'packages').replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
+              const filename = path.basename(filePath).replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
+              sanitisedPath = sanitisedPath.replace(new RegExp(`_(${filename})$`), '__$1');
+              return `_${sanitisedPath}__${exportedName}`;
+            },
            }));
           isAsync = true;
         }
