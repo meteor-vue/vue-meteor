@@ -27,6 +27,7 @@ Package.registerBuildPlugin({
   npmDependencies: {
     'postcss': '5.0.21',
     'postcss-selector-parser': '2.0.0',
+    'postcss-modules': '0.6.4',
     'socket.io': '1.4.6',
     'async': '1.4.0',
     'lodash': '4.13.1',

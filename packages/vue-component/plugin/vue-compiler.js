@@ -607,6 +607,14 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
     js += `__vue_options__._scopeId = '${vueId}';`;
   }
 
+  // CSS Modules
+  if(compileResult.cssModules) {
+    console.log('adding css modules', JSON.stringify(compileResult.cssModules))
+    const modulesCode = `__vue_options__.computed = {\n $style: function() {\n return ${JSON.stringify(compileResult.cssModules)}\n }\n};\n`;
+    js += modulesCode;
+    console.log(modulesCode)
+  }
+
   // Package context
   js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
 

@@ -1,5 +1,6 @@
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
+import postcssModules from 'postcss-modules';
 import SourceMapMerger from 'source-map-merger';
 
 global._vue_js_cache = global._vue_js_cache || {};
@@ -245,6 +246,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
 
     // Styles
+    let cssModules;
     if(this.parts.style) {
       for (let styleTag of this.component.styles) {
         let css = styleTag.contents;
@@ -307,13 +309,55 @@ VueComponentTagHandler = class VueComponentTagHandler {
           }));
         }
 
+        // Modules
+        let isAsync = false;
+        if (styleTag.attribs.module) {
+          const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : '';
+          const generateScopedName = (function () {
+            const scopedModuleName = moduleName ? `_${moduleName}` : '';
+            return function generateScopedName(name, filename, css) {
+              const path  = require('path');
+              const i     = css.indexOf('.' + name);
+              const line  = css.substr(0, i).split(/[\r\n]/).length;
+              const file  = path.basename(filename, '.css');
+
+              return `_${file}${scopedModuleName}_${line}_${name}`;
+            }
+          })();
+          plugins.push(postcssModules({
+            getJSON(cssFilename, json) {
+              console.log('getjson')
+              cssModules = { ...(cssModules || {}), ...json };
+            },
+            generateScopedName,
+           }));
+          isAsync = true;
+        }
+
         // Autoprefixer
         if (styleTag.attribs.autoprefix !== 'off') {
           plugins.push(autoprefixer());
         }
 
         // Postcss result
-        let result = postcss(plugins).process(css, postcssOptions);
+        let result;
+        if (isAsync) {
+          const promise = new Promise((resolve, reject) => {
+            postcss(plugins).process(css, postcssOptions).then(function (result) {
+              resolve(result);
+            })
+            .catch(function(err){
+              console.error('got err')
+              console.error('got err')
+              reject(err)
+            });
+          });
+          result = promise.await();
+          // result = postcss(plugins).process(css, postcssOptions).await();
+        } else {
+          result = postcss(plugins).process(css, postcssOptions);
+        }
+
         css = result.css;
         cssMap = result.map;
 
@@ -329,6 +373,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       map,
       styles,
       template,
+      cssModules,
       hash,
     };
 
