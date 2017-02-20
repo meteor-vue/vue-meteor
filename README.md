@@ -1,6 +1,6 @@
 # Vue as a Meteor UI layer
 
-[![meteor](https://img.shields.io/badge/meteor-1.4.2.3-blue.svg)](https://meteor.com/)
+[![meteor](https://img.shields.io/badge/meteor-1.4.2.7-blue.svg)](https://meteor.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-green.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 **This project is in beta.**
