@@ -1,5 +1,6 @@
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
+import postcssModules from 'postcss-modules';
 import SourceMapMerger from 'source-map-merger';
 
 global._vue_js_cache = global._vue_js_cache || {};
@@ -245,6 +246,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     }
 
     // Styles
+    let cssModules;
     if(this.parts.style) {
       for (let styleTag of this.component.styles) {
         let css = styleTag.contents;
@@ -291,7 +293,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // Postcss
         let plugins = [];
         let postcssOptions = {
-          form: inputFilePath,
+          from: inputFilePath,
           to: inputFilePath,
           map: {
             inline: false,
@@ -307,13 +309,51 @@ VueComponentTagHandler = class VueComponentTagHandler {
           }));
         }
 
+        // CSS Modules
+        let isAsync = false;
+        if (styleTag.attribs.module) {
+          const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : '';
+          const scopedModuleName = moduleName ? `_${moduleName}` : '';
+          plugins.push(postcssModules({
+            getJSON(cssFilename, json) {
+              console.log('getjson')
+              cssModules = { ...(cssModules || {}), ...json };
+            },
+            generateScopedName(exportedName, filePath) {
+              const path  = require('path');
+              let sanitisedPath = path.relative(process.cwd(), filePath).replace(/.*\{}[/\\]/, '').replace(/.*\{.*?}/, 'packages').replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
+              const filename = path.basename(filePath).replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
+              sanitisedPath = sanitisedPath.replace(new RegExp(`_(${filename})$`), '__$1');
+              return `_${sanitisedPath}__${exportedName}`;
+            },
+           }));
+          isAsync = true;
+        }
+
         // Autoprefixer
         if (styleTag.attribs.autoprefix !== 'off') {
           plugins.push(autoprefixer());
         }
 
         // Postcss result
-        let result = postcss(plugins).process(css, postcssOptions);
+        let result;
+        if (isAsync) {
+          const promise = new Promise((resolve, reject) => {
+            postcss(plugins).process(css, postcssOptions).then(function (result) {
+              resolve(result);
+            })
+            .catch(function(err){
+              console.error('got err')
+              console.error('got err')
+              reject(err)
+            });
+          });
+          result = promise.await();
+          // result = postcss(plugins).process(css, postcssOptions).await();
+        } else {
+          result = postcss(plugins).process(css, postcssOptions);
+        }
+
         css = result.css;
         cssMap = result.map;
 
@@ -329,6 +369,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       map,
       styles,
       template,
+      cssModules,
       hash,
     };
 
