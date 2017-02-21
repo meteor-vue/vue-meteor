@@ -251,7 +251,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         let cssMap = null;
 
         // Lang
-        if (styleTag.attribs.lang !== undefined) {
+        if (styleTag.attribs.lang !== undefined && styleTag.attribs.lang !== 'css') {
           let lang = styleTag.attribs.lang;
           try {
             let compile = global.vue.lang[lang];
@@ -259,7 +259,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
               throwCompileError({
                 inputFile: this.inputFile,
                 tag: 'style',
-                charIndex: tag.tagStartIndex,
+                charIndex: styleTag.tagStartIndex,
                 action: 'compiling',
                 lang,
                 message: `Can't find handler for lang ${lang}, did you install it?`,
