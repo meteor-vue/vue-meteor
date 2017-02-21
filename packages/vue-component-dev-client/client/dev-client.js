@@ -82,10 +82,20 @@ if(!Response.prototype.setEncoding) {
 }
 
 Meteor.startup(function() {
+
   // Dev client
   let port = __meteor_runtime_config__.VUE_DEV_SERVER_PORT || 3003;
-  console.log('[HMR] Dev client port', port);
-  let _socket = require('socket.io-client')(`${Meteor.absoluteUrl().replace(/:\d+\//gi, '')}:${port}`);
+  let devUrl =  __meteor_runtime_config__.VUE_DEV_SERVER_URL || null
+
+  if (devUrl){
+    console.log('[HMR] Dev client URL', devUrl);
+  } else {
+    devUrl = `${Meteor.absoluteUrl().replace(/:\d+\//gi, '')}:${port}`
+    console.log('[HMR] Dev client port', port);
+  }
+
+  // NOTE: Socket lib don't allow mix HTTP and HTTPS servers URLs on client!
+  let _socket = require('socket.io-client')(devUrl);
   window.__dev_client__ = _socket;
 
   _socket.on('connect', function() {
