@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.6 - 2017-02-21
+
+ - CSS Modules: New `<style>` attribute `module` & `$style` component property (see [PR](https://github.com/Akryum/meteor-vue-component/pull/117)). Thanks @nathantreid
+ - Better Meteor port detection and new `VUE_DEV_SERVER_URL` env variable (see [PR](https://github.com/Akryum/meteor-vue-component/pull/100)). Thanks @MartinBucko
+
+## 0.8.5
+
+ - Initial `lang="css"` support.
+
 ## 0.8.4 - 2017-02-02
 
  - Fixed [#101](https://github.com/Akryum/meteor-vue-component/issues/101) (for Meteor 1.4.2.4+)
