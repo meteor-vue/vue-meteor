@@ -7,9 +7,9 @@ It allows you to write your components in [this format](https://vuejs.org/guide/
 
 ## Installation
 
-
-    meteor add akryum:vue akryum:vue-component
-
+```
+meteor add akryum:vue-component
+```
 
 ## Usage
 
