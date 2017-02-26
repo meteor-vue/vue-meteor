@@ -1,4 +1,4 @@
-<img src="vue+meteor.svg"/>
+<p align="center"><img src="./vue%2Bmeteor.png"></p>
 
 [![meteor](https://img.shields.io/badge/meteor-1.4.3.1-blue.svg)](https://meteor.com/)
 [![vue1](https://img.shields.io/badge/vue-1.x-green.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
