@@ -37,9 +37,8 @@ const vueVersion = getVueVersion();
 let templateCompiler, transpile;
 
 if(vueVersion === 2) {
-  const VueCompiler = require('meteor/akryum:vue-compiler').default
-  templateCompiler = VueCompiler.compile;
-  transpile = VueCompiler.transpile;
+  templateCompiler = require('vue-template-compiler');
+  transpile = require('vue-template-es2015-compiler');
 }
 
 function toFunction (code) {

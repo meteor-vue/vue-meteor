@@ -141,10 +141,15 @@ Meteor.startup(function() {
     let needsReload = false;
     if(!error) {
       console.log('[HMR] Reloading ' + path);
-      if(vueVersion === 1) {
-        needsReload = VueHotReloadApi.update(hash, result.default, template);
-      } else if(vueVersion === 2) {
-        needsReload = VueHotReloadApi.reload(hash, result.default, template);
+      try {
+        if(vueVersion === 1) {
+          needsReload = VueHotReloadApi.update(hash, result.default, template);
+        } else if(vueVersion === 2) {
+          needsReload = VueHotReloadApi.reload(hash, result.default, template);
+        }
+      } catch (e) {
+        console.error(e)
+        error = true
       }
     }
 
