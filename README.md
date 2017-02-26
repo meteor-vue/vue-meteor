@@ -1,7 +1,11 @@
-<p align="center"><img src="./vue%2Bmeteor.png"></p>
+<p align="center"><img height="180" src="./vue%2Bmeteor.png"></p>
 
-[![meteor](https://img.shields.io/badge/meteor-1.4.3.1-blue.svg)](https://meteor.com/)
-[![vue1](https://img.shields.io/badge/vue-1.x-green.svg) ![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+<p align="center">
+<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.4.3.1-blue.svg"/></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.2.1-brightgreen.svg"/></a>
+</p>
+
+<br/>
 
 **This project is in beta.**
 
