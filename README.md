@@ -28,7 +28,7 @@ For more detailed documentations, see the [usage section](#usage) below.
 - [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
 - [Vuex example project](https://github.com/Akryum/meteor-vuex-example)
 
-## Packages Links
+## Recommended Packages Links
 
 - [:package: `vue-meteor-tracker`](https://github.com/Akryum/vue-meteor-tracker) (meteor tracker integration)
 - [:package: `arkyum:vue-component`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component) (vue component files)
