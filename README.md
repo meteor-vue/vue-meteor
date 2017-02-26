@@ -30,19 +30,19 @@ For more detailed documentations, see the [usage section](#usage) below.
 
 ## Usage
 
-### **Recommended**: New project with Vue 2.x and without Blaze
+### **Recommended**: New project with Vue 2.x and without Blaze ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Create a new project without blaze, using Vue 2.x:
 
 See the [simple example project](https://github.com/Akryum/meteor-vue2-example).
 
-### New project with Vue 1.x and without blaze
+### New project with Vue 1.x and without blaze ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Create a new project without blaze, using Vue 1.x:
 
 See the [simple example project](https://github.com/Akryum/meteor-vue-example).
 
-### New project with blaze
+### New project with blaze ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 See the [blaze example project](https://github.com/Akryum/meteor-vue-blaze).
 
