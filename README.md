@@ -9,7 +9,7 @@
 
 **This project is currently in beta.**
 
-vue+meteor is a set of packages to help you awesome apps quickly and efficiently with two technologies:
+vue+meteor is a set of packages to help you create awesome apps quickly and efficiently with two great web technologies:
 
 - [vuejs](http://vuejs.org/) is the frontend
 - [meteor](http://meteor.com/) is the platform (client, server, database, network)
