@@ -14,7 +14,7 @@ function getVueVersion() {
   const packageFile = path.join(CWD, 'package.json');
 
   if (fs.existsSync(packageFile)) {
-    const pkg = JSON.parse(fs.readFileSync(packageFile).toString());
+    const pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8'));
 
     // Override
     if(pkg.meteor && typeof pkg.meteor.vueVersion !== 'undefined') {
