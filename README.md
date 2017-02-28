@@ -1,4 +1,4 @@
-<p align="center"><img height="180" src="./vue%2Bmeteor.png"></p>
+<p align="center"><img width="522" height="180" src="./vue%2Bmeteor.png"></p>
 
 <p align="center">
 <a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.4.3.1-blue.svg"/></a>
