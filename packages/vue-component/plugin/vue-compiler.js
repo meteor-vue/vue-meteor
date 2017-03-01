@@ -14,7 +14,12 @@ function getVueVersion() {
   const packageFile = path.join(CWD, 'package.json');
 
   if (fs.existsSync(packageFile)) {
-    const pkg = JSON.parse(fs.readFileSync(packageFile).toString());
+    const pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8'));
+
+    // Override
+    if(pkg.meteor && typeof pkg.meteor.vueVersion !== 'undefined') {
+      return parseInt(pkg.meteor.vueVersion);
+    }
 
     const vue = pkg.dependencies && pkg.dependencies.vue
     || pkg.devDependencies && pkg.devDependencies.vue
@@ -23,7 +28,7 @@ function getVueVersion() {
     if(vue) {
       const reg = /\D*(\d).*/gi;
       const result = reg.exec(vue);
-      if(result.length >= 2) {
+      if(result && result.length >= 2) {
         return parseInt(result[1]);
       }
     }
