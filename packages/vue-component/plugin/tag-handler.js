@@ -206,7 +206,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             throwCompileError({
               inputFile: this.inputFile,
               tag: 'template',
-              charIndex: tag.tagStartIndex,
+              charIndex: templateTag.tagStartIndex,
               action: 'compiling',
               lang,
               message: `Can't find handler for lang ${lang}, did you install it?`,
@@ -223,7 +223,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           throwCompileError({
             inputFile: this.inputFile,
             tag: 'template',
-            charIndex: tag.tagStartIndex,
+            charIndex: templateTag.tagStartIndex,
             action: 'compiling',
             lang,
             error: e,
