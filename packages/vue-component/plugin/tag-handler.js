@@ -338,18 +338,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // Postcss result
         let result;
         if (isAsync) {
-          const promise = new Promise((resolve, reject) => {
-            postcss(plugins).process(css, postcssOptions).then(function (result) {
-              resolve(result);
-            })
-            .catch(function(err){
-              console.error('got err')
-              console.error('got err')
-              reject(err)
-            });
-          });
-          result = promise.await();
-          // result = postcss(plugins).process(css, postcssOptions).await();
+          result = Promise.await(postcss(plugins).process(css, postcssOptions));
         } else {
           result = postcss(plugins).process(css, postcssOptions);
         }
