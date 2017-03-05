@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import sass from 'node-sass';
 import {Meteor} from 'meteor/meteor';
+import meteorProjectPath from 'meteor-project-path';
 
 function resolveImport(dependencyManager) {
   return function (url, prev, done) {
@@ -15,7 +16,7 @@ function resolveImport(dependencyManager) {
     /*} else if (url.indexOf('{') === 0) {
       resolvedFilename = decodeFilePath(url);*/
     } else if (url.indexOf('/') === 0) {
-      resolvedFilename = process.cwd() + url;
+      resolvedFilename = meteorProjectPath + url;
     } else {
       let currentDirectory = path.dirname(this.options.outFile);
       resolvedFilename = path.resolve(currentDirectory, url);
