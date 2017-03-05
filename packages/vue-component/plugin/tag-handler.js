@@ -312,22 +312,53 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // CSS Modules
         let isAsync = false;
         if (styleTag.attribs.module) {
-          const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : '';
-          const scopedModuleName = moduleName ? `_${moduleName}` : '';
-          plugins.push(postcssModules({
-            getJSON(cssFilename, json) {
-              console.log('getjson')
-              cssModules = { ...(cssModules || {}), ...json };
-            },
-            generateScopedName(exportedName, filePath) {
-              const path  = require('path');
-              let sanitisedPath = path.relative(process.cwd(), filePath).replace(/.*\{}[/\\]/, '').replace(/.*\{.*?}/, 'packages').replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
-              const filename = path.basename(filePath).replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
-              sanitisedPath = sanitisedPath.replace(new RegExp(`_(${filename})$`), '__$1');
-              return `_${sanitisedPath}__${exportedName}`;
-            },
-           }));
-          isAsync = true;
+          if (global.vue.cssModules) {
+            try {
+              let compile = global.vue.cssModules;
+              //console.log(`Compiling <style> css modules ${lang}...`);
+              let result = compile({
+                source: css,
+                map: cssMap,
+                inputFile: this.inputFile,
+                dependencyManager: this.dependencyManager,
+                tag: styleTag,
+              });
+              // console.log('Css result', result);
+              css = result.css;
+              cssMap = result.map;
+              if (result.cssModules) {
+                cssModules = { ...(cssModules || {}), ...result.cssModules };
+              }
+              if (result.js) {
+                js += result.js;
+              }
+            } catch (e) {
+              throwCompileError({
+                inputFile: this.inputFile,
+                tag: 'style',
+                charIndex: styleTag.tagStartIndex,
+                action: 'compiling css modules',
+                error: e,
+                showError: true
+              });
+            }
+          } else {
+            const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : '';
+            const scopedModuleName = moduleName ? `_${moduleName}` : '';
+            plugins.push(postcssModules({
+              getJSON(cssFilename, json) {
+                cssModules = { ...(cssModules || {}), ...json };
+              },
+              generateScopedName(exportedName, filePath) {
+                const path = require('path');
+                let sanitisedPath = path.relative(process.cwd(), filePath).replace(/.*\{}[/\\]/, '').replace(/.*\{.*?}/, 'packages').replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
+                const filename = path.basename(filePath).replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
+                sanitisedPath = sanitisedPath.replace(new RegExp(`_(${filename})$`), '__$1');
+                return `_${sanitisedPath}__${exportedName}`;
+              },
+            }));
+            isAsync = true;
+          }
         }
 
         // Autoprefixer
