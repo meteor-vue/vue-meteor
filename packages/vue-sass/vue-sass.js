@@ -9,6 +9,7 @@ import {Meteor} from 'meteor/meteor';
 function resolveImport(dependencyManager) {
   return function (url, prev, done) {
     let resolvedFilename;
+    url = url.replace(/^["']?(.*?)["']?$/, '$1');
     if (url.indexOf('~') === 0) {
       resolvedFilename = url.substr(1);
     /*} else if (url.indexOf('{') === 0) {
