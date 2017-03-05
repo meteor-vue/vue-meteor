@@ -14,6 +14,8 @@ function resolveImport(dependencyManager) {
       resolvedFilename = url.substr(1);
     /*} else if (url.indexOf('{') === 0) {
       resolvedFilename = decodeFilePath(url);*/
+    } else if (url.indexOf('/') === 0) {
+      resolvedFilename = process.cwd() + url;
     } else {
       let currentDirectory = path.dirname(this.options.outFile);
       resolvedFilename = path.resolve(currentDirectory, url);
