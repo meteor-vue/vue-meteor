@@ -198,7 +198,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       template = templateTag.contents;
 
       // Lang
-      if (templateTag.attribs.lang !== undefined) {
+      if (templateTag.attribs.lang !== undefined && templateTag.attribs.lang !== "html") {
         let lang = templateTag.attribs.lang;
         try {
           let compile = global.vue.lang[lang];
