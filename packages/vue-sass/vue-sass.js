@@ -5,20 +5,25 @@ import path from 'path';
 import fs from 'fs';
 import sass from 'node-sass';
 import {Meteor} from 'meteor/meteor';
+import meteorProjectPath from 'meteor-project-path';
 
 function resolveImport(dependencyManager) {
   return function (url, prev, done) {
     let resolvedFilename;
+    url = url.replace(/^["']?(.*?)["']?$/, '$1');
     if (url.indexOf('~') === 0) {
       resolvedFilename = url.substr(1);
     /*} else if (url.indexOf('{') === 0) {
       resolvedFilename = decodeFilePath(url);*/
+    } else if (url.indexOf('/') === 0) {
+      resolvedFilename = meteorProjectPath + url;
     } else {
       let currentDirectory = path.dirname(this.options.outFile);
       resolvedFilename = path.resolve(currentDirectory, url);
     }
 
-    if (!fs.existsSync(resolvedFilename)) {
+    resolvedFilename = discoverImportPath(resolvedFilename);
+    if (resolvedFilename === null) {
       done(new Error('Unknown import (file not found): ' + url));
     } else {
       dependencyManager.addDependency(resolvedFilename);
@@ -28,6 +33,26 @@ function resolveImport(dependencyManager) {
       });
     }
   };
+}
+
+function discoverImportPath(importPath) {
+  const potentialPaths = [importPath];
+  const potentialFileExtensions = ["scss", "sass"];
+
+  if (!path.extname(importPath)) {
+    potentialFileExtensions.forEach(extension => potentialPaths.push(`${importPath}.${extension}`));
+  }
+  if (path.basename(importPath)[0] !== '_') {
+    [].concat(potentialPaths).forEach(potentialPath => potentialPaths.push(`${path.dirname(potentialPath)}/_${path.basename(potentialPath)}`));
+  }
+
+  for (let i = 0, potentialPath = potentialPaths[i]; i < potentialPaths.length; i++, potentialPath = potentialPaths[i]) {
+    if (fs.existsSync(potentialPaths[i]) && fs.lstatSync(potentialPaths[i]).isFile()) {
+      return potentialPath;
+    }
+  }
+
+  return null;
 }
 
 function decodeFilePath(filePath) {
