@@ -4,19 +4,16 @@ global.vue.lang = global.vue.lang || {}
 import path from 'path';
 import fs from 'fs';
 import sass from 'node-sass';
-import {Meteor} from 'meteor/meteor';
-import meteorProjectPath from 'meteor-project-path';
+import { Meteor } from 'meteor/meteor';
 
 function resolveImport(dependencyManager) {
   return function (url, prev, done) {
     let resolvedFilename;
     url = url.replace(/^["']?(.*?)["']?$/, '$1');
-    if (url.indexOf('~') === 0) {
+    if (url.indexOf('~') === 0 || url.indexOf('/') === 0) {
       resolvedFilename = url.substr(1);
     /*} else if (url.indexOf('{') === 0) {
       resolvedFilename = decodeFilePath(url);*/
-    } else if (url.indexOf('/') === 0) {
-      resolvedFilename = meteorProjectPath + url;
     } else {
       let currentDirectory = path.dirname(this.options.outFile);
       resolvedFilename = path.resolve(currentDirectory, url);
