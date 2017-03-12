@@ -44,5 +44,5 @@ Package.onUse(function(api) {
   api.versionsFrom('1.4.2');
   api.use('isobuild:compiler-plugin@1.0.0');
   api.use('akryum:vue-component-dev-server@0.0.5');
-  api.use('akryum:vue-component-dev-client@0.2.4');
+  api.use('akryum:vue-component-dev-client@0.2.6');
 });
