@@ -233,16 +233,17 @@ VueComponentTagHandler = class VueComponentTagHandler {
       }
 
       // Tag hash (for scoping)
-      let result;
-      template = template.replace(tagReg, (match, p1, p2, offset) => {
-        let attributes = p2;
-        if (!attributes) {
-          return match.replace(p1, p1 + ` ${hash}`);
-        } else {
-          attributes += ` ${hash}`;
-          return match.replace(p2, attributes);
-        }
-      });
+      if (vueVersion === 1) {
+        template = template.replace(tagReg, (match, p1, p2, offset) => {
+          let attributes = p2;
+          if (!attributes) {
+            return match.replace(p1, p1 + ` ${hash}`);
+          } else {
+            attributes += ` ${hash}`;
+            return match.replace(p2, attributes);
+          }
+        });
+      }
     }
 
     // Styles

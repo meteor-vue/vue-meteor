@@ -6,39 +6,6 @@ import { Meteor } from 'meteor/meteor';
 import { EventEmitter } from 'events';
 import _ from 'lodash';
 
-IGNORE_FILE = '.vueignore';
-CWD = path.resolve('./');
-
-
-function getVueVersion() {
-  const packageFile = path.join(CWD, 'package.json');
-
-  if (fs.existsSync(packageFile)) {
-    const pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8'));
-
-    // Override
-    if(pkg.meteor && typeof pkg.meteor.vueVersion !== 'undefined') {
-      return parseInt(pkg.meteor.vueVersion);
-    }
-
-    const vue = pkg.dependencies && pkg.dependencies.vue
-    || pkg.devDependencies && pkg.devDependencies.vue
-    || pkg.peerDependencies && pkg.peerDependencies.vue;
-
-    if(vue) {
-      const reg = /\D*(\d).*/gi;
-      const result = reg.exec(vue);
-      if(result && result.length >= 2) {
-        return parseInt(result[1]);
-      }
-    }
-  }
-
-  return 1;
-}
-
-const vueVersion = getVueVersion();
-
 let templateCompiler, transpile;
 
 if(vueVersion === 2) {
@@ -176,7 +143,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
   addCompileResult(inputFile, compileResult) {
     const inputFilePath = inputFile.getPathInPackage();
-    const vueId = 'data-v-' + FileHash(inputFile);
+    const vueId = compileResult.hash;
     const isDev = isDevelopment();
 
     let jsHash = Hash(compileResult.code);
@@ -353,7 +320,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
     encoding: 'utf8'
   });
   let compileResult = compileOneFileWithContents(inputFile, contents, parts, babelOptions);
-  let vueId = 'data-v-' + FileHash(inputFile);
+  let vueId = compileResult.hash;
 
   // CSS
   let css = '', cssHash = '';
@@ -585,7 +552,9 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
       // Template option
       js += `__vue_options__.template = __vue_template__;\n`;
     } else if(vueVersion === 2) {
-      const templateCompilationResult = templateCompiler.compile(compileResult.template);
+      const templateCompilationResult = templateCompiler.compile(compileResult.template, {
+        id: vueId,
+      });
       if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
         console.error(templateCompilationResult.errors);
         js += `__vue_options__.render = function(){};\n`;
