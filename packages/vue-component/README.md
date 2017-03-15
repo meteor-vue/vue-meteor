@@ -148,7 +148,7 @@ node_modules/
 
 Most of the time, you need to ignore the compilation of Vue files inside the `node_modules` directory.
 
-Add a .vueignore in the project root with the following content:
+Add a `.vueignore` file in the project root with the following content:
 
 ```
 node_modules/
