@@ -144,6 +144,26 @@ For example, you can add the following `.vueignore` file to your app inorder to 
 node_modules/
 ```
 
+### Using Vue npm packages
+
+Most of the time, you need to ignore the compilation of Vue files inside the `node_modules` directory.
+
+Add a .vueignore in the project root with the following content:
+
+```
+node_modules/
+```
+
+The npm packages should have distribution/compiled files (or try to tell their authors if they are missing). You should directly import these if you have any issue.
+
+For example, to use the [keen-ui](https://github.com/JosephusPaye/keen-ui) package, install the plugin in your app using the dist files:
+
+```javascript
+import 'keen-ui/dist/keen-ui.min.css'
+import KeenUI from 'keen-ui/dist/keen-ui.min.js'
+Vue.use(KeenUI)
+```
+
 ---
 
 ## Next steps
