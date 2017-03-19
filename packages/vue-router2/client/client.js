@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 // scrollBehavior:
 // - only available in html5 history mode
@@ -31,38 +31,40 @@ export const nativeScrollBehavior = (to, from, savedPosition) => {
   }
 }
 
-export class Router {
+export class RouterFactory {
   // Vue-router constructor options
-  constructor(options) {
-    this.options = options;
-    this.options.routes = options.routes || [];
+  constructor (options) {
+    this.options = options
+    this.options.routes = options.routes || []
   }
 
   // The order of the routes matters
-  addRoutes(array) {
+  addRoutes (array) {
     array.forEach(route => {
-      this.addRoute(route);
-    });
+      this.addRoute(route)
+    })
   }
 
-  addRoute(route) {
-    this.options.routes.push(route);
+  addRoute (route) {
+    this.options.routes.push(route)
   }
 
-  start() {
+  create () {
     // Callbacks
-    Router._cbs.sort((a, b) => b.priority - a.priority).forEach(cb => cb(this));
+    const cbs = RouterFactory._cbs || []
+    cbs.sort((a, b) => b.priority - a.priority).forEach(cb => cb(this))
 
     // Real vue-router instance
-    return this.router = new VueRouter(this.options);
+    this.router = new VueRouter(this.options)
+    return this.router
   }
 
   // Callbacks with higher priority will be called before
-  static configure(cb, priority) {
-    if(!Router._cbs) {
-      Router._cbs = [];
+  static configure (cb, priority) {
+    if (!RouterFactory._cbs) {
+      RouterFactory._cbs = []
     }
-    cb.priority = priority || 0;
-    Router._cbs.push(cb);
+    cb.priority = priority || 0
+    RouterFactory._cbs.push(cb)
   }
 }

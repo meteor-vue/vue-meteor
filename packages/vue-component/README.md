@@ -72,6 +72,32 @@ a {
 </style>
 ```
 
+### CSS Modules
+
+As an alternative to scoped styles, you can use CSS modules to scope your CSS to your components by adding the `module` attribute to any `<style>` tag in your component file and accessing the styles via the `$style` property:
+```html
+<style module>
+/* Will only be applied to this component <a> elements */
+.red {
+   color: red;
+}
+</style>
+
+<template>
+  <div :class="$style.red">Red Text</div>
+</template>
+
+<script>
+  export default {
+    created() {
+      console.log(this.$style.red);
+    }
+  }
+</script>
+```
+
+Note: composing from other files is not supported by the built-in CSS modules processor. See the community packages.
+
 ### Language packages
 
 Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>`, `<script>` or `<style>` tags.
@@ -91,9 +117,14 @@ Official packages for `<style>` tag:
  - [akryum:vue-stylus](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-stylus)
 
 Community packages welcomed (add a your package with a PR)!
+
 Community packages for `<script>` tag:
+
  - [nathantreid:vue-typescript](https://github.com/nathantreid/meteor-vue-typescript)
 
+Community packages for `<style>` tag:
+
+ - [nathantreid:vue-css-modules](https://github.com/nathantreid/vue-css-modules) enables interop with nathantreid:css-modules, including support for composing from other files.
 
 ### Manual import
 
@@ -145,6 +176,26 @@ For example, you can add the following `.vueignore` file to your app inorder to 
 
 ```
 node_modules/
+```
+
+### Using Vue npm packages
+
+Most of the time, you need to ignore the compilation of Vue files inside the `node_modules` directory.
+
+Add a `.vueignore` file in the project root with the following content:
+
+```
+node_modules/
+```
+
+The npm packages should have distribution/compiled files (or try to tell their authors if they are missing). You should directly import these if you have any issue.
+
+For example, to use the [keen-ui](https://github.com/JosephusPaye/keen-ui) package, install the plugin in your app using the dist files:
+
+```javascript
+import 'keen-ui/dist/keen-ui.min.css'
+import KeenUI from 'keen-ui/dist/keen-ui.min.js'
+Vue.use(KeenUI)
 ```
 
 ---

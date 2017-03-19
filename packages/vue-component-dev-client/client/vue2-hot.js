@@ -1,4 +1,5 @@
 var Vue // late bind
+var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
 var installed = false
 var isBrowserify = false
@@ -8,7 +9,8 @@ exports.install = function (vue, browserify) {
   if (installed) return
   installed = true
 
-  Vue = vue
+  Vue = vue.__esModule ? vue.default : vue
+  version = Vue.version.split('.').map(Number)
   isBrowserify = browserify
 
   // compat with < 2.0.0-alpha.7
@@ -16,7 +18,7 @@ exports.install = function (vue, browserify) {
     initHookName = 'init'
   }
 
-  exports.compatible = Number(Vue.version.split('.')[0]) >= 2
+  exports.compatible = version[0] >= 2
   if (!exports.compatible) {
     console.warn(
       '[HMR] You are using a version of vue-hot-reload-api that is ' +
@@ -84,9 +86,12 @@ function injectHook (options, name, hook) {
 
 function tryWrap (fn) {
   return function (id, arg) {
-    try { fn(id, arg) } catch (e) {
+    try {
+      return fn(id, arg)
+    } catch (e) {
       console.error(e)
       console.warn('Something went wrong during Vue component hot-reload. Full reload required.')
+      throw e
     }
   }
 }
@@ -114,12 +119,14 @@ exports.reload = tryWrap(function (id, options) {
     // temporary global mixin strategy used in < 2.0.0-alpha.6
     newCtor.release()
   }
+  var needsReload = false
   record.instances.slice().forEach(function (instance) {
-    if (instance.$parent) {
-      instance.$parent.$forceUpdate()
+    if (instance.$vnode && instance.$vnode.context) {
+      instance.$vnode.context.$forceUpdate()
     } else {
       console.warn('Root or manually mounted instance modified. Full reload required.')
-      return true;
+      needsReload = true;
     }
   });
+  return needsReload
 })

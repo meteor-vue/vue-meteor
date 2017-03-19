@@ -5,6 +5,8 @@ import hash from 'hash-sum';
 import sourceMap from 'source-map';
 import generateIdentityMap from 'generate-source-map';
 
+Config = {}
+
 FileHash = function(inputFile) {
   let filePath = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
   return Hash(filePath);
@@ -13,6 +15,38 @@ FileHash = function(inputFile) {
 Hash = function(text) {
   return hash(text)
 }
+
+IGNORE_FILE = '.vueignore';
+CWD = path.resolve('./');
+
+function getVueVersion() {
+  const packageFile = path.join(CWD, 'package.json');
+
+  if (fs.existsSync(packageFile)) {
+    const pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8'));
+
+    // Override
+    if(pkg.meteor && typeof pkg.meteor.vueVersion !== 'undefined') {
+      return parseInt(pkg.meteor.vueVersion);
+    }
+
+    const vue = pkg.dependencies && pkg.dependencies.vue
+    || pkg.devDependencies && pkg.devDependencies.vue
+    || pkg.peerDependencies && pkg.peerDependencies.vue;
+
+    if(vue) {
+      const reg = /\D*(\d).*/gi;
+      const result = reg.exec(vue);
+      if(result && result.length >= 2) {
+        return parseInt(result[1]);
+      }
+    }
+  }
+
+  return 1;
+}
+
+vueVersion = getVueVersion();
 
 normalizeCarriageReturns = function(contents, str = "\n") {
   return contents.replace(rnReg, str).replace(rReg, str);

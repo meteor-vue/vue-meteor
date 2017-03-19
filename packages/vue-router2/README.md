@@ -16,41 +16,43 @@ See the [example here](https://github.com/Akryum/meteor-vue2-example-routing).
 
 ### Router options
 
-First, let's create our router:
+With this package, we will not directly configure the `router` instance, but will use a factory instead. This is to easy the definition of routes regarding how Meteor build files (especially in a large project).
+
+First, let's create our router factory:
 
 ```javascript
 /* /client/client.js */
 
-// Import the router
-import {Router, nativeScrollBehavior} from 'meteor/akryum:vue-router2';
+// Import the router factory
+import { RouterFactory, nativeScrollBehavior } from 'meteor/akryum:vue-router2'
 
 // Create router instance
-const router = new Router({
+const routerFactory = new RouterFactory({
   mode: 'history',
   scrollBehavior: nativeScrollBehavior,
-});
+})
 ```
 
-When you create the router instance, you can pass `options` that allow you to customize the router behavior ([more info](http://router.vuejs.org/en/api/options.html)).
+When you create the router factory, you can pass router `options` that allows you to customize the router behavior ([more info](http://router.vuejs.org/en/api/options.html)).
 
 ### Route definition
 
-In your client, add some routes with the `Router.configure()` method (for more info about route definition, check the [vue-router documentation](http://router.vuejs.org/en/essentials/nested-routes.html)):
+In your client, add some routes with the `RouterFactory.configure()` method (for more info about route definition, check the [vue-router documentation](http://router.vuejs.org/en/essentials/nested-routes.html)):
 
 ```javascript
 /* /client/routes.js */
 
 // Import the router
-import {Router} from 'meteor/akryum:vue-router2';
+import { RouterFactory } from 'meteor/akryum:vue-router2'
 
 // Components
-import Home from '/imports/ui/Home.vue';
-import Forum from '/imports/ui/Forum.vue';
-import Apollo from '/imports/ui/Apollo.vue';
+import Home from '/imports/ui/Home.vue'
+import Forum from '/imports/ui/Forum.vue'
+import Apollo from '/imports/ui/Apollo.vue'
 
-Router.configure(router => {
+RouterFactory.configure(factory => {
   // Simple routes
-  router.addRoutes([
+  factory.addRoutes([
     {
       path: '/',
       name: 'home',
@@ -66,13 +68,13 @@ Router.configure(router => {
       name: 'apollo',
       component: Apollo,
     },
-  ]);
-});
+  ])
+})
 ```
 
 **Attention! The order of the routes matters during the route matching!**
 
-The callbacks you pass to the `Router.configure()` calls will be called before the router is started, regardless of the file load order.
+The callbacks you pass to the `RouterFactory.configure()` calls will be called before the router is started, regardless of the file load order.
 
 You can pass a second integer argument `priority`, that changes the order in which the callbacks are called to add routes. Callbacks with higher priority will be called before the others. The default priority is `0`.
 
@@ -170,20 +172,20 @@ To add a 'not found' page, add a `*` route in your client code:
 /* /client/routes.js */
 
 // Import the router
-import {Router} from 'meteor/akryum:vue-router';
+import { RouterFactory } from 'meteor/akryum:vue-router';
 
 // Not found
 import NotFound from '/imports/ui/NotFound.vue';
 
-Router.configure(router => {
-  router.addRoute({
+RouterFactory.configure(factory => {
+  factory.addRoute({
     path: '*',
     component: NotFound,
   });
 }, -1);
 ```
 
-*Note that we use a priority of `-1`, so this route is added last. If we don't do that, there is a chance that this route will be first and then will match immediatly: the user will be greeted by a 'not found' page everytime he loads the app!*
+*Note that we use a priority of `-1`, so this route is added last. If we don't do that, there is a chance that this route will be first and then will match immediately: the user will be greeted by a 'not found' page every time he loads the app!*
 
 ### Starting the router
 
@@ -197,10 +199,13 @@ import AppLayout from '/imports/ui/AppLayout.vue';
 
 // App start
 Meteor.startup(() => {
-  // Start the router
+  // Create the router instance
+  const router = routerFactory.create()
+
+  // Start the Vue app
   new Vue({
-    router: router.start(),
-    render: h => h(AppLayout),
+    router,
+    ...AppLayout,
   }).$mount('app');
 });
 
@@ -208,7 +213,7 @@ Meteor.startup(() => {
 
 **If you put your routes files in the `/imports` folder, you need to import them manually.**
 
-To start the router, use the `router.start()` method and pass the result to a Vue instance with the `router` option.
+To start the router, use the `routerFactory.create()` method and pass the result to a Vue instance with the `router` option.
 
 ### Fast-render
 

@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-sass',
-  version: '0.0.4',
+  version: '0.0.6',
   summary: 'Add sass and scss support for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -15,7 +15,8 @@ Package.registerBuildPlugin({
       'vue-sass.js'
   ],
   npmDependencies: {
-    'node-sass': '3.7.0'
+    'node-sass': '3.7.0',
+    'meteor-project-path': '0.0.1'
   }
 });
 
