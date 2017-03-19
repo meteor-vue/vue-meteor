@@ -98,11 +98,6 @@ As an alternative to scoped styles, you can use CSS modules to scope your CSS to
 
 Note: composing from other files is not supported by the built-in CSS modules processor. See the community packages.
 
-Community packages:
-
-- [nathantreid:vue-css-modules](https://github.com/nathantreid/vue-css-modules) enables interop with nathantreid:css-modules, including support for composing from other files.
-
-
 ### Language packages
 
 Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>`, `<script>` or `<style>` tags.
@@ -122,6 +117,9 @@ Official packages for `<style>` tag:
  - [akryum:vue-stylus](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-stylus)
 
 Community packages welcomed (add a your package with a PR)!
+Community packages for `<style>` tag:
+
+ - [nathantreid:vue-css-modules](https://github.com/nathantreid/vue-css-modules) enables interop with nathantreid:css-modules, including support for composing from other files.
 
 ### Manual import
 
