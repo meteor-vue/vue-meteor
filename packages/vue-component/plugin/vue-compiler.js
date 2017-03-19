@@ -613,7 +613,6 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
 
   // CSS Modules
   if(compileResult.cssModules) {
-    console.log('adding css modules', JSON.stringify(compileResult.cssModules))
     const modulesCode = '__vue_options__.computed = __vue_options__.computed || {};\n' +
      `__vue_options__.computed.$style = function() {\n return ${JSON.stringify(compileResult.cssModules)}\n};\n`;
     js += modulesCode;
