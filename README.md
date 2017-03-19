@@ -140,7 +140,7 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Easy state management with vuex integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
  - [x] Use Blaze templates in your vue app ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
  - [x] `module` attribute on `<style>` in .vue files
- - [ ] *Typescript official integration in .vue files*
+ - [x] Typescript support in .vue files
  - [ ] *Server-side rendering (Vue 2.x)*
  - [ ] *`src` attribute support in `.vue` files*
 
