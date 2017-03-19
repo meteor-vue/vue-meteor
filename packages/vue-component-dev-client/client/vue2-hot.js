@@ -94,11 +94,9 @@ function tryWrap (fn) {
 
 exports.rerender = tryWrap(function (id, options) {
   var record = map[id]
-  console.log(id, record, map)
   if (typeof options === 'function') {
     options = options.options
   }
-  console.log(options)
   record.Ctor.options.render = options.render
   record.Ctor.options.staticRenderFns = options.staticRenderFns
   record.instances.slice().forEach(function (instance) {
