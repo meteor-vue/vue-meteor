@@ -72,6 +72,37 @@ a {
 </style>
 ```
 
+### CSS Modules
+
+As an alternative to scoped styles, you can use CSS modules to scope your CSS to your components by adding the `module` attribute to any `<style>` tag in your component file and accessing the styles via the `$style` property:
+```html
+<style module>
+/* Will only be applied to this component <a> elements */
+.red {
+   color: red;
+}
+</style>
+
+<template>
+  <div :class="$style.red">Red Text</div>
+</template>
+
+<script>
+  export default {
+    created() {
+      console.log(this.$style.red);
+    }
+  }
+</script>
+```
+
+Note: composing from other files is not supported by the built-in CSS modules processor. See the community packages.
+
+Community packages:
+
+- [nathantreid:vue-css-modules](https://github.com/nathantreid/vue-css-modules) enables interop with nathantreid:css-modules, including support for composing from other files.
+
+
 ### Language packages
 
 Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>`, `<script>` or `<style>` tags.
