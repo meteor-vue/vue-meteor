@@ -116,8 +116,6 @@ Official packages for `<style>` tag:
  - [akryum:vue-sass](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-sass)
  - [akryum:vue-stylus](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-stylus)
 
-Community packages welcomed (add a your package with a PR)!
-
 Community packages for `<script>` tag:
 
  - [nathantreid:vue-typescript](https://github.com/nathantreid/meteor-vue-typescript)
@@ -125,6 +123,8 @@ Community packages for `<script>` tag:
 Community packages for `<style>` tag:
 
  - [nathantreid:vue-css-modules](https://github.com/nathantreid/vue-css-modules) enables interop with nathantreid:css-modules, including support for composing from other files.
+
+Community packages welcomed (add a your package with a PR)!
 
 ### Manual import
 
