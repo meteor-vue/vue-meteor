@@ -1,10 +1,10 @@
 
 import Vue from 'vue'
-import {Reload} from 'meteor/reload'
-import {Meteor} from 'meteor/meteor'
-import {Tracker} from 'meteor/tracker'
-import {Autoupdate} from 'meteor/autoupdate'
-import {ReactiveVar} from 'meteor/reactive-var'
+import { Reload } from 'meteor/reload'
+import { Meteor } from 'meteor/meteor'
+import { Tracker } from 'meteor/tracker'
+import { Autoupdate } from 'meteor/autoupdate'
+import { ReactiveVar } from 'meteor/reactive-var'
 import VueHot1 from './vue-hot'
 import VueHot2 from './vue2-hot'
 
@@ -112,6 +112,7 @@ Meteor.startup(function () {
     while (regResult = jsImportsReg.exec(js)) {
       args.push(regResult[2])
     }
+    console.log(args, js)
     args.push(function (require, exports, module) {
       try {
         eval(js)
@@ -161,12 +162,17 @@ Meteor.startup(function () {
   _socket.on('render', function ({hash, template, path}) {
     if (vueVersion === 2) {
       console.log('[HMR] Rerendering ' + path)
-      // console.log(template)
-      var obj
-      eval(`obj = ${template};`)
-      // console.log(obj)
-      VueHotReloadApi.rerender(hash, obj)
-      _suppressNextReload = true
+      console.log(template)
+      let error = true
+      try {
+        var obj
+        eval(`obj = ${template};`)
+        // console.log(obj)
+        VueHotReloadApi.rerender(hash, obj)
+      } catch (e) {
+        error = true
+      }
+      _suppressNextReload = !error
     }
   })
 

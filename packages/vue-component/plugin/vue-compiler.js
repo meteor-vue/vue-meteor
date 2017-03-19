@@ -596,7 +596,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
 
   if (!isHotReload) {
     // Hot-reloading
-    if (isDev && Meteor.isClient) {
+    if (isDev && inputFile.getArch().indexOf('web') !== -1) {
       js += `\nif(!window.__vue_hot__){
         window.__vue_hot_pending__ = window.__vue_hot_pending__ || {};
         window.__vue_hot_pending__['${vueId}'] = __vue_script__;
