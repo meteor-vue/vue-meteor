@@ -112,7 +112,6 @@ Meteor.startup(function () {
     while (regResult = jsImportsReg.exec(js)) {
       args.push(regResult[2])
     }
-    console.log(args, js)
     args.push(function (require, exports, module) {
       try {
         eval(js)
@@ -154,6 +153,7 @@ Meteor.startup(function () {
         error = true
       }
     }
+    console.log(error, needsReload)
 
     _suppressNextReload = !error && !needsReload
   }))
@@ -162,8 +162,7 @@ Meteor.startup(function () {
   _socket.on('render', function ({hash, template, path}) {
     if (vueVersion === 2) {
       console.log('[HMR] Rerendering ' + path)
-      console.log(template)
-      let error = true
+      let error = false
       try {
         var obj
         eval(`obj = ${template};`)
