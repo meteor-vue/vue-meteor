@@ -31,8 +31,8 @@ For more detailed documentations, see the [usage section](#usage) below.
 ## Recommended Packages Links
 
 - [:package: `vue-meteor-tracker`](https://github.com/Akryum/vue-meteor-tracker) (meteor tracker integration)
-- [:package: `arkyum:vue-component`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component) (vue component files)
-- [:package: `arkyum:vue-router2`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router2) (`vue-router` 2.x helpers)
+- [:package: `akryum:vue-component`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component) (vue component files)
+- [:package: `akryum:vue-router2`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router2) (`vue-router` 2.x helpers)
 - [:package: `vue-apollo`](https://github.com/Akryum/vue-apollo) (apollo integration)
 - [:package: `akryum:vue-blaze-template`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-blaze-template) (use blaze inside vue components)
 - [:package: `vue-supply`](https://github.com/Akryum/vue-supply) (use reactive data & automatic subscriptions in components and vuex store)
