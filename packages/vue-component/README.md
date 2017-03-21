@@ -96,6 +96,26 @@ As an alternative to scoped styles, you can use CSS modules to scope your CSS to
 </script>
 ```
 
+By default, your styles will be assigned to the `$style` computed property. You can customize this by setting the module attribute. This also allows you to create multiple "modules" in one component file:
+
+```html
+<style module="foo">
+  .color {
+    color: orange;
+  }
+</style>
+<style module="bar">
+  .color {
+    color: purple;
+  }
+</style>
+
+<template>
+  <div :class="foo.color">Foo Text</div>
+  <div :class="bar.color">Bar Text</div>
+</template>
+```
+
 Note: composing from other files is not supported by the built-in CSS modules processor. See the community packages.
 
 ### Language packages
