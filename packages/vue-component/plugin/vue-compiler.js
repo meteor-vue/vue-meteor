@@ -582,10 +582,11 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
 
   // CSS Modules
   if(compileResult.cssModules) {
+    const modules = Object.keys(compileResult.cssModules);
     const modulesCode = '__vue_options__.computed = __vue_options__.computed || {};\n' +
-     `__vue_options__.computed.$style = function() {\n return ${JSON.stringify(compileResult.cssModules)}\n};\n`;
+      modules.map(module=>`__vue_options__.computed['${module}'] = function() {\n return ${JSON.stringify(compileResult.cssModules[module])}\n};\n`).join('\n');
     js += modulesCode;
-    console.log(modulesCode)
+    // console.log(modulesCode);
   }
 
   // Package context

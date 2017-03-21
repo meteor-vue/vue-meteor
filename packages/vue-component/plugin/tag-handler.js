@@ -312,6 +312,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
         // CSS Modules
         let isAsync = false;
+        let defaultModuleName = '$style';
         if (styleTag.attribs.module) {
           if (global.vue.cssModules) {
             try {
@@ -328,7 +329,11 @@ VueComponentTagHandler = class VueComponentTagHandler {
               css = result.css;
               cssMap = result.map;
               if (result.cssModules) {
-                cssModules = { ...(cssModules || {}), ...result.cssModules };
+                const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : defaultModuleName;
+                if (cssModules === undefined) {
+                  cssModules = {};
+                }
+                cssModules[moduleName] = { ...(cssModules[moduleName] || {}), ...result.cssModules };
               }
               if (result.js) {
                 js += result.js;
@@ -344,18 +349,20 @@ VueComponentTagHandler = class VueComponentTagHandler {
               });
             }
           } else {
-            const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : '';
-            const scopedModuleName = moduleName ? `_${moduleName}` : '';
+            const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : defaultModuleName;
+            const scopedModuleName = moduleName !== defaultModuleName ? `__${moduleName}` : '';
             plugins.push(postcssModules({
               getJSON(cssFilename, json) {
-                cssModules = { ...(cssModules || {}), ...json };
+                if (cssModules === undefined)
+                  cssModules = {};
+                cssModules[moduleName] = { ...(cssModules[moduleName] || {}), ...json };
               },
               generateScopedName(exportedName, filePath) {
                 const path = require('path');
                 let sanitisedPath = path.relative(process.cwd(), filePath).replace(/.*\{}[/\\]/, '').replace(/.*\{.*?}/, 'packages').replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
                 const filename = path.basename(filePath).replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_');
                 sanitisedPath = sanitisedPath.replace(new RegExp(`_(${filename})$`), '__$1');
-                return `_${sanitisedPath}__${exportedName}`;
+                return `_${sanitisedPath}${scopedModuleName}__${exportedName}`;
               },
             }));
             isAsync = true;
