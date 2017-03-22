@@ -103,6 +103,8 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 ### State management with vuex ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
+**:warning: This is using the old `vuex` package and is not compatible with Vue 2.x**
+
 Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
 
 [:package: See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
