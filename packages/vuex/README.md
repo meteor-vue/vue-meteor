@@ -1,4 +1,6 @@
-# Vuex integration for Meteor
+# Vuex integration for Meteor (deprecated)
+
+**:warning: This is using the old `vuex` package and is not compatible with Vue 2.x. Please use [vue-supply](https://github.com/Akryum/vue-supply) instead.**
 
 > Flux-inspired Application Architecture for your Vue Meteor app
 
