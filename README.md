@@ -20,13 +20,12 @@ You will be able to [use meteor data inside Vue](https://github.com/Akryum/vue-m
 
 For more detailed documentations, see the [usage section](#usage) below.
 
-- [Simple example project](https://github.com/Akryum/meteor-vue-example)
 - [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
-- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
-- [Routing example project](https://github.com/Akryum/meteor-vue-example-routing)
+- [Simple example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example)
 - [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
+- [Routing example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example-routing)
+- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
 - [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
-- [Vuex example project](https://github.com/Akryum/meteor-vuex-example)
 
 ## Recommended Packages Links
 
