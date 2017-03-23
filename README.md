@@ -16,16 +16,7 @@ vue+meteor is a set of packages to help you create awesome apps quickly and effi
 
 You will be able to [use meteor data inside Vue](https://github.com/Akryum/vue-meteor-tracker#vue-integration-for-meteor) or [write `.vue` files in your meteor project](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component).
 
-## Examples Links
-
-For more detailed documentations, see the [usage section](#usage) below.
-
-- [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
-- [Simple example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example)
-- [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
-- [Routing example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example-routing)
-- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
-- [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
+### [Complete Example/Demo Project](https://github.com/Akryum/vue-meteor-demo)
 
 ## Recommended Packages Links
 
@@ -35,6 +26,17 @@ For more detailed documentations, see the [usage section](#usage) below.
 - [:package: `vue-apollo`](https://github.com/Akryum/vue-apollo) (apollo integration)
 - [:package: `akryum:vue-blaze-template`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-blaze-template) (use blaze inside vue components)
 - [:package: `vue-supply`](https://github.com/Akryum/vue-supply) (use reactive data & automatic subscriptions in components and vuex store)
+
+## More Examples
+
+For more detailed documentations, see the [usage section](#usage) below.
+
+- [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
+- [Simple example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example)
+- [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
+- [Routing example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example-routing)
+- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
+- [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
 
 ## Usage
 
