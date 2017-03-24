@@ -57,10 +57,10 @@ In your server code, you need to set the `VueSSR.createApp` method with a functi
 import { VueSSR } from 'meteor/akryum:vue-ssr'
 import CreateApp from './app'
 
-VueSSR.createApp = function ({ url }) {
+VueSSR.createApp = function (context) {
   const { app, router } = CreateApp()
   // Set the url in the router
-  router.push(url)
+  router.push(context.url)
   return app
 }
 ```
@@ -68,11 +68,11 @@ VueSSR.createApp = function ({ url }) {
 Returning a promise works too:
 
 ```javascript
-VueSSR.createApp = function ({ url }) {
+VueSSR.createApp = function (context) {
   return new Promise((resolve, reject) => {
     const { app, router } = CreateApp()
     // Set the URL in the router
-    router.push(url)
+    router.push(context.url)
 
     router.onReady(() => {
       const matchedComponents = router.getMatchedComponents()
