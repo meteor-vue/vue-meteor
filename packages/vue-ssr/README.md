@@ -108,7 +108,7 @@ VueSSR.template = `
 `
 ```
 
-*:warning: The CSS can flicker in developpement mode and load after the app is rendered. This is due to the HMR system having to append dynamic style tag in the page to get the fastest reloading possible. This is not the case in production mode (try running your app with `meteor --production`).*
+*:warning: The CSS can flicker in developpement mode and load after the app is rendered. This is due to the HMR system having to append dynamic style tags in the page to get the fastest reloading possible. This is not the case in production mode (try running your app with `meteor --production`).*
 
 [Example project](https://github.com/Akryum/vue-meteor-demo)
 
