@@ -33,12 +33,9 @@ global.vue.lang.coffee = Meteor.wrapAsync(function({
 
   let output = coffee.compile(source, compileOptions);
 
-  if (source.indexOf('`') !== -1) {
-    // If source contains backticks, pass the coffee output through ecmascript
-    try {
-      output.js = ECMAScript.compileForShell(output.js);
-    } catch (e) {}
-  }
+  try {
+    output.js = ECMAScript.compileForShell(output.js);
+  } catch (e) {}
 
   const stripped = stripExportedVars(
     output.js,
