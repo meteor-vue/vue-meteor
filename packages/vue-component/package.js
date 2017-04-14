@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component',
-  version: '0.8.17',
+  version: '0.8.18',
   summary: 'VueJS single-file components that hot-reloads',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -12,6 +12,7 @@ Package.registerBuildPlugin({
     'ecmascript@0.6.1',
     'caching-compiler@1.1.9',
     'babel-compiler@6.13.0',
+    'templating-tools@1.1.2',
   ],
   sources: [
     'plugin/regexps.js',
