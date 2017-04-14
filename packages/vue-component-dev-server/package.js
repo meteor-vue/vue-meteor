@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component-dev-server',
-  version: '0.0.5',
+  version: '0.0.6',
   summary: 'Dev server for vue hot-reloading',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md',
@@ -13,3 +13,7 @@ Package.onUse(function(api) {
   api.use('webapp');
   api.mainModule('server/main.js', 'server');
 });
+
+Npm.depends({
+  'local-ipv4-address': '0.0.1',
+})

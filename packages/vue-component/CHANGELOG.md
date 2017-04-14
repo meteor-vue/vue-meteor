@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.16 - 2017-04-14
+
+ - Vue 2.2.6 support
+ - Automatic IP detection for HMR to work on other devices in the local network.
+
 ## 0.8.6 - 2017-02-21
 
  - CSS Modules: New `<style>` attribute `module` & `$style` component property (see [PR](https://github.com/Akryum/meteor-vue-component/pull/117)). Thanks @nathantreid
