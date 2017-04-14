@@ -124,6 +124,7 @@ Using the power of preprocessors, you can use a different language (like less or
 
 Official packages for `<template>` tag:
 
+- [akryum:vue-pug](https://github.com/Akryum/vue-meteor/tree/master/packages/vue-pug)
 - [akryum:vue-jade](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-jade)
 
 Official packages from `<script>` tag:
