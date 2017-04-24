@@ -313,7 +313,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // CSS Modules
         let isAsync = false;
         let defaultModuleName = '$style';
-        if (styleTag.attribs.module) {
+        if ('module' in styleTag.attribs && !!css.trim()) {
           if (global.vue.cssModules) {
             try {
               let compile = global.vue.cssModules;
