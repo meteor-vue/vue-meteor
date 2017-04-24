@@ -344,7 +344,6 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
 
       if (compileResult.cssModules) {
         cssModulesHash = Hash(JSON.stringify(compileResult.cssModules));
-        console.log('css modules hash', cssModulesHash)
       }
     }
   }
