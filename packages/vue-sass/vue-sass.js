@@ -70,6 +70,10 @@ global.vue.lang.scss = Meteor.wrapAsync(function({
   inputFile,
   dependencyManager
 }, cb) {
+  if (!source.trim()) {
+    cb(null, { css: ''});
+    return;
+  }
   sass.render({
     data: source,
     importer: resolveImport(dependencyManager),
@@ -93,6 +97,10 @@ global.vue.lang.sass = Meteor.wrapAsync(function({
   inputFile,
   dependencyManager
 }, cb) {
+  if (!source.trim()) {
+    cb(null, { css: ''});
+    return;
+  }
   sass.render({
     data: source,
     importer: resolveImport(dependencyManager),
