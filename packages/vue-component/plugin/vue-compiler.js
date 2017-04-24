@@ -163,6 +163,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     // Style
     let css = '';
     let cssHash = '';
+    let cssModulesHash = '';
     if (compileResult.styles.length !== 0) {
       for (let style of compileResult.styles) {
         css += style.css;
@@ -171,6 +172,10 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       cssHash = Hash(css);
 
       //console.log(`css hash: ${cssHash}`);
+      
+      if (compileResult.cssModules) {
+        cssModulesHash = Hash(JSON.stringify(compileResult.cssModules));
+      }
 
       if (isDev) {
         // Add style to client first-connection style list
@@ -188,6 +193,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       cache.filePath = getFilePath(inputFile);
       cache.js = jsHash;
       cache.css = cssHash;
+      cache.cssModules = cssModulesHash;
       cache.template = templateHash;
     }
   }
@@ -323,7 +329,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
   let vueId = compileResult.hash;
 
   // CSS
-  let css = '', cssHash = '';
+  let css = '', cssHash = '', cssModulesHash = '';
   if(parts.style) {
     if (compileResult.styles.length !== 0) {
       for (let style of compileResult.styles) {
@@ -334,6 +340,11 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
       cssHash = Hash(css);
       if (cache.css !== cssHash) {
         global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath });
+      }
+
+      if (compileResult.cssModules) {
+        cssModulesHash = Hash(JSON.stringify(compileResult.cssModules));
+        console.log('css modules hash', cssModulesHash)
       }
     }
   }
@@ -354,13 +365,13 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
       }
     }
 
-    if (cache.js !== jsHash || cache.template !== templateHash) {
+    if (cache.js !== jsHash || cache.template !== templateHash || cache.cssModules !== cssModulesHash) {
 
       const path = (inputFile.getPackageName() ? `packages/${inputFile.getPackageName()}` : '') + inputFile.getPathInPackage();
 
       const { js, render, staticRenderFns } = generateJs(vueId, inputFile, compileResult, true)
 
-      if(vueVersion === 2 && cache.js === jsHash) {
+      if(vueVersion === 2 && cache.js === jsHash && cache.cssModules === cssModulesHash) {
         global._dev_server.emit('render', { hash: vueId, template:`{
           render: ${render},
           staticRenderFns: ${staticRenderFns}
@@ -377,6 +388,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
   }
   if(parts.style) {
     cache.css = cssHash;
+    cache.cssModules = cssModulesHash;
   }
   if(parts.template) {
     cache.template = templateHash;
