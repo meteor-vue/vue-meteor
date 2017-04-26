@@ -32,7 +32,9 @@ Now, whenever you save a component file, it will be instantly updated on all the
 
 By default, the package will try to use the Meteor port + 3, but you can override the port used by the hot-reloading server with the `HMR_PORT` environment variable:
 
-    set HMR_PORT=4242
+```
+cross-env HMR_PORT=4242
+```
 
 #### Remote devices
 
