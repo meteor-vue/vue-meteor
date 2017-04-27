@@ -5,7 +5,7 @@
  - Components now support `src="file"` attribute on `<template>`, `<script>` and `<style>` tags. Please update the language packages you are using.
  - Updated to Vue 2.3.0
  - Fixed automatic IP detection on non-english Windows systems
- - Rewrote HTML parsing from scratch (fix multiples issues)
+ - Rewrote HTML parsing from scratch (fix multiple issues)
  - Compilation errors and warnings are sent to the client (in dev mode)
 
 ## 0.8.16 - 2017-04-14
