@@ -1,3 +1,4 @@
+import path from 'path'
 import postcss from 'postcss';
 import autoprefixer from 'autoprefixer';
 import postcssModules from 'postcss-modules';
@@ -57,6 +58,40 @@ VueComponentTagHandler = class VueComponentTagHandler {
         message: 'Expected <template>, <script>, or <style> tag in template file',
       });
     }
+
+    if (tag.attribs.src) {
+      if (tag.contents.trim()) {
+        throwCompileError({
+          inputFile: this.inputFile,
+          message: `Should not have any contents if using the 'src' attribute.`,
+          tag: tag.tagName,
+          charIndex: tag.tagStartIndex,
+        })
+      } else {
+        const filePath = path.resolve(path.dirname(getFilePath(this.inputFile)), tag.attribs.src)
+        try {
+          tag.origin = Object.assign({}, tag)
+          tag.basePath = filePath
+          tag.contents = tag.fileContents = getFileContents(filePath)
+          tag.sourceName = filePath
+          tag.tagStartIndex = 0
+          this.dependencyManager.addDependency(filePath)
+        } catch (e) {
+          if (e.message === 'file-not-found') {
+            throwCompileError({
+              inputFile: this.inputFile,
+              message: `File ${filePath} not found.`,
+              tag: tag.tagName,
+              charIndex: tag.tagStartIndex,
+            })
+          } else {
+            throw e
+          }
+        }
+      }
+    } else {
+      tag.basePath = path.resolve(getFilePath(this.inputFile))
+    }
   }
 
   getResults() {
@@ -101,7 +136,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
             //console.log(`Compiling <script> in lang ${lang}...`);
             let result = compile({
               source: script,
-              inputFile: this.inputFile
+              inputFile: this.inputFile,
+              basePath: tag.basePath,
+              dependencyManager: this.dependencyManager,
             });
             script = result.script;
             if (result.map) {
@@ -130,7 +167,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // Babel options
         this.babelOptions.sourceMap = true;
         this.babelOptions.filename =
-          this.babelOptions.sourceFileName = fullInputFilePath;
+          this.babelOptions.sourceFileName = tag.basePath;
         this.babelOptions.sourceMapTarget = this.babelOptions.filename + '.map';
 
         // Babel compilation
@@ -215,7 +252,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
             //console.log(`Compiling <template> in lang ${lang}...`);
             let result = compile({
               source: template,
-              inputFile: this.inputFile
+              inputFile: this.inputFile,
+              basePath: templateTag.basePath,
+              dependencyManager: this.dependencyManager,
             });
             template = result.template;
           }
@@ -272,7 +311,8 @@ VueComponentTagHandler = class VueComponentTagHandler {
               let result = compile({
                 source: css,
                 inputFile: this.inputFile,
-                dependencyManager: this.dependencyManager
+                basePath: styleTag.basePath,
+                dependencyManager: this.dependencyManager,
               });
               //console.log('Css result', result);
               css = result.css;
