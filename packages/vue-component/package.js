@@ -39,6 +39,7 @@ Package.registerBuildPlugin({
     'vue-template-compiler': '2.2.6',
     'vue-template-es2015-compiler': '1.5.1',
     'parse5': '3.0.2',
+    'colors': '1.1.2',
   }
 });
 
