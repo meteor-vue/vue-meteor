@@ -17,6 +17,7 @@ function statOrNull(path) {
 
 global.vue.lang.stylus = Meteor.wrapAsync(function({
   source,
+  basePath,
   inputFile,
   dependencyManager
 }, cb) {
@@ -28,7 +29,7 @@ global.vue.lang.stylus = Meteor.wrapAsync(function({
       /*} else if (filename.indexOf('{') === 0) {
         resolvedFilename = decodeFilePath(filename);*/
     } else {
-      let currentDirectory = path.dirname(inputFile.getPathInPackage());
+      let currentDirectory = path.dirname(basePath);
       resolvedFilename = path.resolve(currentDirectory, filePath);
     }
 
@@ -72,7 +73,7 @@ global.vue.lang.stylus = Meteor.wrapAsync(function({
 
   let style = stylus(source)
     .use(nib())
-    .set('filename', inputFile.getPathInPackage())
+    .set('filename', basePath)
     .set('sourcemap', { inline: false, comment: false })
     .set('cache', true)
     .set('importer', importer);

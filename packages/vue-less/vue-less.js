@@ -103,10 +103,11 @@ function getImportPlugin(inputFile, dependencyManager) {
 global.vue.lang.less = Meteor.wrapAsync(function({
   source,
   inputFile,
+  basePath,
   dependencyManager
 }, cb) {
   less.render(source, {
-    filename: inputFile.getPathInPackage(),
+    filename: basePath,
     plugins: [getImportPlugin(inputFile, dependencyManager)],
     sourceMap: {
       outputSourceFiles: true

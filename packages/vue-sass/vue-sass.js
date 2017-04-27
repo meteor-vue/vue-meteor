@@ -67,6 +67,7 @@ function decodeFilePath(filePath) {
 
 global.vue.lang.scss = Meteor.wrapAsync(function({
   source,
+  basePath,
   inputFile,
   dependencyManager
 }, cb) {
@@ -94,6 +95,7 @@ global.vue.lang.scss = Meteor.wrapAsync(function({
 
 global.vue.lang.sass = Meteor.wrapAsync(function({
   source,
+  basePath,
   inputFile,
   dependencyManager
 }, cb) {
@@ -104,7 +106,7 @@ global.vue.lang.sass = Meteor.wrapAsync(function({
   sass.render({
     data: source,
     importer: resolveImport(dependencyManager),
-    outFile: inputFile.getPathInPackage() + '.css',
+    outFile: basePath + '.css',
     sourceMap: true,
     sourceMapContents: true,
     indentedSyntax: true

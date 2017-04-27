@@ -4,9 +4,9 @@ global.vue.lang = global.vue.lang || {}
 import jade from 'jade';
 import { Meteor } from 'meteor/meteor';
 
-global.vue.lang.jade = Meteor.wrapAsync(function({ source, inputFile }, cb) {
+global.vue.lang.jade = Meteor.wrapAsync(function({ source, basePath, inputFile }, cb) {
   var fn = jade.compile(source, {
-    filename: inputFile.getPathInPackage(),
+    filename: basePath,
     fileMode: true
   });
 
