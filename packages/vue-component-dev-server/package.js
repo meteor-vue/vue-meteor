@@ -13,7 +13,3 @@ Package.onUse(function(api) {
   api.use('webapp');
   api.mainModule('server/main.js', 'server');
 });
-
-Npm.depends({
-  'local-ipv4-address': '0.0.1',
-})
