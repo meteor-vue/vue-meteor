@@ -5,6 +5,7 @@ import async from 'async';
 import { Meteor } from 'meteor/meteor';
 import { EventEmitter } from 'events';
 import _ from 'lodash';
+import 'colors';
 
 let templateCompiler, transpile;
 
@@ -554,11 +555,27 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
     } else if(vueVersion === 2) {
       const templateCompilationResult = templateCompiler.compile(compileResult.template, {
         id: vueId,
+        warn: (message) => {
+          const msg = `${inputFilePath}: ${message}`
+          console.warn(`   (!) Warning: ${msg}`.yellow)
+          if (isDev) {
+            global._dev_server.emit('message', {
+              type: 'warn',
+              message: msg,
+            })
+          }
+        },
       });
       if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
-        console.error(templateCompilationResult.errors);
+        console.error(...templateCompilationResult.errors);
         js += `__vue_options__.render = function(){};\n`;
         js += `__vue_options__.staticRenderFns = [];\n`;
+        if (isDev) {
+          global._dev_server.emit('message', {
+            type: 'error',
+            message: templateCompilationResult.errors.map(e => e.toString()).join('\n'),
+          })
+        }
       } else {
         render = toFunction(templateCompilationResult.render)
         staticRenderFns = `[${ templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`

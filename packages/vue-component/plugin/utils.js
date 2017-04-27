@@ -109,20 +109,27 @@ printSourceMap = function(map) {
   console.log(map)
 }
 
-throwCompileError = function throwCompileError({
-  inputFile,
-  path,
-  action,
-  message,
-  line,
-  column,
-  tag,
-  lang,
-  charIndex,
-  error,
-  showError = false,
-  showStack = false
-}) {
+throwCompileError = function throwCompileError(options) {
+  options = Object.assign({}, {
+    showError: false,
+    showStack: false,
+  }, options)
+
+  const {
+    inputFile,
+    path,
+    action,
+    message,
+    line,
+    column,
+    tag,
+    lang,
+    charIndex,
+    error,
+    showError,
+    showStack,
+  } = options
+
   let output = '[vue-component] Error';
 
   // Action
@@ -135,6 +142,10 @@ throwCompileError = function throwCompileError({
     output += ' in tag <' + tag + '>';
   }
 
+  if(column) {
+    output += ' col:' + column;
+  }
+
   // Lang
   if(lang) {
     output += ' using lang ' + lang;
@@ -142,7 +153,7 @@ throwCompileError = function throwCompileError({
 
   // Message
   if(message) {
-    if(action) {
+    if(!action) {
       output += ': ';
     } else {
       output += ' ';
@@ -154,13 +165,13 @@ throwCompileError = function throwCompileError({
   let errMsg = `${output}`;
 
   // Error location
-
+  let file
   if(path) {
-    output += ' -> in ' + path;
+    file = path;
   } else if(inputFile) {
-    output += ' -> in ' + getFullPathInApp(inputFile);
+    file = getFullPathInApp(inputFile);
   } else {
-    output += ' (unknown source file)';
+    file = '(unknown source file)';
   }
 
   let lineNumber = line;
@@ -172,12 +183,13 @@ throwCompileError = function throwCompileError({
       lineNumber = lineResult;
     }
   }
-  if(lineNumber) {
-    output += ' at line ' + lineNumber;
+  if (!lineNumber) {
+    lineNumber = 1
   }
 
-  if(column) {
-    output += ' col ' + column;
+  // Native error
+  if(showError) {
+    output += ` ${error.message}`
   }
 
   // Stack
@@ -185,14 +197,26 @@ throwCompileError = function throwCompileError({
     ouput += '\n' + error.stack;
   }
 
-  console.error(output);
-
-  // Native error
-  if(showError) {
-    console.error(error);
+  if (isDevelopment()) {
+    global._dev_server.emit('message', {
+      type: 'error',
+      message: `${file}:${lineNumber}  ${output}`,
+    })
   }
 
-  let err = new Error(errMsg);
-  err.line = lineNumber;
+  const err = new TemplatingTools.CompileError();
+  err.message = output
+  err.file = file
+  err.line = lineNumber
   throw err;
+}
+
+getFileContents = (path) => {
+  if (!fs.existsSync(path)) {
+    throw new Error('file-not-found')
+  } else {
+    return fs.readFileSync(path, {
+      encoding: 'utf8',
+    })
+  }
 }

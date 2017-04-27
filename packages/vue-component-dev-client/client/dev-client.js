@@ -199,6 +199,19 @@ Meteor.startup(function () {
     _deferReload = 3000
   })
 
+  // Message
+  _socket.on('message', function ({ type, message }) {
+    let func
+    if (type === 'error') {
+      func = console.error
+    } else if (type === 'warn') {
+      func = console.warn
+    } else {
+      func = console.log
+    }
+    func(`[HMR] ${message}`)
+  })
+
   // Reg
   const jsImportsReg = /module\.import\((['"])(.+?)\1/g
 })
