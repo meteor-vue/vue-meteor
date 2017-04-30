@@ -130,7 +130,7 @@ Meteor.bindEnvironment(function () {
                 const data = frContext.getData()
                 InjectData.pushData(res, 'fast-render-data', data)
 
-                const script = (result.js && `<script>${result.js}</script>`) || ''
+                const script = (result.js && `<script type="text/javascript">${result.js}</script>`) || ''
 
                 res.write = patchResWrite(res.write, VueSSR.template.replace(VueSSR.outlet, html) + script)
 
