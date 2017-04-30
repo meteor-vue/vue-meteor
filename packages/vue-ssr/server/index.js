@@ -108,7 +108,15 @@ Meteor.bindEnvironment(function () {
             asyncResult = Promise.resolve(result)
           }
 
-          asyncResult.then(app => {
+          asyncResult.then(result => {
+
+            let app
+            if (result.app) {
+              app = result.app
+            } else {
+              app = result
+            }
+
             renderer.renderToString(
               app,
               (error, html) => {
@@ -122,7 +130,9 @@ Meteor.bindEnvironment(function () {
                 const data = frContext.getData()
                 InjectData.pushData(res, 'fast-render-data', data)
 
-                res.write = patchResWrite(res.write, VueSSR.template.replace(VueSSR.outlet, html))
+                const script = (result.js && `<script>${result.js}</script>`) || ''
+
+                res.write = patchResWrite(res.write, VueSSR.template.replace(VueSSR.outlet, html) + script)
 
                 next()
               },

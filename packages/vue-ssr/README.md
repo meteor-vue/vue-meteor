@@ -12,8 +12,6 @@ meteor add akryum:vue-ssr
 
 **:warning: All your client-side code should be available on the server (which means they shouldn't be in a `client` folder), and the code and libraries should be able to run on the server.**
 
-*:warning: vuex & apollo are not tested yet.*
-
 Wrap your Vue root instance in a `createApp` function and export it, alongside with the router instance:
 
 ```javascript
@@ -61,7 +59,11 @@ VueSSR.createApp = function (context) {
   const { app, router } = CreateApp()
   // Set the url in the router
   router.push(context.url)
-  return app
+  return {
+    app,
+    // Inject some arbitrary JS
+    js: `console.log('hello')`,
+  }
 }
 ```
 
@@ -84,7 +86,11 @@ VueSSR.createApp = function (context) {
 
       // Can use components prefetch here...
 
-      resolve(app)
+      resolve({
+        app,
+        // Inject some arbitrary JS
+        js: `console.log('hello')`,
+      })
     })
   })
 }
