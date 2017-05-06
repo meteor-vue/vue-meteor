@@ -1,4 +1,6 @@
 
+global.Buffer = global.Buffer || require('buffer').Buffer;
+
 import Vue from 'vue'
 import { Reload } from 'meteor/reload'
 import { Meteor } from 'meteor/meteor'
