@@ -15,7 +15,7 @@ Package.registerBuildPlugin({
     'vue-coffee.js'
   ],
   npmDependencies: {
-    'coffee-script': '1.12.6',
+    'coffeescript': '1.12.6',
     'source-map': '0.5.6'
   }
 });

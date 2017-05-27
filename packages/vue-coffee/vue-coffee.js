@@ -4,11 +4,11 @@ global.vue = global.vue || {}
 global.vue.lang = global.vue.lang || {}
 
 
-import sourcemap from "source-map";
-import coffee from "coffee-script";
+import sourcemap from 'source-map';
+import coffee from 'coffeescript';
 import {
   ECMAScript
-} from "meteor/ecmascript";
+} from 'meteor/ecmascript';
 import {
   Meteor
 } from 'meteor/meteor';
