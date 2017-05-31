@@ -1,4 +1,4 @@
-
+import './buffer'
 import Vue from 'vue'
 import { Reload } from 'meteor/reload'
 import { Meteor } from 'meteor/meteor'
