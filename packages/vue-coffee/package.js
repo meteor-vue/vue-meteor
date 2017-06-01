@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-coffee',
-  version: '0.0.4',
+  version: '0.0.5',
   summary: 'Add coffee support for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -15,7 +15,7 @@ Package.registerBuildPlugin({
     'vue-coffee.js'
   ],
   npmDependencies: {
-    'coffee-script': '1.12.4',
+    'coffeescript': '1.12.6',
     'source-map': '0.5.6'
   }
 });

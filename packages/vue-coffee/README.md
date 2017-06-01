@@ -1,8 +1,8 @@
-# Integrate coffee-script with vue single-file components for Meteor
+# Integrate CoffeeScript with vue single-file components for Meteor
 
 Compatibility: **Vue 1.x, Vue 2.x**
 
-This meteor package adds [coffee-script](http://coffeescript.org/) support in your single-file `.vue` components.
+This meteor package adds [CoffeeScript](http://coffeescript.org/) support in your single-file `.vue` components.
 
 ## Installation
 
@@ -13,14 +13,13 @@ This meteor package adds [coffee-script](http://coffeescript.org/) support in yo
 
 ```html
 <script lang="coffee">
-`import {Meteor} from 'meteor/meteor'`
+import { Meteor } from 'meteor/meteor'
 
-return {
+return
   props: [ 'data' ]
-  methods: removePost: ->
-    Meteor.call 'posts.remove', @data._id
-    return
-}
+  methods:
+    removePost: ->
+      Meteor.call 'posts.remove', @data._id
 </script>
 ```
 
