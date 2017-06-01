@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component',
-  version: '0.9.1',
+  version: '0.9.2',
   summary: 'VueJS single-file components that hot-reloads',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -36,7 +36,7 @@ Package.registerBuildPlugin({
     'source-map-merger': '0.2.0',
     'generate-source-map': '0.0.5',
     'autoprefixer': '6.7.5',
-    'vue-template-compiler': '2.3.0',
+    'vue-template-compiler': '2.3.3',
     'vue-template-es2015-compiler': '1.5.2',
     'parse5': '3.0.2',
     'colors': '1.1.2',
