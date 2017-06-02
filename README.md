@@ -148,8 +148,9 @@ Feel free to contribute by opening a PR or an issue (but check before if the top
 
 ### Development project
 
-Clone this repository and type in the project directory:
+Clone this repository and [the demo project](https://github.com/Akryum/vue-meteor-demo) and type in the demo project directory:
 
+    ln -s ../vue-meteor/packages packages
     meteor npm install
     meteor
 
