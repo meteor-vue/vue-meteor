@@ -134,10 +134,10 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Easy state management with vuex integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
  - [x] Use Blaze templates in your vue app ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
  - [x] `module` attribute on `<style>` in .vue files
- - [x] Typescript support in .vue files
- - [x] Server-side rendering (Vue 2.x)
- - [x] `src` attribute support in `.vue` files
- - [x] Apollo Server-side rendering (Vue 2.x)
+ - [x] Typescript support in .vue files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Server-side rendering ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] `src` attribute support in `.vue` files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Apollo Server-side rendering ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
 
