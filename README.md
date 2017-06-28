@@ -136,8 +136,8 @@ Currently supported and possible future features (in no particular order) are:
  - [x] `module` attribute on `<style>` in .vue files
  - [x] Typescript support in .vue files
  - [x] Server-side rendering (Vue 2.x)
- - [ ] *`src` attribute support in `.vue` files*
- - [ ] Apollo Server-side rendering (Vue 2.x)
+ - [x] `src` attribute support in `.vue` files
+ - [x] Apollo Server-side rendering (Vue 2.x)
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
 
