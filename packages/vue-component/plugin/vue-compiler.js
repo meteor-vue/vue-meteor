@@ -621,7 +621,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
   js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
 
   // Export
-  js += `module.export('default', exports.default = __vue_script__);`;
+  js += `module.export('default', exports.default = __vue_script__);exports.__esModule = true;`;
 
   if (!isHotReload) {
     // Hot-reloading
