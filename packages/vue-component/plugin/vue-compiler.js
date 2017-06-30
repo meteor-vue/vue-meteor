@@ -151,26 +151,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
     //console.log(`js hash: ${jsHash}`);
 
-    const { js, templateHash } = generateJs(vueId, inputFile, compileResult)
-
-    let outputFilePath = inputFile.getPathInPackage();
-    // Meteor will error when loading .vue files on the server unless they are postfixed with .js
-    if (inputFile.getArch().indexOf('os') === 0 && inputFilePath.indexOf('node_modules') !== -1) {
-      outputFilePath += '.js';
-    }
-
-    // Including the source maps for .vue files from node_modules breaks source mapping. 
-    const sourceMap = inputFilePath.indexOf('node_modules') === -1
-      ? compileResult.map
-      : undefined;
-
-    // Add JS Source file
-    inputFile.addJavaScript({
-      path: outputFilePath,
-      data: js,
-      sourceMap: sourceMap,
-      lazy: false,
-    });
+    // Lazy load files from NPM packages or imports directories
+    const isLazy = !!inputFilePath.match(/(^|\/)(node_modules|imports)\//);
 
     // Style
     let css = '';
@@ -183,11 +165,42 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       cssHash = Hash(css);
 
       //console.log(`css hash: ${cssHash}`);
+      if (!isDev && isLazy) {
+        // Wrap CSS in Meteor's lazy CSS loader
+        css = `
+          const modules = require('meteor/modules');
+          modules.addStyles(${JSON.stringify(css)});
+        `;
+      }
+    }
 
+    const { js, templateHash } = generateJs(vueId, inputFile, compileResult)
+
+    let outputFilePath = inputFilePath;
+    // Meteor will error when loading .vue files on the server unless they are postfixed with .js
+    if (inputFile.getArch().indexOf('os') === 0 && inputFilePath.indexOf('node_modules') !== -1) {
+      outputFilePath += '.js';
+    }
+    
+    // Including the source maps for .vue files from node_modules breaks source mapping. 
+    const sourceMap = inputFilePath.indexOf('node_modules') === -1
+      ? compileResult.map
+      : undefined;
+
+    // Add JS Source file
+    inputFile.addJavaScript({
+      path: outputFilePath,
+      data: isLazy && !isDev ? css + js : js,
+      sourceMap: sourceMap,
+      lazy: isLazy,
+    });
+
+    if (css) {
       if (isDev) {
         // Add style to client first-connection style list
         global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, false);
-      } else {
+      } else if (!isLazy) {
+        // In order to avoid lazy-loading errors in --production mode, addStylesheet must come after addJavaScript
         this.addStylesheet(inputFile, {
           data: css
         });
