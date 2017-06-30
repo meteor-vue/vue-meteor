@@ -154,6 +154,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     // Lazy load files from NPM packages or imports directories
     const isLazy = !!inputFilePath.match(/(^|\/)(node_modules|imports)\//);
 
+    const lazyCSS = !isDev && isLazy && inputFile.getArch().indexOf('web') !== -1
+
     // Style
     let css = '';
     let cssHash = '';
@@ -165,11 +167,11 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       cssHash = Hash(css);
 
       //console.log(`css hash: ${cssHash}`);
-      if (!isDev && isLazy) {
+      if (lazyCSS) {
         // Wrap CSS in Meteor's lazy CSS loader
-        css = `
-          const modules = require('meteor/modules');
-          modules.addStyles(${JSON.stringify(css)});
+        css = `\n
+          const modules = require('meteor/modules');\n
+          modules.addStyles(${JSON.stringify(css)});\n
         `;
       }
     }
@@ -181,8 +183,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     if (inputFile.getArch().indexOf('os') === 0 && inputFilePath.indexOf('node_modules') !== -1) {
       outputFilePath += '.js';
     }
-    
-    // Including the source maps for .vue files from node_modules breaks source mapping. 
+
+    // Including the source maps for .vue files from node_modules breaks source mapping.
     const sourceMap = inputFilePath.indexOf('node_modules') === -1
       ? compileResult.map
       : undefined;
@@ -190,7 +192,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     // Add JS Source file
     inputFile.addJavaScript({
       path: outputFilePath,
-      data: isLazy && !isDev ? css + js : js,
+      data: lazyCSS ? css + js : js,
       sourceMap: sourceMap,
       lazy: isLazy,
     });
