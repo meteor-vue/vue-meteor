@@ -138,6 +138,7 @@ Currently supported and possible future features (in no particular order) are:
  - [x] Server-side rendering ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
  - [x] `src` attribute support in `.vue` files ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
  - [x] Apollo Server-side rendering ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+ - [x] Meteor 1.5 code-splitting ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Track the project progress [here](https://github.com/Akryum/meteor-vue-component/milestones).
 
