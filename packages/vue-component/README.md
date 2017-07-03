@@ -131,30 +131,24 @@ Note: composing from other files is not supported by the built-in CSS modules pr
 
 Using the power of preprocessors, you can use a different language (like less or jade) by adding a `lang` attribute on your `<template>`, `<script>` or `<style>` tags.
 
-Official packages for `<template>` tag:
+Packages for `<template>` tag:
 
 - [akryum:vue-pug](https://github.com/Akryum/vue-meteor/tree/master/packages/vue-pug)
 - [akryum:vue-jade](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-jade)
 
-Official packages from `<script>` tag:
+Packages for `<script>` tag:
 
  - [akryum:vue-coffee](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-coffee)
+ - [nathantreid:vue-typescript](https://github.com/nathantreid/meteor-vue-typescript)
 
-Official packages for `<style>` tag:
+Packages for `<style>` tag:
 
  - [akryum:vue-less](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-less)
  - [akryum:vue-sass](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-sass)
  - [akryum:vue-stylus](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-stylus)
-
-Community packages for `<script>` tag:
-
- - [nathantreid:vue-typescript](https://github.com/nathantreid/meteor-vue-typescript)
-
-Community packages for `<style>` tag:
-
  - [nathantreid:vue-css-modules](https://github.com/nathantreid/vue-css-modules) enables interop with nathantreid:css-modules, including support for composing from other files.
 
-Community packages welcomed (add a your package with a PR)!
+Get involved! Add your own package with a PR! :+1:
 
 ### Manual import
 
