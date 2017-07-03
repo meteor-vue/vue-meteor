@@ -34,6 +34,7 @@ Here is a list of recommended packages for developping a meteor+vue app:
 
 ### Examples
 
+- [Complete Example/Demo Project](https://github.com/Akryum/vue-meteor-demo) (recommended)
 - [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
 - [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
 
