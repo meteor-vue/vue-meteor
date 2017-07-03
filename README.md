@@ -118,6 +118,17 @@ Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-r
 [:package: See Installation & Usage in arkyum:vue-router package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
 
 [Example app](https://github.com/Akryum/meteor-vue-example-routing)
+
+### State management with vuex ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
+
+**:warning: This is using the old `vuex` package and is not compatible with Vue 2.x. Use [vue-supply](https://github.com/Akryum/vue-supply) instead.**
+
+Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
+
+[:package: See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
+
+[Example app](https://github.com/Akryum/meteor-vuex-example)
+
 </details>
 
 ---
