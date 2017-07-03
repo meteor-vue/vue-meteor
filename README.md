@@ -38,11 +38,15 @@ Here is a list of recommended packages for developping a meteor+vue app:
 - [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
 - [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
 
+<br>
+
 ### **Recommended**: New project with Vue 2.x and without Blaze ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Create a new project without blaze, using Vue 2.x:
 
 See the [simple example project](https://github.com/Akryum/meteor-vue2-example).
+
+<br>
 
 ### Meteor & Tracker data integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
@@ -50,11 +54,15 @@ Declarative subscriptions and meteor reactive data
 
 [:package: See Usage in npm vue-meteor-tracker package](https://github.com/Akryum/vue-meteor-tracker#vue-integration-for-meteor)
 
+<br>
+
 ### Single-file component ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
 
 [:package: See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
+
+<br>
 
 ### Routing ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
@@ -64,11 +72,15 @@ Routing for Vue 2.x and Meteor using [vue-router](https://github.com/vuejs/vue-r
 
 [Example app](https://github.com/Akryum/meteor-vue2-example-routing)
 
+<br>
+
 ### Apollo integration ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
 Use apollo in your vue component!
 
 [:package: See Installation & Usage in the vue-apollo npm package](https://github.com/Akryum/vue-apollo)
+
+<br>
 
 ### Embed Blaze template ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
@@ -77,6 +89,8 @@ Use Blaze templates inside your vue components.
 [:package: See Installation & Usage in akryum:vue-blaze-template](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-blaze-template)
 
 [Example app](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)
+
+<br>
 
 
 ## Vue 1.x
@@ -90,16 +104,21 @@ Use Blaze templates inside your vue components.
 - [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
 - [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
 
+<br>
+
 ### New project with Vue 1.x and without blaze ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Create a new project without blaze, using Vue 1.x:
 
 See the [simple example project](https://github.com/Akryum/meteor-vue-example).
 
+<br>
 
 ### New project with blaze ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 See the [blaze example project](https://github.com/Akryum/meteor-vue-blaze).
+
+<br>
 
 ### Localization ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
@@ -111,6 +130,8 @@ Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon
 
 [Example app](https://github.com/Akryum/meteor-vue-example-i18n)
 
+<br>
+
 ### Routing ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
 Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
@@ -118,6 +139,8 @@ Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-r
 [:package: See Installation & Usage in arkyum:vue-router package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
 
 [Example app](https://github.com/Akryum/meteor-vue-example-routing)
+
+<br>
 
 ### State management with vuex ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
 
