@@ -9,7 +9,7 @@ if(vueVersion === 1) {
     update(newValue, oldValue) {
       if(newValue !== oldValue || !this.blazeView) {
         const templateName = newValue;
-        const template = Template[templateName];
+        const template = Blaze._getTemplate(templateName, null);
         if(!template) {
           throw new Error(`Blaze template '${templateName}' not found.`);
         }
@@ -27,7 +27,7 @@ if(vueVersion === 1) {
   });
 } else if(vueVersion === 2) {
   function renderTemplate(el, templateName) {
-    const template = Template[templateName];
+    const template = Blaze._getTemplate(templateName, null);
     if(!template) {
       throw new Error(`Blaze template '${templateName}' not found.`);
     }
