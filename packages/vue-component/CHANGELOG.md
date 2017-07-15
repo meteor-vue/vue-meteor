@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.3 -2017-07-16
+
+ - Fixed component auto naming
+
 ## 0.10.1 - 2017-07-15
 
  - Support `>>>` and `/deep/` scope-piercing combinators inside `<style scoped>`

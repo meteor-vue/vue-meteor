@@ -635,6 +635,31 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
   // Package context
   js += `__vue_options__.packageName = '${inputFile.getPackageName()}';`;
 
+  // Auto register
+  let isGlobalName = globalFileNameReg.test(inputFilePath);
+  let ext = (isGlobalName ? '.global' : '') + '.vue';
+
+  let name = Plugin.path.basename(inputFilePath);
+  name = name.substring(0, name.lastIndexOf(ext));
+
+  // Remove special characters
+  name = name.replace(nonWordCharReg, match => {
+    if (match !== '-') {
+      return ''
+    } else {
+      return match
+    }
+  });
+
+  // Kebab case
+  name = name.replace(capitalLetterReg, (match) => {
+    return '-' + match.toLowerCase();
+  });
+  name = name.replace(trimDashReg, '');
+
+  // Auto default name
+  js += `\n__vue_options__.name = __vue_options__.name || '${name}';`
+
   // Export
   js += `module.export('default', exports.default = __vue_script__);exports.__esModule = true;`;
 
@@ -649,30 +674,6 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
       }`;
     }
 
-    // Auto register
-    let isGlobalName = globalFileNameReg.test(inputFilePath);
-    let ext = (isGlobalName ? '.global' : '') + '.vue';
-
-    let name = Plugin.path.basename(inputFilePath);
-    name = name.substring(0, name.lastIndexOf(ext));
-
-    // Remove special characters
-    name = name.replace(nonWordCharReg, match => {
-      if (match !== '-') {
-        return ''
-      } else {
-        return match
-      }
-    });
-
-    // Kebab case
-    name = name.replace(capitalLetterReg, (match) => {
-      return '-' + match.toLowerCase();
-    });
-    name = name.replace(trimDashReg, '');
-
-    // Auto default name
-    js += `\n__vue_options__.name = __vue_options__.name || '${name}';`
     let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1;
     if (isOutsideImports || isGlobalName) {
       // Component registration
