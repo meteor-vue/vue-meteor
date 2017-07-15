@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.1 - 2017-07-15
+
+ - Support `>>>` and `/deep/` scope-percing combinators inside `<style scoped>`
+ - Animation keyframes inside `<style scoped>` will now become scoped. **Note**: this only works if the keyframes declaration and the animation rules are inside the same `<style>` block.
+
+## 0.10.0 - 2017-06-30
+
+ - Support Meteor 1.5 code-splitting
+
 ## 0.9.0 - 2017-04-27
 
  - Components now support `src="file"` attribute on `<template>`, `<script>` and `<style>` tags. Please update the language packages you are using.
