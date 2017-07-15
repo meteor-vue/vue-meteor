@@ -2,7 +2,7 @@
 
 ## 0.10.1 - 2017-07-15
 
- - Support `>>>` and `/deep/` scope-percing combinators inside `<style scoped>`
+ - Support `>>>` and `/deep/` scope-piercing combinators inside `<style scoped>`
  - Animation keyframes inside `<style scoped>` will now become scoped. **Note**: this only works if the keyframes declaration and the animation rules are inside the same `<style>` block.
 
 ## 0.10.0 - 2017-06-30
