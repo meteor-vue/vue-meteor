@@ -53,4 +53,4 @@ const DEVURL = process.env.HMR_URL || process.env.VUE_DEV_SERVER_URL || getLocal
 
 
 // Client-side config
-__meteor_runtime_config__.VUE_DEV_SERVER_URL = `${DEVURL}:${PORT}`
+__meteor_runtime_config__.VUE_DEV_SERVER_URL = DEVURL.indexOf(':') === -1 ? `${DEVURL}:${PORT}` : DEVURL
