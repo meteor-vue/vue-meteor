@@ -345,8 +345,8 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
         // Scoped
         if (styleTag.attribs.scoped) {
-          plugins.push(addHash({
-            hash
+          plugins.push(scopeId({
+            id: hash
           }));
         }
 
