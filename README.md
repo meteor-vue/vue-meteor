@@ -40,11 +40,10 @@ Here is a list of recommended packages for developping a meteor+vue app:
 
 <br>
 
-### **Recommended**: New project with Vue 2.x and without Blaze ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
+### Creating a new vue-meteor project ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
-Create a new project without blaze, using Vue 2.x:
-
-See the [simple example project](https://github.com/Akryum/meteor-vue2-example).
+- **Recommended**: Create a new project without blaze, using Vue 2.x:
+  - See the [simple example project](https://github.com/Akryum/meteor-vue2-example) for instructions.
 
 <br>
 
