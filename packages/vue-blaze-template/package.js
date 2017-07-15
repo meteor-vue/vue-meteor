@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-blaze-template',
-  version: '0.0.3',
+  version: '0.0.4',
   summary: 'Render Blaze templates in vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
