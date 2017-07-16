@@ -35,21 +35,28 @@ if(Meteor.isDevelopment) {
     }
   });
 
-  function getMeteorPort() {
+  function getMeteorBinding() {
+    const reg = /(?:--port|-p)(?:=|\s)(?:([0-9.]+):)?(\d+)/gi;
     const argv = this.process.argv;
-    let index = argv.indexOf('--port');
-    if(index === -1) {
-      index = argv.indexOf('-p');
+    const result = reg.exec(argv);
+    if(result && result.length >= 2) {
+      let interface = result[1];
+      let port = parseInt(result[2]);
+      return {interface, port};
     }
-    if(index !== -1 && argv.length > index) {
-      return parseInt(argv[index+1])+3;
-    }
+    return {}
   }
 
-  PORT = parseInt(process.env.HMR_PORT) || parseInt(process.env.VUE_DEV_SERVER_PORT) || getMeteorPort() || 3003;
+  PORT = parseInt(process.env.HMR_PORT) || parseInt(process.env.VUE_DEV_SERVER_PORT) || getMeteorBinding().port+3 || 3003;
+  INTERFACE = getMeteorBinding().interface
 
   try {
-    server.listen(PORT);
+    if( INTERFACE ) {
+      server.listen(PORT, INTERFACE);
+    }
+    else {
+      server.listen(PORT)
+    }
     if (process.stdout.clearLine) {
         process.stdout.clearLine();
     }
