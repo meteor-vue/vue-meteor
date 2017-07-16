@@ -34,16 +34,9 @@ Here is a list of recommended packages for developping a meteor+vue app:
 
 ### Examples
 
-- [Complete Example/Demo Project](https://github.com/Akryum/vue-meteor-demo) (recommended)
-- [Simple example project (Vue 2.x)](https://github.com/Akryum/meteor-vue2-example)
-- [Routing example project (vue 2.x)](https://github.com/Akryum/meteor-vue2-example-routing)
-
-<br>
-
-### Creating a new vue-meteor project ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
-
-- **Recommended**: Create a new project without blaze, using Vue 2.x:
-  - See the [simple example project](https://github.com/Akryum/meteor-vue2-example) for instructions.
+- [Guide Example](https://github.com/meteor-vue/guide)
+- [TodoMVC](https://github.com/meteor-vue/todomvc)
+- [Complete Example/Demo Project](https://github.com/Akryum/vue-meteor-demo)
 
 <br>
 
