@@ -84,7 +84,7 @@ Very easy way to render your fonrtend on the server automatically when a user fi
 
 ### Integrate Blaze  ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
-Render Blaze templates in Vue components and the other way aroud!
+Render Blaze templates in Vue components and the other way around!
 
 [:package: See Installation & Usage in the vuejs:blaze-integration package](https://github.com/meteor-vue/blaze-integration)
 
