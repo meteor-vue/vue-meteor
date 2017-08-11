@@ -165,6 +165,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       // Babel
       if(useBabel) {
         // Babel options
+        this.babelOptions.babelrc = true
         this.babelOptions.sourceMap = true;
         this.babelOptions.filename =
           this.babelOptions.sourceFileName = tag.basePath;

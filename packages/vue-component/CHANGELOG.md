@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.10.3 -2017-07-16
+## 0.10.5 - 2017-08-11
+
+ - Enable babelrc for vue files
+
+## 0.10.3 - 2017-07-16
 
  - Fixed component auto naming
 

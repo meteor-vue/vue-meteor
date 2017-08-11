@@ -150,6 +150,38 @@ Packages for `<style>` tag:
 
 Get involved! Add your own package with a PR! :+1:
 
+### JSX
+
+To add JSX support, install the following packages:
+
+```
+meteor npm i -D babel-plugin-syntax-jsx babel-plugin-transform-vue-jsx
+```
+
+Then add a `.babelrc` file in the root directory of the meteor project with the following content:
+
+```json
+{
+  "plugins": [
+    "transform-vue-jsx"
+  ]
+}
+```
+
+You can now use JSX in your Vue components:
+
+```html
+<script>
+export default {
+  render (h) {
+    return <div class="home">
+      <h1>#404</h1>
+    </div>
+  }
+}
+</script>
+```
+
 ### Manual import
 
 You can then import your .vue component files in your meteor code:
