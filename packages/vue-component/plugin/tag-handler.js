@@ -160,7 +160,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       }
 
       // Export
-      script = script.replace(jsExportDefaultReg, 'return');
+      script += `\nreturn require('${this.inputFile.getDisplayPath()}').default;`
 
       // Babel
       if(useBabel) {
@@ -226,7 +226,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       map.names = lastMap.names
       map.file = this.inputFile.getPathInPackage()
 
-      js += '__vue_script__ = (function(){' + script + '\n})();';
+      js += '__vue_script__ = (function(){ ' + script + '\n})();';
     }
 
     // Template

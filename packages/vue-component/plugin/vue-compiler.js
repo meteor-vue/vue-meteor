@@ -556,7 +556,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
   const isDev = isDevelopment();
   const inputFilePath = inputFile.getPathInPackage();
 
-  let js = 'var __vue_script__, __vue_template__;' + compileResult.code;
+  let js = 'var __vue_script__, __vue_template__; ' + compileResult.code + '\n';
   js += `__vue_script__ = __vue_script__ || {};`;
   js += `var __vue_options__ = (typeof __vue_script__ === "function" ?
   (__vue_script__.options || (__vue_script__.options = {}))
