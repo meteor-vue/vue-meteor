@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue',
-  version: '1.2.2',
+  version: '1.2.3',
   summary: 'Integrate Vue with Meteor',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md'
@@ -8,7 +8,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.3.2.4');
-  api.use('akryum:npm-check@0.0.2');
+  api.use('akryum:npm-check@0.0.4');
   api.use('ecmascript');
   api.mainModule('index.js', 'client');
   api.export('Vue', 'client');
