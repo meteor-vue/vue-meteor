@@ -1,5 +1,4 @@
-import {_} from 'meteor/underscore';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 
 Plugin.registerCompiler({
   filenames: ['npm.json']
@@ -30,8 +29,8 @@ class NpmCheck {
   processFile(inputFile) {
     let contents = inputFile.getContentsAsString();
     let d = JSON.parse(contents);
-    _.extend(this.deps.dependencies, d.dependencies);
-    _.extend(this.deps.devDependencies, d.devDependencies);
+    Object.assign(this.deps.dependencies, d.dependencies);
+    Object.assign(this.deps.devDependencies, d.devDependencies);
   }
 
 
