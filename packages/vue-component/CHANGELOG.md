@@ -1,6 +1,6 @@
 # Changelog
 
-## NEXT
+## 0.10.6 - 2017-08-24
 
  - #227 Initializes HMR dev server using the configuration specified in meteor server (thanks @gbisheimer)
  - #243 and #244 Better module handling in .vue files (thanks @GeoffreyBooth)
