@@ -1,5 +1,3 @@
-jsImportsReg = /import\s+.+\s+from\s+.+;?\s*/g;
-jsExportDefaultReg = /export\s+default/g;
 quoteReg = /'/g;
 lineReg = /\r?\n|\r/g;
 tagReg = /<([\w\d-]+)((\s+.*?)*)?\/?>/ig;

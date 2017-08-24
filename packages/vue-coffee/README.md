@@ -15,7 +15,7 @@ This meteor package adds [CoffeeScript](http://coffeescript.org/) support in you
 <script lang="coffee">
 import { Meteor } from 'meteor/meteor'
 
-return
+export default
   props: [ 'data' ]
   methods:
     removePost: ->
