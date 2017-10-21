@@ -50,7 +50,7 @@ Declarative subscriptions and meteor reactive data
 
 ### Single-file component ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
-It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
+It allows you to write your components in [this format](https://vuejs.org/v2/guide/single-file-components.html) with hot-reloading support.
 
 [:package: See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
 
