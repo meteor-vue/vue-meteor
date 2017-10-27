@@ -7,7 +7,7 @@ scanHtmlForTags = function scanHtmlForTags(options) {
   } catch (e) {
     throwCompileError(e)
   }
-};
+}
 
 const parseHtml = Meteor.wrapAsync(({
     sourceName,

@@ -1,83 +1,83 @@
-import fs from 'fs';
-import path from 'path';
-import { Meteor } from 'meteor/meteor';
-import hash from 'hash-sum';
-import sourceMap from 'source-map';
-import generateIdentityMap from 'generate-source-map';
+import fs from 'fs'
+import path from 'path'
+import { Meteor } from 'meteor/meteor'
+import hash from 'hash-sum'
+import sourceMap from 'source-map'
+import generateIdentityMap from 'generate-source-map'
 
 Config = {}
 
 FileHash = function(inputFile) {
-  let filePath = inputFile.getPackageName() + ':' + inputFile.getPathInPackage();
-  return Hash(filePath);
+  let filePath = inputFile.getPackageName() + ':' + inputFile.getPathInPackage()
+  return Hash(filePath)
 }
 
 Hash = function(text) {
   return hash(text)
 }
 
-IGNORE_FILE = '.vueignore';
-CWD = path.resolve('./');
+IGNORE_FILE = '.vueignore'
+CWD = path.resolve('./')
 
 function getVueVersion() {
-  const packageFile = path.join(CWD, 'package.json');
+  const packageFile = path.join(CWD, 'package.json')
 
   if (fs.existsSync(packageFile)) {
-    const pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8'));
+    const pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8'))
 
     // Override
     if(pkg.meteor && typeof pkg.meteor.vueVersion !== 'undefined') {
-      return parseInt(pkg.meteor.vueVersion);
+      return parseInt(pkg.meteor.vueVersion)
     }
 
     const vue = pkg.dependencies && pkg.dependencies.vue
     || pkg.devDependencies && pkg.devDependencies.vue
-    || pkg.peerDependencies && pkg.peerDependencies.vue;
+    || pkg.peerDependencies && pkg.peerDependencies.vue
 
     if(vue) {
-      const reg = /\D*(\d).*/gi;
-      const result = reg.exec(vue);
+      const reg = /\D*(\d).*/gi
+      const result = reg.exec(vue)
       if(result && result.length >= 2) {
-        return parseInt(result[1]);
+        return parseInt(result[1])
       }
     }
   }
 
-  return 1;
+  return 1
 }
 
-vueVersion = getVueVersion();
+vueVersion = getVueVersion()
 
 normalizeCarriageReturns = function(contents, str = "\n") {
-  return contents.replace(rnReg, str).replace(rReg, str);
+  return contents.replace(rnReg, str).replace(rReg, str)
 }
 
 getFullDirname = function(inputFile) {
-  const packageName = inputFile.getPackageName();
-  return (packageName? packageName + '/' : '') + inputFile.getDirname();
+  const packageName = inputFile.getPackageName()
+  return (packageName? packageName + '/' : '') + inputFile.getDirname()
 }
 
 getFullPathInApp = function(inputFile) {
-  const packageName = inputFile.getPackageName();
-  return (packageName? packageName + '/' : '') + inputFile.getPathInPackage();
+  const packageName = inputFile.getPackageName()
+  return (packageName? packageName + '/' : '') + inputFile.getPathInPackage()
 }
 
 getFilePath = function(inputFile) {
-  const sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot);
-  return path.resolve(sourceRoot, inputFile.getPathInPackage());
+  const sourceRoot = Plugin.convertToOSPath(inputFile._resourceSlot.packageSourceBatch.sourceRoot)
+  return path.resolve(sourceRoot, inputFile.getPathInPackage())
 }
 
 isDevelopment = function() {
-  return Meteor.isDevelopment;
+  return Meteor.isDevelopment
 }
 
 getLineNumber = function(contents, charIndex) {
-  const text = normalizeCarriageReturns(contents.substring(0, charIndex));
-  return text.split('\n').length;
+  const text = normalizeCarriageReturns(contents.substring(0, charIndex))
+  return text.split('\n').length
 }
 
 getLineInInputFile = function(inputFile, charIndex) {
-  return getLineNumber(inputFile.getContentsAsString(), charIndex);
+  return getLineNumber(inputFile.getContentsAsString(), charIndex)
 }
 
 generateSourceMap = function(filename, source, generated, offset) {
@@ -130,51 +130,51 @@ throwCompileError = function throwCompileError(options) {
     showStack,
   } = options
 
-  let output = '[vue-component] Error';
+  let output = '[vue-component] Error'
 
   // Action
   if(action) {
-    output += ' while ' + action;
+    output += ' while ' + action
   }
 
   // Tag
   if(tag) {
-    output += ' in tag <' + tag + '>';
+    output += ' in tag <' + tag + '>'
   }
 
   if(column) {
-    output += ' col:' + column;
+    output += ' col:' + column
   }
 
   // Lang
   if(lang) {
-    output += ' using lang ' + lang;
+    output += ' using lang ' + lang
   }
 
   // Message
   if(message) {
-    output += ': ' + message;
+    output += ': ' + message
   }
 
-  let errMsg = `${output}`;
+  let errMsg = `${output}`
 
   // Error location
   let file
   if(path) {
-    file = path;
+    file = path
   } else if(inputFile) {
-    file = getFullPathInApp(inputFile);
+    file = getFullPathInApp(inputFile)
   } else {
-    file = '(unknown source file)';
+    file = '(unknown source file)'
   }
 
-  let lineNumber = line;
+  let lineNumber = line
   if(charIndex && inputFile) {
-    const lineResult = getLineInInputFile(inputFile, charIndex)-1;
+    const lineResult = getLineInInputFile(inputFile, charIndex)-1
     if(lineNumber) {
-      lineNumber += lineResult;
+      lineNumber += lineResult
     } else {
-      lineNumber = lineResult;
+      lineNumber = lineResult
     }
   }
   if (!lineNumber) {
@@ -188,7 +188,7 @@ throwCompileError = function throwCompileError(options) {
 
   // Stack
   if(showStack && error && error.stack) {
-    ouput += '\n' + error.stack;
+    ouput += '\n' + error.stack
   }
 
   if (isDevelopment()) {
@@ -198,11 +198,11 @@ throwCompileError = function throwCompileError(options) {
     })
   }
 
-  const err = new TemplatingTools.CompileError();
+  const err = new TemplatingTools.CompileError()
   err.message = output
   err.file = file
   err.line = lineNumber
-  throw err;
+  throw err
 }
 
 getFileContents = (path) => {
