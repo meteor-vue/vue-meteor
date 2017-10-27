@@ -347,6 +347,10 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
     encoding: 'utf8'
   });
   let compileResult = compileOneFileWithContents(inputFile, contents, parts, babelOptions);
+  if (!compileResult) {
+    return
+  }
+
   let vueId = compileResult.hash;
 
   // CSS

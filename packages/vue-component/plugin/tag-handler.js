@@ -130,7 +130,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
               charIndex: tag.tagStartIndex,
               action: 'compiling',
               lang,
-              message: `Can't find handler for lang ${lang}, did you install it?`,
+              message: `Can't find handler for lang '${lang}', did you install it?`.yellow,
             });
           } else {
             //console.log(`Compiling <script> in lang ${lang}...`);
@@ -214,7 +214,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           map = maps[0]
         }
       } catch (e) {
-        console.error(`Error while mergin sourcemaps for ${inputFilePath}`, e.message)
+        console.error(`Error while mergin sourcemaps for ${inputFilePath}`.red, e.message)
         console.log(maps)
         map = maps[0]
       }
@@ -247,7 +247,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
               charIndex: templateTag.tagStartIndex,
               action: 'compiling',
               lang,
-              message: `Can't find handler for lang ${lang}, did you install it?`,
+              message: `Can't find handler for lang '${lang}', did you install it?`.yellow,
             });
           } else {
             //console.log(`Compiling <template> in lang ${lang}...`);
@@ -305,7 +305,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
                 charIndex: styleTag.tagStartIndex,
                 action: 'compiling',
                 lang,
-                message: `Can't find handler for lang ${lang}, did you install it?`,
+                message: `Can't find handler for lang '${lang}', did you install it?`.yellow,
               });
             } else {
               //console.log(`Compiling <style> in lang ${lang}...`);
@@ -333,8 +333,21 @@ VueComponentTagHandler = class VueComponentTagHandler {
         }
 
         // Postcss
-        let plugins = [];
-        let postcssOptions = {
+        let plugins = []
+        let customPostcssOptions = {}
+        try {
+          customPostcssOptions = loadPostcssConfig()
+        } catch (e) {
+          throwCompileError({
+            inputFile: this.inputFile,
+            tag: 'style',
+            charIndex: styleTag.tagStartIndex,
+            action: 'configuring PostCSS (custom configuration)',
+            error: e,
+            showError: true
+          })
+        }
+        let postcssOptions = Object.assign({
           from: inputFilePath,
           to: inputFilePath,
           map: {
@@ -342,7 +355,9 @@ VueComponentTagHandler = class VueComponentTagHandler {
             annotation: false,
             prev: cssMap
           }
-        }
+        }, customPostcssOptions)
+
+        plugins.push(trimCSS)
 
         // Scoped
         if (styleTag.attribs.scoped) {

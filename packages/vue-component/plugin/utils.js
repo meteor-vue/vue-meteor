@@ -153,13 +153,7 @@ throwCompileError = function throwCompileError(options) {
 
   // Message
   if(message) {
-    if(!action) {
-      output += ': ';
-    } else {
-      output += ' ';
-    }
-
-    output += message;
+    output += ': ' + message;
   }
 
   let errMsg = `${output}`;
