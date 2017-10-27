@@ -1,8 +1,8 @@
 <p align="center"><img src="https://github.com/Akryum/vue-meteor/raw/master/vue%2Bmeteor.png"></p>
 
 <p align="center">
-<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.5.2.1-blue.svg"/></a>
-<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.4.4-brightgreen.svg"/></a>
+<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.5.2.2-blue.svg"/></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.2-brightgreen.svg"/></a>
 </p>
 
 <br/>
