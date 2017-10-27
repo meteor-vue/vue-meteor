@@ -41,26 +41,28 @@ if(Meteor.isDevelopment) {
       const index = argv.findIndex(
         arg => arg.indexOf('-p') === 0 || arg.indexOf('--port') === 0
       )
-      const arg = argv[index]
-      const equalIndex = arg.indexOf('=')
-      let value
-      if (equalIndex !== -1) {
-        value = arg.substr(equalIndex + 1)
-      } else {
-        value = argv[index + 1]
-      }
-      const results = value.split(':')
-      let interface
-      let port
-      if (results.length === 2) {
-        interface = results[0]
-        port = results[1]
-      } else {
-        port = results[0]
-      }
-      return {
-        interface,
-        port: parseInt(port),
+      if (index !== -1) {
+        const arg = argv[index]
+        const equalIndex = arg.indexOf('=')
+        let value
+        if (equalIndex !== -1) {
+          value = arg.substr(equalIndex + 1)
+        } else {
+          value = argv[index + 1]
+        }
+        const results = value.split(':')
+        let interface
+        let port
+        if (results.length === 2) {
+          interface = results[0]
+          port = results[1]
+        } else {
+          port = results[0]
+        }
+        return {
+          interface,
+          port: parseInt(port),
+        }
       }
     } else {
       const reg = /(?:--port|-p)(?:=|\s)(?:([0-9.]+):)?(\d+)/gi
