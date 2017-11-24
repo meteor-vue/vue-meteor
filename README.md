@@ -2,7 +2,7 @@
 
 <p align="center">
 <a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.6-blue.svg"/></a>
-<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.2-brightgreen.svg"/></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.8-brightgreen.svg"/></a>
 </p>
 
 <br/>
