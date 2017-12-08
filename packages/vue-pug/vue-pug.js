@@ -7,7 +7,8 @@ import { Meteor } from 'meteor/meteor';
 global.vue.lang.pug = Meteor.wrapAsync(function({ source, basePath, inputFile }, cb) {
   var fn = pug.compile(source, {
     filename: basePath,
-    fileMode: true
+    fileMode: true,
+    doctype: 'html'
   });
 
   var html = fn();
