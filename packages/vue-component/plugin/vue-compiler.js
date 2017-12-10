@@ -126,7 +126,11 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
   getCacheKey(inputFile) {
     let cache = Cache.getCache(inputFile)
-    return inputFile.getSourceHash() + '_' + cache.dependencyManager.lastChangeTime
+    return [
+      inputFile.getSourceHash(),
+      inputFile.getPathInPackage(),
+      cache.dependencyManager.lastChangeTime
+    ]
   }
 
   compileResultSize(compileResult) {
