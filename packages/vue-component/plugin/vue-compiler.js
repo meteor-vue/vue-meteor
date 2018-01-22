@@ -200,7 +200,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     if (css) {
       if (isDev) {
         // Add style to client first-connection style list
-        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, true);
+        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, false);
       } else if (!isLazy) {
         // In order to avoid lazy-loading errors in --production mode, addStylesheet must come after addJavaScript
         this.addStylesheet(inputFile, {
@@ -360,7 +360,7 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
       // Hot-reloading
       cssHash = Hash(css);
       if (cache.css !== cssHash) {
-        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath });
+        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, true);
       }
     }
   }
