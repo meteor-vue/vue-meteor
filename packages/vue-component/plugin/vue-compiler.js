@@ -631,7 +631,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
   if(compileResult.cssModules) {
     const modules = Object.keys(compileResult.cssModules)
     const modulesCode = '__vue_options__.computed = __vue_options__.computed || {};\n' +
-      modules.map(module=>`__vue_options__.computed['${module}'] = function() {\n return ${JSON.stringify(compileResult.cssModules[module])}\n};\n`).join('\n')
+      modules.map(module=>`__vue_options__.computed['${module}'] = function() {\n return ${compileResult.cssModules[module]}\n};\n`).join('\n')
     js += modulesCode
     // console.log(modulesCode)
   }
