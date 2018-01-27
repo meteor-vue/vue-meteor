@@ -11,7 +11,7 @@ Package.registerBuildPlugin({
   use: [
     'ecmascript@0.4.4',
     'caching-compiler@1.0.5',
-    'babel-compiler@6.8.0',
+    'babel-compiler@7.0.0',
   ],
   sources: [
     'plugin/plugin.js',
