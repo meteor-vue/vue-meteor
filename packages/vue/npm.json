@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "vue": "^1.0.24",
-    "vue-meteor-tracker": "^1.0.3"
-  }
-}
