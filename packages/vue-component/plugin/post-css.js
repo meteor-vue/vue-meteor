@@ -32,7 +32,7 @@ loadPostcssConfig = Meteor.wrapAsync(function (cb) {
 
     cb(error, {
       plugins,
-      options
+      options,
     })
   })
 })
@@ -77,7 +77,7 @@ scopeId = postcss.plugin('add-id', ({ id }) => root => {
           }
         })
         selector.insertAfter(node, selectorParser.attribute({
-          attribute: id
+          attribute: id,
         }))
       })
     }).process(node.selector).result

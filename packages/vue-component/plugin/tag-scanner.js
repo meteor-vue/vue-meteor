@@ -1,7 +1,7 @@
 import parse5 from 'parse5'
 import { Meteor } from 'meteor/meteor'
 
-scanHtmlForTags = function scanHtmlForTags(options) {
+scanHtmlForTags = function scanHtmlForTags (options) {
   try {
     return parseHtml(options)
   } catch (e) {
@@ -10,11 +10,10 @@ scanHtmlForTags = function scanHtmlForTags(options) {
 }
 
 const parseHtml = Meteor.wrapAsync(({
-    sourceName,
-    contents,
-    tagNames
-  }, cb) => {
-
+  sourceName,
+  contents,
+  tagNames,
+}, cb) => {
   const tags = []
 
   const parser = new parse5.SAXParser({
@@ -24,7 +23,7 @@ const parseHtml = Meteor.wrapAsync(({
   let depth = 0
   let info
 
-  function addTag() {
+  function addTag () {
     const tagContents = contents.substring(info.start.index, info.end.index)
 
     const tag = {
@@ -36,7 +35,7 @@ const parseHtml = Meteor.wrapAsync(({
       fileContents: contents,
       sourceName: sourceName,
       startLine: info.start.line,
-      endLine: info.end.line
+      endLine: info.end.line,
     }
 
     // save the tag
@@ -74,7 +73,7 @@ const parseHtml = Meteor.wrapAsync(({
         }
       }
     } else if (name === info.tag.name) {
-      depth ++
+      depth++
     }
   })
 

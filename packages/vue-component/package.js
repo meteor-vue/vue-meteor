@@ -3,13 +3,13 @@ Package.describe({
   version: '0.13.0',
   summary: 'VueJS single-file components that hot-reloads',
   git: 'https://github.com/Akryum/meteor-vue-component',
-  documentation: 'README.md'
-});
+  documentation: 'README.md',
+})
 
 Package.registerBuildPlugin({
-  name: "vue-component",
+  name: 'vue-component',
   use: [
-    'ecmascript@0.6.1',
+    'ecmascript@0.10.0',
     'caching-compiler@1.1.9',
     'babel-compiler@7.0.0',
     'templating-tools@1.1.2',
@@ -22,7 +22,7 @@ Package.registerBuildPlugin({
     'plugin/tag-scanner.js',
     'plugin/tag-handler.js',
     'plugin/vue-compiler.js',
-    'plugin/plugin.js'
+    'plugin/plugin.js',
   ],
   npmDependencies: {
     'postcss': '5.2.17',
@@ -41,12 +41,12 @@ Package.registerBuildPlugin({
     'vue-template-es2015-compiler': '1.6.0',
     'parse5': '3.0.2',
     'colors': '1.1.2',
-  }
-});
+  },
+})
 
-Package.onUse(function(api) {
-  api.versionsFrom('1.4.2');
-  api.use('isobuild:compiler-plugin@1.0.0');
-  api.use('akryum:vue-component-dev-server@0.0.11');
-  api.use('akryum:vue-component-dev-client@0.3.0');
-});
+Package.onUse(function (api) {
+  api.versionsFrom('1.6')
+  api.use('isobuild:compiler-plugin@1.0.0')
+  api.use('akryum:vue-component-dev-server@0.1.0')
+  api.use('akryum:vue-component-dev-client@0.4.0')
+})

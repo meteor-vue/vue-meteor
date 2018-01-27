@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import Vue from 'vue'
 import VueServerRenderer from 'vue-server-renderer/build.js'
 import { WebApp } from 'meteor/webapp'
@@ -86,8 +84,7 @@ Meteor.bindEnvironment(function () {
     const headers = req.headers
     const frLoginContext = new FastRender._Context(loginToken, { headers })
 
-    FastRender.frContext.withValue(frLoginContext, function() {
-
+    FastRender.frContext.withValue(frLoginContext, function () {
       // we're stealing all the code from FlowRouter SSR
       // https://github.com/kadirahq/flow-router/blob/ssr/server/route.js#L61
       const ssrContext = new SsrContext()
@@ -109,7 +106,6 @@ Meteor.bindEnvironment(function () {
           }
 
           asyncResult.then(result => {
-
             let app
             if (result.app) {
               app = result.app
@@ -141,39 +137,37 @@ Meteor.bindEnvironment(function () {
             console.error(e)
             writeServerError(res)
           })
-
         } catch (error) {
           console.error(error)
           writeServerError(res)
         }
       })
-
     })
   })
 })()
 
-function patchResWrite(originalWrite, html) {
-  return function(data) {
-    if(typeof data === 'string' && data.indexOf('<!DOCTYPE html>') === 0) {
+function patchResWrite (originalWrite, html) {
+  return function (data) {
+    if (typeof data === 'string' && data.indexOf('<!DOCTYPE html>') === 0) {
       if (data.indexOf(VueSSR.outlet) !== -1) {
-        data = data.replace(VueSSR.outlet, html);
+        data = data.replace(VueSSR.outlet, html)
       } else {
-        data = moveScripts(data);
-        data = data.replace('<body>', '<body>' + html);
+        data = moveScripts(data)
+        data = data.replace('<body>', '<body>' + html)
       }
     }
 
-    originalWrite.call(this, data);
-  };
+    originalWrite.call(this, data)
+  }
 }
 
-function moveScripts(data) {
+function moveScripts (data) {
   const $ = Cheerio.load(data, {
-    decodeEntities: false
-  });
-  const heads = $('head script');
-  $('body').append(heads);
-  $('head').html($('head').html().replace(/(^[ \t]*\n)/gm, ''));
+    decodeEntities: false,
+  })
+  const heads = $('head script')
+  $('body').append(heads)
+  $('head').html($('head').html().replace(/(^[ \t]*\n)/gm, ''))
 
-  return $.html();
+  return $.html()
 }

@@ -7,7 +7,7 @@ rReg = /\r/g
 tagCommentRegex = /<!--([\s\S]+?)-->/igm
 expandedTagRegex = /<(template|script)(\s+.*)?>\n?([\s\S]+)<\/\1>/igm
 limitedTagRegex = /<(style)(\s+.*)?>\n?([\s\S]+?)<\/\1>/igm
-attrsRegex = /\s+(\w+)(=(["'])([\w\/~$@:.-]*)\3)?/ig
+attrsRegex = /\s+(\w+)(=(["'])([\w/~$@:.-]*)\3)?/ig
 globalFileNameReg = /\.global\.vue$/
 capitalLetterReg = /([A-Z])/g
 trimDashReg = /^-/

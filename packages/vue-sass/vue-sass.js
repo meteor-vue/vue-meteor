@@ -1,107 +1,107 @@
+import path from 'path'
+import fs from 'fs'
+import sass from 'node-sass'
+import { Meteor } from 'meteor/meteor'
+
 global.vue = global.vue || {}
 global.vue.lang = global.vue.lang || {}
 
-import path from 'path';
-import fs from 'fs';
-import sass from 'node-sass';
-import { Meteor } from 'meteor/meteor';
-
-function resolveImport(dependencyManager) {
+function resolveImport (dependencyManager) {
   return function (url, prev, done) {
-    let resolvedFilename;
-    url = url.replace(/^["']?(.*?)["']?$/, '$1');
+    let resolvedFilename
+    url = url.replace(/^["']?(.*?)["']?$/, '$1')
     if (url.indexOf('~') === 0 || url.indexOf('/') === 0) {
-      resolvedFilename = url.substr(1);
-    /*} else if (url.indexOf('{') === 0) {
-      resolvedFilename = decodeFilePath(url);*/
+      resolvedFilename = url.substr(1)
+    /* } else if (url.indexOf('{') === 0) {
+      resolvedFilename = decodeFilePath(url) */
     } else {
-      let currentDirectory = path.dirname(this.options.outFile);
-      resolvedFilename = path.resolve(currentDirectory, url);
+      let currentDirectory = path.dirname(this.options.outFile)
+      resolvedFilename = path.resolve(currentDirectory, url)
     }
 
-    resolvedFilename = discoverImportPath(resolvedFilename);
+    resolvedFilename = discoverImportPath(resolvedFilename)
     if (resolvedFilename === null) {
-      done(new Error('Unknown import (file not found): ' + url));
+      done(new Error('Unknown import (file not found): ' + url))
     } else {
-      dependencyManager.addDependency(resolvedFilename);
+      dependencyManager.addDependency(resolvedFilename)
 
       done({
-        file: resolvedFilename
-      });
+        file: resolvedFilename,
+      })
     }
-  };
+  }
 }
 
-function discoverImportPath(importPath) {
-  const potentialPaths = [importPath];
-  const potentialFileExtensions = ["scss", "sass"];
+function discoverImportPath (importPath) {
+  const potentialPaths = [importPath]
+  const potentialFileExtensions = ['scss', 'sass']
 
   if (!path.extname(importPath)) {
-    potentialFileExtensions.forEach(extension => potentialPaths.push(`${importPath}.${extension}`));
+    potentialFileExtensions.forEach(extension => potentialPaths.push(`${importPath}.${extension}`))
   }
   if (path.basename(importPath)[0] !== '_') {
-    [].concat(potentialPaths).forEach(potentialPath => potentialPaths.push(`${path.dirname(potentialPath)}/_${path.basename(potentialPath)}`));
+    [].concat(potentialPaths).forEach(potentialPath => potentialPaths.push(`${path.dirname(potentialPath)}/_${path.basename(potentialPath)}`))
   }
 
   for (let i = 0, potentialPath = potentialPaths[i]; i < potentialPaths.length; i++, potentialPath = potentialPaths[i]) {
     if (fs.existsSync(potentialPaths[i]) && fs.lstatSync(potentialPaths[i]).isFile()) {
-      return potentialPath;
+      return potentialPath
     }
   }
 
-  return null;
+  return null
 }
 
-function decodeFilePath(filePath) {
-  const match = filePath.match(/^{(.*)}\/(.*)$/);
-  if (!match)
-    throw new Error('Failed to decode Sass path: ' + filePath);
+// function decodeFilePath (filePath) {
+//   const match = filePath.match(/^{(.*)}\/(.*)$/)
+//   if (!match)
+//     {throw new Error('Failed to decode Sass path: ' + filePath)}
 
-  if (match[1] === '') {
-    // app
-    return match[2];
-  }
+//   if (match[1] === '') {
+//     // app
+//     return match[2]
+//   }
 
-  return 'packages/' + match[1] + '/' + match[2];
-}
+//   return 'packages/' + match[1] + '/' + match[2]
+// }
 
-global.vue.lang.scss = Meteor.wrapAsync(function({
+global.vue.lang.scss = Meteor.wrapAsync(function ({
   source,
   basePath,
   inputFile,
-  dependencyManager
+  dependencyManager,
 }, cb) {
   if (!source.trim()) {
-    cb(null, { css: ''});
-    return;
+    cb(null, { css: '' })
+    return
   }
   sass.render({
     data: source,
     importer: resolveImport(dependencyManager),
     outFile: inputFile.getPathInPackage() + '.css',
     sourceMap: true,
-    sourceMapContents: true
-  }, function(error, result) {
+    sourceMapContents: true,
+  }, function (error, result) {
     if (error) {
-      cb(error, null);
+      cb(error, null)
     } else {
       cb(null, {
         css: result.css.toString(),
-        map: result.map.toString()
+        map: result.map.toString(),
       })
     }
   })
-});
+})
 
-global.vue.lang.sass = Meteor.wrapAsync(function({
+global.vue.lang.sass = Meteor.wrapAsync(function ({
   source,
   basePath,
   inputFile,
-  dependencyManager
+  dependencyManager,
 }, cb) {
   if (!source.trim()) {
-    cb(null, { css: ''});
-    return;
+    cb(null, { css: '' })
+    return
   }
   sass.render({
     data: source,
@@ -109,15 +109,15 @@ global.vue.lang.sass = Meteor.wrapAsync(function({
     outFile: basePath + '.css',
     sourceMap: true,
     sourceMapContents: true,
-    indentedSyntax: true
-  }, function(error, result) {
+    indentedSyntax: true,
+  }, function (error, result) {
     if (error) {
-      cb(error, null);
+      cb(error, null)
     } else {
       cb(null, {
         css: result.css.toString(),
-        map: result.map.toString()
+        map: result.map.toString(),
       })
     }
   })
-});
+})

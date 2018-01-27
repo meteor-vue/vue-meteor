@@ -15,7 +15,7 @@ class VueRouterCompiler extends CachingCompiler {
   getCacheKey (inputFile) {
     return [
       inputFile.getSourceHash(),
-      inputFile.getPathInPackage()
+      inputFile.getPathInPackage(),
     ]
   }
 

@@ -2,11 +2,11 @@ import './buffer'
 import Vue from 'vue'
 import { Reload } from 'meteor/reload'
 import { Meteor } from 'meteor/meteor'
-import { Tracker } from 'meteor/tracker'
 import { Autoupdate } from 'meteor/autoupdate'
-import { ReactiveVar } from 'meteor/reactive-var'
 import VueHot1 from './vue-hot'
 import VueHot2 from './vue2-hot'
+// Hack https://github.com/socketio/socket.io-client/issues/961
+import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response'
 
 const tagStyle = 'padding: 2px 4px 1px; background: #326ABC; color: white; border-radius: 3px; font-weight: bold;'
 const infoStyle = 'font-style: italic; color: #326ABC;'
@@ -42,7 +42,8 @@ if (window.__vue_hot_pending__) {
 }
 
 // Reload override
-var _suppressNextReload = false, _deferReload = 0
+var _suppressNextReload = false
+let _deferReload = 0
 var _reload = Reload._reload
 Reload._reload = function (options) {
   // Disable original reload for autoupdate package
@@ -68,14 +69,14 @@ function reload (options) {
 }
 
 // Reimplement client version check from autoupdate package
+function checkNewVersionDocument (doc) {
+  if (doc._id === 'version' && doc.version !== autoupdateVersion) {
+    reload()
+  }
+}
 var autoupdateVersion = __meteor_runtime_config__.autoupdateVersion || `unknown`
 var ClientVersions = Autoupdate._ClientVersions
 if (ClientVersions) {
-  function checkNewVersionDocument (doc) {
-    if (doc._id === 'version' && doc.version !== autoupdateVersion) {
-      reload()
-    }
-  }
   ClientVersions.find().observe({
     added: checkNewVersionDocument,
     changed: checkNewVersionDocument,
@@ -85,10 +86,9 @@ if (ClientVersions) {
 }
 
 // Hack https://github.com/socketio/socket.io-client/issues/961
-import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response'
 if (!Response.prototype.setEncoding) {
   Response.prototype.setEncoding = function (encoding) {
-        // do nothing
+    // do nothing
   }
 }
 
@@ -116,11 +116,12 @@ Meteor.startup(function () {
     let args = ['vue']
     let regResult
     let error = null
-    while (regResult = jsImportsReg.exec(js)) {
+    while ((regResult = jsImportsReg.exec(js))) {
       args.push(regResult[2])
     }
     args.push(function (require, exports, module) {
       try {
+        // eslint-disable-next-line no-eval
         eval(js)
       } catch (e) {
         console.error(e)
@@ -174,6 +175,7 @@ Meteor.startup(function () {
       let error = false
       try {
         var obj
+        // eslint-disable-next-line no-eval
         eval(`obj = ${template};`)
         // console.log(obj)
         VueHotReloadApi.rerender(hash, obj)
@@ -187,7 +189,7 @@ Meteor.startup(function () {
   // CSS
   let _styleNodes = {}
   _socket.on('css', function ({hash, css, path}) {
-    // console.log('css', hash, css.length);
+    // console.log('css', hash, css.length)
     let style = _styleNodes[hash]
     if (!style) {
       style = document.createElement('style')

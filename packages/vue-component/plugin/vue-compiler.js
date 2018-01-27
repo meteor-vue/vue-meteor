@@ -1,15 +1,13 @@
 import fs from 'fs'
-import path from 'path'
 import Future from 'fibers/future'
 import async from 'async'
 import { Meteor } from 'meteor/meteor'
-import { EventEmitter } from 'events'
 import _ from 'lodash'
 import 'colors'
 
 let templateCompiler, transpile
 
-if(vueVersion === 2) {
+if (vueVersion === 2) {
   templateCompiler = require('vue-template-compiler')
   transpile = require('vue-template-es2015-compiler')
 }
@@ -25,23 +23,23 @@ const babelOptions = Babel.getDefaultOptions()
 
 // Compiler
 VueComponentCompiler = class VueCompo extends CachingCompiler {
-  constructor() {
+  constructor () {
     super({
       compilerName: 'vuecomponent',
       defaultCacheSize: 1024 * 1024 * 10,
     })
   }
 
-  processFilesForTarget(inputFiles) {
+  processFilesForTarget (inputFiles) {
     const cacheMisses = []
 
     this.updateIgnoredConfig(inputFiles)
 
-    //console.log(`Found ${inputFiles.length} files.`)
+    // console.log(`Found ${inputFiles.length} files.`)
 
-    const future = new Future
+    const future = new Future()
     async.eachLimit(inputFiles, this._maxParallelism, (inputFile, cb) => {
-      if(!this.isIgnored(inputFile)) {
+      if (!this.isIgnored(inputFile)) {
         let error = null
         try {
           const cacheKey = this._deepHash(this.getCacheKey(inputFile))
@@ -50,7 +48,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
           if (!compileResult) {
             compileResult = this._readCache(cacheKey)
             if (compileResult) {
-              this._cacheDebug(`Loaded ${ inputFile.getDisplayPath() }`)
+              this._cacheDebug(`Loaded ${inputFile.getDisplayPath()}`)
             }
           }
 
@@ -84,22 +82,22 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     if (this._cacheDebugEnabled) {
       cacheMisses.sort()
       this._cacheDebug(
-        `Ran (#${ ++this._callCount }) on: ${ JSON.stringify(cacheMisses) }`)
+        `Ran (#${++this._callCount}) on: ${JSON.stringify(cacheMisses)}`)
     }
   }
 
-  updateIgnoredConfig(inputFiles) {
+  updateIgnoredConfig (inputFiles) {
     this.ignoreRules = []
-    for(let inputFile of inputFiles) {
-      if(inputFile.getBasename() === IGNORE_FILE) {
+    for (let inputFile of inputFiles) {
+      if (inputFile.getBasename() === IGNORE_FILE) {
         const contents = normalizeCarriageReturns(inputFile.getContentsAsString())
         const lines = contents.split('\n')
         let dirname = getFullDirname(inputFile)
-        if(dirname === '.') {
+        if (dirname === '.') {
           dirname = ''
         }
-        for(let line of lines) {
-          if(line !== '') {
+        for (let line of lines) {
+          if (line !== '') {
             this.ignoreRules.push({
               dirname,
               reg: new RegExp(line),
@@ -110,34 +108,34 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     }
   }
 
-  isIgnored(inputFile) {
-    if(inputFile.getBasename() === IGNORE_FILE) {
+  isIgnored (inputFile) {
+    if (inputFile.getBasename() === IGNORE_FILE) {
       return true
     }
 
-    for(let rule of this.ignoreRules) {
+    for (let rule of this.ignoreRules) {
       const dirname = getFullDirname(inputFile)
-      if(dirname.indexOf(rule.dirname) === 0 && rule.reg.test(inputFile.getPathInPackage())) {
+      if (dirname.indexOf(rule.dirname) === 0 && rule.reg.test(inputFile.getPathInPackage())) {
         return true
       }
     }
     return false
   }
 
-  getCacheKey(inputFile) {
+  getCacheKey (inputFile) {
     let cache = Cache.getCache(inputFile)
     return [
       inputFile.getSourceHash(),
       inputFile.getPathInPackage(),
-      cache.dependencyManager.lastChangeTime
+      cache.dependencyManager.lastChangeTime,
     ]
   }
 
-  compileResultSize(compileResult) {
+  compileResultSize (compileResult) {
     return compileResult.code.length + compileResult.map.length
   }
 
-  compileOneFile(inputFile) {
+  compileOneFile (inputFile) {
     const contents = inputFile.getContentsAsString()
     return compileOneFileWithContents(inputFile, contents, {
       template: true,
@@ -146,14 +144,14 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     }, babelOptions)
   }
 
-  addCompileResult(inputFile, compileResult) {
+  addCompileResult (inputFile, compileResult) {
     const inputFilePath = inputFile.getPathInPackage()
     const vueId = compileResult.hash
     const isDev = isDevelopment()
 
     let jsHash = Hash(compileResult.code)
 
-    //console.log(`js hash: ${jsHash}`)
+    // console.log(`js hash: ${jsHash}`)
 
     // Lazy load files from NPM packages or imports directories
     const isLazy = !!inputFilePath.match(/(^|\/)(node_modules|imports)\//)
@@ -161,9 +159,9 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     const lazyCSS = !isDev && isLazy && inputFile.getArch().indexOf('web') !== -1
 
     // Style
-    let css = '';
-    let cssHash = '';
-    let cssModulesHash = '';
+    let css = ''
+    let cssHash = ''
+    let cssModulesHash = ''
     if (compileResult.styles.length !== 0) {
       for (let style of compileResult.styles) {
         css += style.css
@@ -171,12 +169,12 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
       cssHash = Hash(css)
 
-      //console.log(`css hash: ${cssHash}`);
-      
+      // console.log(`css hash: ${cssHash}`)
+
       if (compileResult.cssModules) {
-        cssModulesHash = Hash(JSON.stringify(compileResult.cssModules));
+        cssModulesHash = Hash(JSON.stringify(compileResult.cssModules))
       }
-      //console.log(`css hash: ${cssHash}`)
+      // console.log(`css hash: ${cssHash}`)
       if (lazyCSS) {
         // Wrap CSS in Meteor's lazy CSS loader
         css = `\n
@@ -210,27 +208,27 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     if (css) {
       if (isDev) {
         // Add style to client first-connection style list
-        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, true);
+        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, true)
       } else if (!isLazy) {
         // In order to avoid lazy-loading errors in --production mode, addStylesheet must come after addJavaScript
         this.addStylesheet(inputFile, {
-          data: css
+          data: css,
         })
       }
     }
 
     if (isDev) {
-      cache = Cache.getCache(inputFile);
-      cache.watcher.update(inputFile);
-      cache.filePath = getFilePath(inputFile);
-      cache.js = jsHash;
-      cache.css = cssHash;
-      cache.cssModules = cssModulesHash;
-      cache.template = templateHash;
+      cache = Cache.getCache(inputFile)
+      cache.watcher.update(inputFile)
+      cache.filePath = getFilePath(inputFile)
+      cache.js = jsHash
+      cache.css = cssHash
+      cache.cssModules = cssModulesHash
+      cache.template = templateHash
     }
   }
 
-  addStylesheet(inputFile, options) {
+  addStylesheet (inputFile, options) {
     const data = normalizeCarriageReturns(options.data)
     inputFile.addStylesheet({
       path: inputFile.getPathInPackage(),
@@ -243,20 +241,20 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 }
 
 class Cache {
-  static getCacheKey(inputFile) {
+  static getCacheKey (inputFile) {
     return FileHash(inputFile)
   }
 
-  static getCache(inputFile) {
+  static getCache (inputFile) {
     const key = Cache.getCacheKey(inputFile)
     let result = global._vue_cache[key] || null
-    if(result === null) {
+    if (result === null) {
       result = global._vue_cache[key] = Cache.createCache(key, inputFile)
     }
     return result
   }
 
-  static createCache(key, inputFile) {
+  static createCache (key, inputFile) {
     const cache = {
       key,
       js: null,
@@ -267,7 +265,7 @@ class Cache {
       filePath: getFullPathInApp(inputFile),
     }
 
-    if(isDevelopment()) {
+    if (isDevelopment()) {
       cache.watcher = new ComponentWatcher(cache)
     }
 
@@ -276,39 +274,39 @@ class Cache {
     return cache
   }
 
-  static removeCache(key) {
+  static removeCache (key) {
     const cache = global._vue_cache[key]
-    if(cache) {
+    if (cache) {
       cache.watcher.remove()
       cache.dependencyManager.remove()
     }
     delete global._vue_cache[key]
   }
 
-  static cleanCache(keptInputFiles) {
-    // TODO
+  // static cleanCache (keptInputFiles) {
+  //   // TODO
 
-    const keptKeys = []
+  //   const keptKeys = []
 
-    for(let key in global._vue_cache) {
+  //   for (let key in global._vue_cache) {
 
-    }
-  }
+  //   }
+  // }
 }
 
 class ComponentWatcher {
-  constructor(cache) {
+  constructor (cache) {
     this.cache = cache
   }
 
-  update(inputFile) {
+  update (inputFile) {
     this.inputFile = inputFile
     const filePath = getFilePath(this.inputFile)
     this._watchPath(filePath)
   }
 
-  refresh(parts) {
-    if(!parts) {
+  refresh (parts) {
+    if (!parts) {
       parts = {
         template: true,
         script: true,
@@ -322,40 +320,40 @@ class ComponentWatcher {
     }
   }
 
-  remove() {
+  remove () {
     this._closeWatcher()
   }
 
-  _closeWatcher() {
+  _closeWatcher () {
     if (this.watcher) {
       this.watcher.close()
     }
   }
 
-  _watchPath(filePath) {
-    if(!this.watcher || filePath !== this.filePath) {
+  _watchPath (filePath) {
+    if (!this.watcher || filePath !== this.filePath) {
       this.filePath = filePath
       // Fast file change detection
       this._closeWatcher()
       this.watcher = fs.watch(filePath, {
-        persistent: false
+        persistent: false,
       }, _.debounce(event => {
         if (event === 'change') {
           this.refresh()
         }
       }, 100, {
         leading: true,
-        trailing: false
+        trailing: false,
       }))
       this.watcher.on('error', (error) => console.error(error))
     }
   }
 }
 
-const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFile, cache, parts) {
+const hotCompile = Meteor.bindEnvironment(function hotCompile (filePath, inputFile, cache, parts) {
   let inputFilePath = inputFile.getPathInPackage()
   let contents = Plugin.fs.readFileSync(filePath, {
-    encoding: 'utf8'
+    encoding: 'utf8',
   })
   let compileResult = compileOneFileWithContents(inputFile, contents, parts, babelOptions)
   if (!compileResult) {
@@ -365,8 +363,10 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
   let vueId = compileResult.hash
 
   // CSS
-  let css = '', cssHash = '', cssModulesHash = '';
-  if(parts.style) {
+  let css = ''
+  let cssHash = ''
+  let cssModulesHash = ''
+  if (parts.style) {
     if (compileResult.styles.length !== 0) {
       for (let style of compileResult.styles) {
         css += style.css
@@ -375,24 +375,23 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
       // Hot-reloading
       cssHash = Hash(css)
       if (cache.css !== cssHash) {
-        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, true);
+        global._dev_server.__addStyle({ hash: vueId, css, path: inputFilePath }, true)
       }
 
       if (compileResult.cssModules) {
-        cssModulesHash = Hash(JSON.stringify(compileResult.cssModules));
+        cssModulesHash = Hash(JSON.stringify(compileResult.cssModules))
       }
     }
   }
 
   // JS & Template
   let jsHash, template, templateHash
-  if(parts.script || parts.template) {
-    if(parts.script) {
+  if (parts.script || parts.template) {
+    if (parts.script) {
       jsHash = Hash(compileResult.code)
     }
-    if(parts.template) {
+    if (parts.template) {
       template = compileResult.template
-      templateHash
       if (template) {
         templateHash = Hash(template)
       } else {
@@ -401,16 +400,17 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
     }
 
     if (cache.js !== jsHash || cache.template !== templateHash || cache.cssModules !== cssModulesHash) {
-
       const path = (inputFile.getPackageName() ? `packages/${inputFile.getPackageName()}` : '') + inputFile.getPathInPackage()
 
       const { js, render, staticRenderFns } = generateJs(vueId, inputFile, compileResult, true)
 
-      if(vueVersion === 2 && cache.js === jsHash && cache.cssModules === cssModulesHash) {
-        global._dev_server.emit('render', { hash: vueId, template:`{
+      if (vueVersion === 2 && cache.js === jsHash && cache.cssModules === cssModulesHash) {
+        global._dev_server.emit('render', { hash: vueId,
+          template: `{
           render: ${render},
           staticRenderFns: ${staticRenderFns}
-        }`, path })
+        }`,
+          path })
       } else {
         global._dev_server.emit('js', { hash: vueId, js, template, path })
       }
@@ -418,69 +418,69 @@ const hotCompile = Meteor.bindEnvironment(function hotCompile(filePath, inputFil
   }
 
   // Cache
-  if(parts.script) {
+  if (parts.script) {
     cache.js = jsHash
   }
-  if(parts.style) {
-    cache.css = cssHash;
-    cache.cssModules = cssModulesHash;
+  if (parts.style) {
+    cache.css = cssHash
+    cache.cssModules = cssModulesHash
   }
-  if(parts.template) {
+  if (parts.template) {
     cache.template = templateHash
   }
 })
 
 class DependencyWatcher {
-  constructor() {
+  constructor () {
     this.files = {}
   }
 
-  clearManager(manager) {
-    for(let path in this.files) {
+  clearManager (manager) {
+    for (let path in this.files) {
       this.removeDependency(path, manager)
     }
   }
 
-  addDependency(path, manager) {
+  addDependency (path, manager) {
     let file = this.files[path]
 
-    if(!file) {
+    if (!file) {
       file = this.files[path] = {
         path,
         lastChangeTime: 0,
         managers: [manager],
-        watcher: null
+        watcher: null,
       }
 
       file.watcher = fs.watch(path, {
-        persistent: false
+        persistent: false,
       }, _.debounce(_ => this._fileChanged(file), 100, {
         leading: true,
-        trailing: false
+        trailing: false,
       }))
     } else {
       file.managers.push(manager)
     }
   }
 
-  removeDependency(path, manager) {
+  removeDependency (path, manager) {
     const file = this.files[path]
     _.pull(file.managers, manager)
-    if(file.managers.length = 0) {
+    if (file.managers.length === 0) {
       this.removeFile(file)
     }
   }
 
-  removeFile(file) {
-    if(file.watcher) {
+  removeFile (file) {
+    if (file.watcher) {
       file.watcher.close()
     }
     delete this.files[file.path]
   }
 
-  _fileChanged(file) {
+  _fileChanged (file) {
     const lastChangeTime = file.lastChangeTime = new Date().getTime()
-    for(let manager of file.managers) {
+    for (let manager of file.managers) {
       manager.update(lastChangeTime)
     }
   }
@@ -489,7 +489,7 @@ class DependencyWatcher {
 const depWatcher = global.__vue_dep_watcher = global.__vue_dep_watcher || new DependencyWatcher()
 
 class DependencyManager {
-  constructor(type, cache) {
+  constructor (type, cache) {
     this.type = type
     this.cache = cache
     this.lastChangeTime = 0
@@ -504,39 +504,39 @@ class DependencyManager {
     this.watchedPaths = {}
   }
 
-  addDependency(path) {
-    if(!this.watchedPaths[path]) {
+  addDependency (path) {
+    if (!this.watchedPaths[path]) {
       depWatcher.addDependency(path, this)
       this.watchedPaths[path] = true
     }
   }
 
-  removeDependency(path) {
-    if(this.watchedPaths[path]) {
+  removeDependency (path) {
+    if (this.watchedPaths[path]) {
       depWatcher.removeDependency(path, this)
       delete this.watchedPaths[path]
     }
   }
 
-  remove() {
+  remove () {
     depWatcher.clearManager(this)
   }
 
-  update(lastChangeTime) {
+  update (lastChangeTime) {
     this.lastChangeTime = lastChangeTime
 
-    if(this.cache.watcher) {
+    if (this.cache.watcher) {
       this.cache.watcher.refresh(this.parts)
     }
   }
 }
 
-function compileTags(inputFile, tags, parts, babelOptions, dependencyManager) {
+function compileTags (inputFile, tags, parts, babelOptions, dependencyManager) {
   var handler = new VueComponentTagHandler({
     inputFile,
     parts,
     babelOptions,
-    dependencyManager
+    dependencyManager,
   })
 
   tags.forEach((tag) => {
@@ -546,7 +546,7 @@ function compileTags(inputFile, tags, parts, babelOptions, dependencyManager) {
   return handler.getResults()
 }
 
-function compileOneFileWithContents(inputFile, contents, parts, babelOptions) {
+function compileOneFileWithContents (inputFile, contents, parts, babelOptions) {
   const inputPath = inputFile.getPathInPackage()
 
   try {
@@ -555,7 +555,7 @@ function compileOneFileWithContents(inputFile, contents, parts, babelOptions) {
     const tags = scanHtmlForTags({
       sourceName: inputPath,
       contents: contents,
-      tagNames: ['template', 'script', 'style']
+      tagNames: ['template', 'script', 'style'],
     })
 
     return compileTags(inputFile, tags, parts, babelOptions, cache.dependencyManager)
@@ -563,7 +563,7 @@ function compileOneFileWithContents(inputFile, contents, parts, babelOptions) {
     if (e.message && e.line) {
       inputFile.error({
         message: e.message,
-        line: e.line
+        line: e.line,
       })
       return null
     } else {
@@ -586,19 +586,18 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
 
   let templateHash
   if (compileResult.template) {
-
     if (!isHotReload) {
       templateHash = Hash(compileResult.template)
     }
 
-    if(vueVersion === 1) {
+    if (vueVersion === 1) {
       // Fix quotes
       compileResult.template = compileResult.template.replace(quoteReg, '&#39;').replace(lineReg, '')
       js += "__vue_template__ = '" + compileResult.template + "';"
 
       // Template option
       js += `__vue_options__.template = __vue_template__;\n`
-    } else if(vueVersion === 2) {
+    } else if (vueVersion === 2) {
       const templateCompilationResult = templateCompiler.compile(compileResult.template, {
         id: vueId,
         warn: (message) => {
@@ -612,7 +611,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
           }
         },
       })
-      if(templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
+      if (templateCompilationResult.errors && templateCompilationResult.errors.length !== 0) {
         console.error(...templateCompilationResult.errors)
         js += `__vue_options__.render = function(){};\n`
         js += `__vue_options__.staticRenderFns = [];\n`
@@ -624,7 +623,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
         }
       } else {
         render = toFunction(templateCompilationResult.render)
-        staticRenderFns = `[${ templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`
+        staticRenderFns = `[${templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`
         let renderJs = `__vue_options__.render = ${render};\n`
         renderJs += `__vue_options__.staticRenderFns = ${staticRenderFns};\n`
         renderJs = transpile(renderJs)
@@ -635,19 +634,19 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
       }
     }
 
-    //console.log(`template hash: ${templateHash}`)
+    // console.log(`template hash: ${templateHash}`)
   }
 
   // Scope
-  if(vueVersion === 2) {
+  if (vueVersion === 2) {
     js += `__vue_options__._scopeId = '${vueId}';`
   }
 
   // CSS Modules
-  if(compileResult.cssModules) {
+  if (compileResult.cssModules) {
     const modules = Object.keys(compileResult.cssModules)
     const modulesCode = '__vue_options__.computed = __vue_options__.computed || {};\n' +
-      modules.map(module=>`__vue_options__.computed['${module}'] = function() {\n return ${compileResult.cssModules[module]}\n};\n`).join('\n')
+      modules.map(module => `__vue_options__.computed['${module}'] = function() {\n return ${compileResult.cssModules[module]}\n};\n`).join('\n')
     js += modulesCode
     // console.log(modulesCode)
   }
