@@ -7,7 +7,8 @@ import { Meteor } from 'meteor/meteor';
 global.vue.lang.jade = Meteor.wrapAsync(function({ source, basePath, inputFile }, cb) {
   var fn = jade.compile(source, {
     filename: basePath,
-    fileMode: true
+    fileMode: true,
+    doctype: 'html'
   });
 
   var html = fn();
