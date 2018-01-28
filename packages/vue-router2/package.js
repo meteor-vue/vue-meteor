@@ -20,7 +20,7 @@ Package.registerBuildPlugin({
 
 Package.onUse(function (api) {
   api.use('isobuild:compiler-plugin@1.0.0')
-  api.use('ecmascript')
+  api.use('ecmascript@0.10.0')
   api.use('akryum:npm-check@0.1.0')
   api.mainModule('client/client.js', 'client')
   api.export(['Router', 'nativeScrollBehavior'], 'client')
