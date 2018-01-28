@@ -16,6 +16,7 @@ module.exports = {
   // Global vars
   globals: {
     'Package': true,
+    'Npm': true,
     'Meteor': true,
     'Tracker': true,
   },

@@ -15,12 +15,11 @@ Package.registerBuildPlugin({
     'vue-sass.js',
   ],
   npmDependencies: {
-    'node-sass': '4.5.3',
-    'meteor-project-path': '0.0.1',
+    'node-sass': '4.7.2',
+    'meteor-project-path': '0.0.3',
   },
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.6')
   api.use('isobuild:compiler-plugin@1.0.0')
 })

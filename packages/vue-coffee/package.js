@@ -8,7 +8,7 @@ Package.describe({
 
 Package.registerBuildPlugin({
   name: 'vue-component-coffee',
-  use: ['ecmascript@0.10.0', 'coffeescript-compiler@2.0.3_1'],
+  use: ['ecmascript@0.10.0', 'coffeescript-compiler@2.0.3_4'],
   sources: ['vue-coffee.js'],
 })
 

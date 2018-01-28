@@ -531,34 +531,25 @@ class DependencyManager {
   }
 }
 
-function compileTags (inputFile, tags, parts, babelOptions, dependencyManager) {
+function compileTags (inputFile, sfcDescriptor, parts, babelOptions, dependencyManager) {
   var handler = new VueComponentTagHandler({
     inputFile,
     parts,
     babelOptions,
     dependencyManager,
-  })
-
-  tags.forEach((tag) => {
-    handler.addTagToResults(tag)
+    sfcDescriptor,
   })
 
   return handler.getResults()
 }
 
 function compileOneFileWithContents (inputFile, contents, parts, babelOptions) {
-  const inputPath = inputFile.getPathInPackage()
-
   try {
     const cache = Cache.getCache(inputFile)
 
-    const tags = scanHtmlForTags({
-      sourceName: inputPath,
-      contents: contents,
-      tagNames: ['template', 'script', 'style'],
-    })
+    const sfcDescriptor = templateCompiler.parseComponent(contents, { pad: 'line' })
 
-    return compileTags(inputFile, tags, parts, babelOptions, cache.dependencyManager)
+    return compileTags(inputFile, sfcDescriptor, parts, babelOptions, cache.dependencyManager)
   } catch (e) {
     if (e.message && e.line) {
       inputFile.error({

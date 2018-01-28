@@ -7,7 +7,6 @@ Package.describe({
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.6')
   api.use([
     'isobuild:compiler-plugin@1.0.0',
     'ecmascript',
@@ -19,8 +18,9 @@ Package.onUse(function (api) {
     'routepolicy',
     'url',
     'akryum:npm-check@0.1.0',
-    'staringatlights:fast-render@2.16.2',
-    'staringatlights:inject-data@2.0.4',
+    'staringatlights:fast-render@2.16.5',
+    'ejson',
+    'server-render',
   ])
   api.mainModule('server/index.js', 'server')
   api.export('VueSSR', 'server')
@@ -29,6 +29,5 @@ Package.onUse(function (api) {
 Npm.depends({
   'vue-server-renderer': '2.5.13',
   'vue-ssr-html-stream': '2.2.0',
-  'cookie-parser': '1.4.1',
-  'cheerio': '0.20.0',
+  'cookie-parser': '1.4.3',
 })

@@ -15,7 +15,7 @@ Package.registerBuildPlugin({
     'vue-pug.js',
   ],
   npmDependencies: {
-    'pug': '2.0.0-beta11',
+    'pug': '2.0.0-rc.4',
   },
 })
 

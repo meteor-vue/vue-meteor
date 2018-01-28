@@ -96,23 +96,16 @@ VueSSR.createApp = function (context) {
 }
 ```
 
-Add the `<!--vue-ssr-outlet-->` comment in you HTML where you want to render the Vue app. If you don't, the app will be rendered at the beginning of the page body.
+Add the `<div id="app"></div>` element in you HTML where you want to render the Vue app. If you don't, the app will be rendered at the beginning of the page body.
 
-You can change the replacing snippet by setting the `VUE_OUTLET` environment variable, or by setting the `VueSSR.outlet` property:
-
-```javascript
-VueSSR.outlet = '<!--my-app-here-->'
-```
-
-You can also customize the template of the rendered HTML with the `VueSSR.template` property:
+You can change the id of the element by setting the `VUE_OUTLET` environment variable, or by setting the `VueSSR.outlet` property:
 
 ```javascript
-VueSSR.template = `
-<div class="app-wrapper">
-  <!--vue-ssr-outlet-->
-</div>
-`
+VueSSR.outlet = 'my-app'
 ```
+
+In this example, Vue SSR expects a `<div id="my-app">` element in the HTML page.
+
 
 *:warning: The CSS can flicker in developpement mode and load after the app is rendered. This is due to the HMR system having to append dynamic style tags in the page to get the fastest reloading possible. This is not the case in production mode (try running your app with `meteor --production`).*
 

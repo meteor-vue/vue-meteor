@@ -10,7 +10,7 @@ Package.registerBuildPlugin({
   name: 'vue-component',
   use: [
     'ecmascript@0.10.0',
-    'caching-compiler@1.1.9',
+    'caching-compiler@1.1.11',
     'babel-compiler@7.0.0',
     'templating-tools@1.1.2',
   ],
@@ -19,33 +19,30 @@ Package.registerBuildPlugin({
     'plugin/utils.js',
     'plugin/dev-server.js',
     'plugin/post-css.js',
-    'plugin/tag-scanner.js',
     'plugin/tag-handler.js',
     'plugin/vue-compiler.js',
     'plugin/plugin.js',
   ],
   npmDependencies: {
-    'postcss': '5.2.17',
+    'postcss': '6.0.16',
     'postcss-load-config': '1.2.0',
     'postcss-selector-parser': '2.2.3',
-    'postcss-modules': '0.6.4',
+    'postcss-modules': '1.1.0',
     'socket.io': '2.0.4',
-    'async': '2.5.0',
+    'async': '2.6.0',
     'lodash': '4.17.4',
     'hash-sum': '1.0.2',
-    'source-map': '0.6.1',
+    'source-map': '0.7.0',
     'source-map-merger': '0.2.0',
     'generate-source-map': '0.0.5',
-    'autoprefixer': '6.7.7',
+    'autoprefixer': '7.2.5',
     'vue-template-compiler': '2.5.13',
     'vue-template-es2015-compiler': '1.6.0',
-    'parse5': '3.0.2',
     'colors': '1.1.2',
   },
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.6')
   api.use('isobuild:compiler-plugin@1.0.0')
   api.use('akryum:vue-component-dev-server@0.1.0')
   api.use('akryum:vue-component-dev-client@0.4.0')

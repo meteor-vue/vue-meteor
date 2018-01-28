@@ -8,7 +8,6 @@ Package.describe({
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.6')
   api.use('ecmascript')
   api.use('reload')
   api.use('autoupdate')

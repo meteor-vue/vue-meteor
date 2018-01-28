@@ -10,7 +10,7 @@ Package.registerBuildPlugin({
   name: 'vue-router',
   use: [
     'ecmascript@0.10.0',
-    'caching-compiler@1.0.5',
+    'caching-compiler@1.1.11',
     'babel-compiler@7.0.0',
   ],
   sources: [
@@ -19,7 +19,6 @@ Package.registerBuildPlugin({
 })
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.6')
   api.use('isobuild:compiler-plugin@1.0.0')
   api.use('ecmascript')
   api.use('akryum:npm-check@0.1.0')

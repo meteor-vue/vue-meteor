@@ -15,7 +15,7 @@ Package.registerBuildPlugin({
     'vue-less.js',
   ],
   npmDependencies: {
-    'less': '2.7.1',
+    'less': '2.7.3',
   },
 })
 

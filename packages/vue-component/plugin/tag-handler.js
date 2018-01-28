@@ -8,85 +8,45 @@ global._vue_js_cache = global._vue_js_cache || {}
 
 // Tag handler
 VueComponentTagHandler = class VueComponentTagHandler {
-  constructor ({ inputFile, parts, babelOptions, dependencyManager }) {
+  constructor ({ inputFile, parts, babelOptions, dependencyManager, sfcDescriptor }) {
     this.inputFile = inputFile
     this.parts = parts
     this.babelOptions = babelOptions
     this.dependencyManager = dependencyManager
+    this.sfcDescriptor = sfcDescriptor
 
-    this.component = {
-      template: null,
-      script: null,
-      styles: [],
-    }
+    // Load 'src'
+    this.sfcDescriptor.template && this.processBlockSrc(this.sfcDescriptor.template)
+    this.sfcDescriptor.script && this.processBlockSrc(this.sfcDescriptor.script)
+    this.sfcDescriptor.styles && this.sfcDescriptor.styles.forEach(
+      block => this.processBlockSrc(block)
+    )
   }
 
-  addTagToResults (tag) {
-    this.tag = tag
-
-    if (this.tag.tagName === 'template') {
-      if (this.component.template) {
-        throwCompileError({
-          inputFile: this.inputFile,
-          message: 'Only one <template> allowed in component file',
-          tag: 'template',
-          charIndex: this.tag.tagStartIndex,
-        })
-      }
-
-      this.component.template = this.tag
-    } else if (this.tag.tagName === 'script') {
-      if (this.component.script) {
-        throwCompileError({
-          inputFile: this.inputFile,
-          message: 'Only one <script> allowed in component file',
-          tag: 'script',
-          charIndex: this.tag.tagStartIndex,
-        })
-      }
-
-      this.component.script = this.tag
-    } else if (this.tag.tagName === 'style') {
-      this.component.styles.push(this.tag)
-    } else {
-      throwCompileError({
-        inputFile: this.inputFile,
-        message: 'Expected <template>, <script>, or <style> tag in template file',
-      })
-    }
-
-    if (tag.attribs.src) {
-      if (tag.contents.trim()) {
-        throwCompileError({
-          inputFile: this.inputFile,
-          message: `Should not have any contents if using the 'src' attribute.`,
-          tag: tag.tagName,
-          charIndex: tag.tagStartIndex,
-        })
-      } else {
-        const filePath = path.resolve(path.dirname(getFilePath(this.inputFile)), tag.attribs.src)
-        try {
-          tag.origin = Object.assign({}, tag)
-          tag.basePath = filePath
-          tag.contents = tag.fileContents = getFileContents(filePath)
-          tag.sourceName = filePath
-          tag.tagStartIndex = 0
-          this.dependencyManager.addDependency(filePath)
-        } catch (e) {
-          if (e.message === 'file-not-found') {
-            throwCompileError({
-              inputFile: this.inputFile,
-              message: `File ${filePath} not found.`,
-              tag: tag.tagName,
-              charIndex: tag.tagStartIndex,
-            })
-          } else {
-            throw e
-          }
+  processBlockSrc (sfcBlock) {
+    if (sfcBlock.src) {
+      const filePath = path.resolve(path.dirname(getFilePath(this.inputFile)), sfcBlock.src)
+      try {
+        sfcBlock.origin = Object.assign({}, sfcBlock)
+        sfcBlock.module = filePath
+        sfcBlock.content = getFileContents(filePath)
+        sfcBlock.start = 0
+        sfcBlock.end = sfcBlock.content.length
+        this.dependencyManager.addDependency(filePath)
+      } catch (e) {
+        if (e.message === 'file-not-found') {
+          throwCompileError({
+            inputFile: this.inputFile,
+            message: `File ${filePath} not found.`,
+            tag: sfcBlock.module,
+            charIndex: sfcBlock.start,
+          })
+        } else {
+          throw e
         }
       }
     } else {
-      tag.basePath = path.resolve(getFilePath(this.inputFile))
+      sfcBlock.module = path.resolve(getFilePath(this.inputFile))
     }
   }
 
@@ -102,26 +62,26 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let styles = []
 
     // Script
-    if (this.parts.script && this.component.script) {
-      let tag = this.component.script
-      let script = tag.contents
+    if (this.parts.script && this.sfcDescriptor.script) {
+      let sfcBlock = this.sfcDescriptor.script
+      let script = sfcBlock.content
       let useBabel = true
       jsHash = Hash(script)
 
       const maps = []
 
-      maps.push(generateSourceMap(inputFilePath, source, script, getLineNumber(source, tag.tagStartIndex)))
+      maps.push(generateSourceMap(inputFilePath, source, script, getLineNumber(source, sfcBlock.start)))
 
       // Lang
-      if (tag.attribs.lang !== undefined) {
-        let lang = tag.attribs.lang
+      if (sfcBlock.lang !== undefined) {
+        let lang = sfcBlock.lang
         try {
           let compile = global.vue.lang[lang]
           if (!compile) {
             throwCompileError({
               inputFile: this.inputFile,
               tag: 'script',
-              charIndex: tag.tagStartIndex,
+              charIndex: sfcBlock.start,
               action: 'compiling',
               lang,
               message: `Can't find handler for lang '${lang}', did you install it?`.yellow,
@@ -131,7 +91,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             let result = compile({
               source: script,
               inputFile: this.inputFile,
-              basePath: tag.basePath,
+              basePath: sfcBlock.module,
               dependencyManager: this.dependencyManager,
             })
             script = result.script
@@ -144,7 +104,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           throwCompileError({
             inputFile: this.inputFile,
             tag: 'script',
-            charIndex: tag.tagStartIndex,
+            charIndex: sfcBlock.start,
             action: 'compiling',
             lang,
             error: e,
@@ -162,7 +122,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         this.babelOptions.babelrc = true
         this.babelOptions.sourceMap = true
         this.babelOptions.filename =
-          this.babelOptions.sourceFileName = tag.basePath
+          this.babelOptions.sourceFileName = sfcBlock.module
         this.babelOptions.sourceMapTarget = this.babelOptions.filename + '.map'
 
         // Babel compilation
@@ -176,7 +136,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           let errorOptions = {
             inputFile: this.inputFile,
             tag: 'script',
-            charIndex: tag.tagStartIndex,
+            charIndex: sfcBlock.start,
             action: 'compiling',
             message: (e.message ? e.message : `An Babel error occured`),
             error: e,
@@ -186,7 +146,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             errorOptions.line = e.loc.line
             errorOptions.column = e.loc.column
           } else {
-            errorOptions.charIndex = tag.tagStartIndex
+            errorOptions.charIndex = sfcBlock.start
             if (!e.message) {
               errorOptions.showError = true
             } else {
@@ -225,20 +185,20 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
     // Template
     let template
-    if (this.parts.template && this.component.template) {
-      let templateTag = this.component.template
-      template = templateTag.contents
+    if (this.parts.template && this.sfcDescriptor.template) {
+      let sfcBlock = this.sfcDescriptor.template
+      template = sfcBlock.content
 
       // Lang
-      if (templateTag.attribs.lang !== undefined && templateTag.attribs.lang !== 'html') {
-        let lang = templateTag.attribs.lang
+      if (sfcBlock.lang !== undefined && sfcBlock.lang !== 'html') {
+        let lang = sfcBlock.lang
         try {
           let compile = global.vue.lang[lang]
           if (!compile) {
             throwCompileError({
               inputFile: this.inputFile,
               tag: 'template',
-              charIndex: templateTag.tagStartIndex,
+              charIndex: sfcBlock.start,
               action: 'compiling',
               lang,
               message: `Can't find handler for lang '${lang}', did you install it?`.yellow,
@@ -248,7 +208,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             let result = compile({
               source: template,
               inputFile: this.inputFile,
-              basePath: templateTag.basePath,
+              basePath: sfcBlock.module,
               dependencyManager: this.dependencyManager,
             })
             template = result.template
@@ -257,7 +217,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           throwCompileError({
             inputFile: this.inputFile,
             tag: 'template',
-            charIndex: templateTag.tagStartIndex,
+            charIndex: sfcBlock.start,
             action: 'compiling',
             lang,
             error: e,
@@ -283,20 +243,20 @@ VueComponentTagHandler = class VueComponentTagHandler {
     // Styles
     let cssModules
     if (this.parts.style) {
-      for (let styleTag of this.component.styles) {
-        let css = styleTag.contents
+      for (let sfcBlock of this.sfcDescriptor.styles) {
+        let css = sfcBlock.content
         let cssMap = null
 
         // Lang
-        if (styleTag.attribs.lang !== undefined && styleTag.attribs.lang !== 'css') {
-          let lang = styleTag.attribs.lang
+        if (sfcBlock.lang !== undefined && sfcBlock.lang !== 'css') {
+          let lang = sfcBlock.lang
           try {
             let compile = global.vue.lang[lang]
             if (!compile) {
               throwCompileError({
                 inputFile: this.inputFile,
                 tag: 'style',
-                charIndex: styleTag.tagStartIndex,
+                charIndex: sfcBlock.start,
                 action: 'compiling',
                 lang,
                 message: `Can't find handler for lang '${lang}', did you install it?`.yellow,
@@ -306,7 +266,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
               let result = compile({
                 source: css,
                 inputFile: this.inputFile,
-                basePath: styleTag.basePath,
+                basePath: sfcBlock.module,
                 dependencyManager: this.dependencyManager,
               })
               // console.log('Css result', result)
@@ -317,7 +277,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             throwCompileError({
               inputFile: this.inputFile,
               tag: 'style',
-              charIndex: styleTag.tagStartIndex,
+              charIndex: sfcBlock.start,
               action: 'compiling',
               lang,
               error: e,
@@ -335,7 +295,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
           throwCompileError({
             inputFile: this.inputFile,
             tag: 'style',
-            charIndex: styleTag.tagStartIndex,
+            charIndex: sfcBlock.start,
             action: 'configuring PostCSS (custom configuration)',
             error: e,
             showError: true,
@@ -354,7 +314,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         plugins.push(trimCSS)
 
         // Scoped
-        if (styleTag.attribs.scoped) {
+        if (sfcBlock.scoped) {
           plugins.push(scopeId({
             id: hash,
           }))
@@ -363,7 +323,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         // CSS Modules
         let isAsync = false
         let defaultModuleName = '$style'
-        if (styleTag.attribs.module) {
+        if (sfcBlock.attrs.module) {
           if (global.vue.cssModules) {
             try {
               let compile = global.vue.cssModules
@@ -373,7 +333,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
                 map: cssMap,
                 inputFile: this.inputFile,
                 dependencyManager: this.dependencyManager,
-                tag: styleTag,
+                tag: sfcBlock,
                 cssModules,
               })
               // console.log('Css result', result)
@@ -387,26 +347,21 @@ VueComponentTagHandler = class VueComponentTagHandler {
               throwCompileError({
                 inputFile: this.inputFile,
                 tag: 'style',
-                charIndex: styleTag.tagStartIndex,
+                charIndex: sfcBlock.start,
                 action: 'compiling css modules',
                 error: e,
                 showError: true,
               })
             }
           } else {
-            const moduleName = typeof styleTag.attribs.module === 'string' ? styleTag.attribs.module : defaultModuleName
-            const scopedModuleName = moduleName !== defaultModuleName ? `__${moduleName}` : ''
+            const moduleName = typeof sfcBlock.attrs.module === 'string' ? sfcBlock.attrs.module : defaultModuleName
             plugins.push(postcssModules({
               getJSON (cssFilename, json) {
                 if (cssModules === undefined) { cssModules = {} }
                 cssModules[moduleName] = { ...(cssModules[moduleName] || {}), ...json }
               },
               generateScopedName (exportedName, filePath) {
-                const path = require('path')
-                let sanitisedPath = path.relative(process.cwd(), filePath).replace(/.*\{}[/\\]/, '').replace(/.*\{.*?}/, 'packages').replace(/\.[^./\\]+$/, '').replace(/[\W_]+/g, '_')
-                const filename = path.basename(filePath).replace(/\.[^./\\]+$/, '').replace(/[\W_]+/g, '_')
-                sanitisedPath = sanitisedPath.replace(new RegExp(`_(${filename})$`), '__$1')
-                return `_${sanitisedPath}${scopedModuleName}__${exportedName}`
+                return `vue-module-${Hash(filePath)}-${Hash(exportedName)}`
               },
             }))
             isAsync = true
@@ -414,7 +369,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
         }
 
         // Autoprefixer
-        if (styleTag.attribs.autoprefix !== 'off') {
+        if (sfcBlock.attrs.autoprefix !== 'off') {
           plugins.push(autoprefixer())
         }
 
