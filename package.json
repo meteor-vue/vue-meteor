@@ -1,0 +1,30 @@
+{
+  "name": "vue-meteor",
+  "version": "0.1.0",
+  "description": "Meteor + Vue stack",
+  "scripts": {
+    "eslint": "eslint --ext .js,.jsx,.vue packages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meteor-vue/vue-meteor.git"
+  },
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meteor-vue/vue-meteor/issues"
+  },
+  "homepage": "https://github.com/meteor-vue/vue-meteor#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

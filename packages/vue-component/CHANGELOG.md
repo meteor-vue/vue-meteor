@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.6 - 2017-08-24
+
+ - #227 Initializes HMR dev server using the configuration specified in meteor server (thanks @gbisheimer)
+ - #243 and #244 Better module handling in .vue files (thanks @GeoffreyBooth)
+
 ## 0.10.5 - 2017-08-11
 
  - Enable babelrc for vue files

@@ -2,7 +2,6 @@ var Vue // late bind
 var map = Object.create(null)
 var registeredComponents = Object.create(null)
 var shimmed = false
-var isBrowserify = false
 
 /**
  * Determine compatibility and apply patch.
@@ -16,7 +15,6 @@ exports.install = function (vue, browserify) {
   shimmed = true
 
   Vue = vue
-  isBrowserify = browserify
 
   exports.compatible = !!Vue.internalDirectives
   if (!exports.compatible) {
@@ -75,7 +73,7 @@ function addView (Component, view) {
       map[id] = {
         Component: Component,
         views: [],
-        instances: []
+        instances: [],
       }
     }
     map[id].views.push(view)
@@ -113,18 +111,18 @@ exports.createRecord = function (id, options) {
     map[id] = {
       Component: null,
       views: [],
-      instances: []
+      instances: [],
     }
 
     // Locally registered components
-    if(options.components) {
-      for(let c in options.components) {
-        let comp = options.components[c];
-        let list = registeredComponents[comp.hotID] = registeredComponents[comp.hotID] || {};
+    if (options.components) {
+      for (let c in options.components) {
+        let comp = options.components[c]
+        let list = registeredComponents[comp.hotID] = registeredComponents[comp.hotID] || {}
         list[id] = {
           record: map[id],
-          key: c
-        };
+          key: c,
+        }
       }
     }
   }
@@ -183,10 +181,10 @@ exports.update = function (id, newOptions, newTemplate) {
   // managed by a view
   if (!record || (record.instances.length && !record.views.length)) {
     console.log('[HMR] Root or manually-mounted instance modified. Full reload may be required.')
-    return true;
+    return true
   }
   var Component = record.Component
-  let oldComponent = Component;
+  let oldComponent = Component
   // update constructor
   if (newOptions) {
     // in case the user exports a constructor
@@ -203,20 +201,20 @@ exports.update = function (id, newOptions, newTemplate) {
     Component.options.components[Component.options.name] = Component
   }
   // Registered components
-  if(oldComponent) {
+  if (oldComponent) {
     // Global
-    for(let c in Vue.options.components) {
-      if(Vue.options.components[c] === oldComponent) {
+    for (let c in Vue.options.components) {
+      if (Vue.options.components[c] === oldComponent) {
         Vue.options.components[c] = Component
       }
     }
     // Local
-    let rc = registeredComponents[id];
-    if(rc) {
-      for(let c in rc) {
-        let {key, record} = rc[c];
-        if(record.Component && record.Component.options && record.Component.options.components) {
-          record.Component.options.components[key] = Component;
+    let rc = registeredComponents[id]
+    if (rc) {
+      for (let c in rc) {
+        let {key, record} = rc[c]
+        if (record.Component && record.Component.options && record.Component.options.components) {
+          record.Component.options.components[key] = Component
         }
       }
     }
@@ -231,7 +229,7 @@ exports.update = function (id, newOptions, newTemplate) {
   if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
     window.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit('flush')
   }
-  return false;
+  return false
 }
 
 /**
@@ -274,7 +272,7 @@ function extractState (vm) {
   return {
     cid: vm.constructor.cid,
     data: vm.$data,
-    children: vm.$children.map(extractState)
+    children: vm.$children.map(extractState),
   }
 }
 
@@ -318,11 +316,11 @@ function restoreState (vm, state, isRoot) {
   }
 }
 
-exports.updateWatchers = function() {
-  for(let id in map) {
-    let record = map[id];
-    for(let vm of record.instances) {
-      updateInstanceWatchers(vm);
+exports.updateWatchers = function () {
+  for (let id in map) {
+    let record = map[id]
+    for (let vm of record.instances) {
+      updateInstanceWatchers(vm)
     }
   }
 }

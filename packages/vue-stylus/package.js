@@ -1,26 +1,25 @@
 Package.describe({
   name: 'akryum:vue-stylus',
-  version: '0.0.5',
+  version: '0.1.0',
   summary: 'Add stylus support for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
-  documentation: 'README.md'
-});
+  documentation: 'README.md',
+})
 
 Package.registerBuildPlugin({
-  name: "vue-component-stylus",
+  name: 'vue-component-stylus',
   use: [
-    'ecmascript@0.5.8'
+    'ecmascript@0.10.0',
   ],
   sources: [
-    'vue-stylus.js'
+    'vue-stylus.js',
   ],
   npmDependencies: {
-    stylus: "https://github.com/meteor/stylus/tarball/d4352c9cb4056faf238e6bd9f9f2172472b67c5b", // fork of 0.51.1
-    nib: "1.1.0"
-  }
-});
+    stylus: 'https://github.com/meteor/stylus/tarball/bb47a357d132ca843718c63998eb37b90013a449', // fork of 0.54.5
+    nib: '1.1.2',
+  },
+})
 
-Package.onUse(function(api) {
-  api.versionsFrom('1.4.1');
-  api.use('isobuild:compiler-plugin@1.0.0');
-});
+Package.onUse(function (api) {
+  api.use('isobuild:compiler-plugin@1.0.0')
+})

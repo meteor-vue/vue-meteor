@@ -1,13 +1,11 @@
 <p align="center"><img src="https://github.com/Akryum/vue-meteor/raw/master/vue%2Bmeteor.png"></p>
 
 <p align="center">
-<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.5.1-blue.svg"/></a>
-<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.4.2-brightgreen.svg"/></a>
+<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.6.1-blue.svg"/></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.13-brightgreen.svg"/></a>
 </p>
 
 <br/>
-
-**This project is currently in beta.**
 
 vue+meteor is a set of packages to help you create awesome apps quickly and efficiently with two great web technologies:
 
@@ -50,7 +48,7 @@ Declarative subscriptions and meteor reactive data
 
 ### Single-file component ![vue](https://img.shields.io/badge/vue-1.x-green.svg) ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
-It allows you to write your components in [this format](https://vuejs.org/guide/application.html#Single-File-Components) with hot-reloading support.
+It allows you to write your components in [this format](https://vuejs.org/v2/guide/single-file-components.html) with hot-reloading support.
 
 [:package: See Usage in arkyum:vue-component package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component#usage)
 
@@ -94,75 +92,7 @@ Render Blaze templates in Vue components and the other way around!
 
 ## Vue 1.x
 
-<details><summary>See exclusively Vue 1.x resources</summary>
-
-### Examples
-
-- [Simple example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example)
-- [Routing example project (Vue 1.x)](https://github.com/Akryum/meteor-vue-example-routing)
-- [Blaze example project](https://github.com/Akryum/meteor-vue-blaze) [[2](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)]
-- [i18n example project](https://github.com/Akryum/meteor-vue-example-i18n)
-
-<br>
-
-### New project with Vue 1.x and without blaze ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
-
-Create a new project without blaze, using Vue 1.x:
-
-See the [simple example project](https://github.com/Akryum/meteor-vue-example).
-
-<br>
-
-### New project with blaze ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
-
-See the [blaze example project](https://github.com/Akryum/meteor-vue-blaze).
-
-<br>
-
-### Localization ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
-
-Translate your app quickly and easily with [vue-i18n](https://github.com/kazupon/vue-i18n).
-
-[:package: See Installation & Usage in akryum:vue-i18n package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n#installation)
-
-[:package: Premade selection ui in akryum:vue-i18n-ui package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-i18n-ui)
-
-[Example app](https://github.com/Akryum/meteor-vue-example-i18n)
-
-<br>
-
-### Routing ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
-
-Routing for Vue 1.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
-
-[:package: See Installation & Usage in arkyum:vue-router package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router#installation)
-
-[Example app](https://github.com/Akryum/meteor-vue-example-routing)
-
-<br>
-
-### State management with vuex ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
-
-**:warning: This is using the old `vuex` package and is not compatible with Vue 2.x. Use [vue-supply](https://github.com/Akryum/vue-supply) instead.**
-
-Manage the state of your app with a centralized data store with [vuex](https://github.com/vuejs/vuex).
-
-[:package: See Installation & Usage in akryum:vuex](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vuex#installation)
-
-[Example app](https://github.com/Akryum/meteor-vuex-example)
-
-<br>
-
-### Embed Blaze template ![vue](https://img.shields.io/badge/vue-1.x-green.svg)
-
-Use Blaze templates inside your vue components.
-
-[:package: See Installation & Usage in akryum:vue-blaze-template](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-blaze-template)
-
-[Example app](https://github.com/Akryum/meteor-vue-blaze/tree/render-blaze)
-
-
-</details>
+See `old` branch.
 
 ---
 
@@ -197,7 +127,7 @@ Track the project progress [here](https://github.com/Akryum/meteor-vue-component
 
 ## Get involved
 
-This project is very much a work-in-progress, so your help will be greatly appreciated!  
+This project is very much a work-in-progress, so your help will be greatly appreciated!
 Feel free to contribute by opening a PR or an issue (but check before if the topic already exists).
 
 ### Development project

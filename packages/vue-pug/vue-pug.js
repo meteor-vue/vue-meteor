@@ -1,18 +1,19 @@
+import pug from 'pug'
+import { Meteor } from 'meteor/meteor'
+
 global.vue = global.vue || {}
 global.vue.lang = global.vue.lang || {}
 
-import pug from 'pug';
-import { Meteor } from 'meteor/meteor';
-
-global.vue.lang.pug = Meteor.wrapAsync(function({ source, basePath, inputFile }, cb) {
+global.vue.lang.pug = Meteor.wrapAsync(function ({ source, basePath, inputFile }, cb) {
   var fn = pug.compile(source, {
     filename: basePath,
-    fileMode: true
-  });
+    fileMode: true,
+    doctype: 'html',
+  })
 
-  var html = fn();
+  var html = fn()
 
   cb(null, {
-    template: html
-  });
-});
+    template: html,
+  })
+})

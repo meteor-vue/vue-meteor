@@ -52,7 +52,7 @@ export class RouterFactory {
   create () {
     // Callbacks
     const cbs = RouterFactory._cbs || []
-    cbs.sort((a, b) => b.priority - a.priority).forEach(cb => cb(this))
+    cbs.sort((a, b) => b.priority - a.priority).forEach(fn => fn(this))
 
     // Real vue-router instance
     this.router = new VueRouter(this.options)
