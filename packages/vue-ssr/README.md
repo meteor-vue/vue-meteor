@@ -106,6 +106,44 @@ VueSSR.outlet = 'my-app'
 
 In this example, Vue SSR expects a `<div id="my-app">` element in the HTML page.
 
+### Head and Body injection
+
+You can modify the head and body of the SSR render with the `appendHtml` function. This example uses vue-meta:
+
+```javascript
+VueSSR.createApp = function (context) {
+  return new Promise((resolve, reject) => {
+    const { app, router, store } = createApp()
+
+    router.push(context.url)
+    context.meta = app.$meta()
+
+    // ...
+
+    resolve({
+      app,
+      appendHtml() {
+        const {
+          title, link, style, script, noscript, meta
+        } = context.meta.inject()
+
+        return {
+          head: `
+            ${meta.text()}
+            ${title.text()}
+            ${link.text()}
+            ${style.text()}
+            ${script.text()}
+            ${noscript.text()}
+          `,
+          body: script.text({ body: true })
+        }
+      }
+    })
+  })
+}
+```
+
 
 *:warning: The CSS can flicker in developpement mode and load after the app is rendered. This is due to the HMR system having to append dynamic style tags in the page to get the fastest reloading possible. This is not the case in production mode (try running your app with `meteor --production`).*
 
