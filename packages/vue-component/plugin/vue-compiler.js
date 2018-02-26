@@ -342,8 +342,8 @@ class ComponentWatcher {
           this.refresh()
         }
       }, 100, {
-        leading: true,
-        trailing: false,
+        leading: false,
+        trailing: true,
       }))
       this.watcher.on('error', (error) => console.error(error))
     }
