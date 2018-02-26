@@ -201,7 +201,7 @@ exports.reload = tryWrap((id, options) => {
         // preserve pre 2.2 behavior for global mixin handling
         record.Ctor.extendOptions = options
       }
-      const newCtor = record.Ctor.super.extend(options)
+      const newCtor = (record.Ctor.super || record.Ctor).extend(options)
       record.Ctor.options = newCtor.options
       record.Ctor.cid = newCtor.cid
       record.Ctor.prototype = newCtor.prototype
