@@ -123,10 +123,18 @@ onPageLoad(sink => new Promise((resolve, reject) => {
               // })
               // // sink.appendToHead(`<script type="text/inject-data">${encodeURIComponent(injectData)}</script>`)
 
-              const script = (result.js && `<script type="text/javascript">${result.js}</script>`) || ''
+              let appendHtml
+              if (typeof result.appendHtml === "function") appendHtml = result.appendHtml()
+
+              const head = ((appendHtml && appendHtml.head) || result.head) || ''
+              const body = ((appendHtml && appendHtml.body) || result.body) || ''
+              const js = ((appendHtml && appendHtml.js) || result.js) || ''
+
+              const script = js && `<script type="text/javascript">${js}</script>`
 
               sink.renderIntoElementById(VueSSR.outlet, html)
-              sink.appendToBody(script)
+              sink.appendToHead(head)
+              sink.appendToBody([body, script])
 
               resolve()
             },
