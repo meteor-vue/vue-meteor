@@ -6,7 +6,7 @@ import { Autoupdate } from 'meteor/autoupdate'
 import VueHot1 from './vue-hot'
 import VueHot2 from './vue2-hot'
 // Hack https://github.com/socketio/socket.io-client/issues/961
-import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response'
+import Response from 'meteor-node-stubs/node_modules/https-browserify/lib/response'
 
 const tagStyle = 'padding: 2px 4px 1px; background: #326ABC; color: white; border-radius: 3px; font-weight: bold;'
 const infoStyle = 'font-style: italic; color: #326ABC;'
