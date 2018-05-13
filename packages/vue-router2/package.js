@@ -23,5 +23,5 @@ Package.onUse(function (api) {
   api.use('ecmascript@0.10.0')
   api.use('akryum:npm-check@0.1.0')
   api.mainModule('client/client.js', 'client')
-  api.export(['Router', 'nativeScrollBehavior'], 'client')
+  api.export(['RouterFactory', 'nativeScrollBehavior'], 'client')
 })
