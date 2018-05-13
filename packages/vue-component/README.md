@@ -36,6 +36,12 @@ By default, the package will try to use the Meteor port + 3, but you can overrid
 cross-env HMR_PORT=4242
 ```
 
+You can disable HMR with the `NO_HMR` var:
+
+```
+cross-env NO_HMR=1
+```
+
 #### Remote devices
 
 If you have an issue with HMR not connecting from remote devices (e.g. styles are not loading), set the `HMR_URL` env. variable with the IP of your computer. For example:
