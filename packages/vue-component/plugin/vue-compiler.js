@@ -5,12 +5,9 @@ import { Meteor } from 'meteor/meteor'
 import _ from 'lodash'
 import 'colors'
 
-let templateCompiler, transpile
-
-if (vueVersion === 2) {
-  templateCompiler = require('vue-template-compiler')
-  transpile = require('vue-template-es2015-compiler')
-}
+let defaultTemplateCompiler, defaultTranspile
+const loadDefaultTemplateCompiler = () => defaultTemplateCompiler || (defaultTemplateCompiler = require('vue-template-compiler'));
+const loadDefaultTranspiler = () => defaultTranspile || (defaultTranspile = require('vue-template-es2015-compiler'));
 
 function toFunction (code) {
   return 'function (){' + code + '}'
@@ -546,8 +543,8 @@ function compileTags (inputFile, sfcDescriptor, parts, babelOptions, dependencyM
 function compileOneFileWithContents (inputFile, contents, parts, babelOptions) {
   try {
     const cache = Cache.getCache(inputFile)
-
-    const sfcDescriptor = templateCompiler.parseComponent(contents, { pad: 'line' })
+    const compiler = loadPackage(inputFile, 'vue-template-compiler', loadDefaultTemplateCompiler)
+    const sfcDescriptor = compiler.parseComponent(contents, { pad: 'line' })
 
     return compileTags(inputFile, sfcDescriptor, parts, babelOptions, cache.dependencyManager)
   } catch (e) {
@@ -589,7 +586,8 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
       // Template option
       js += `__vue_options__.template = __vue_template__;\n`
     } else if (vueVersion === 2) {
-      const templateCompilationResult = templateCompiler.compile(compileResult.template, {
+      const compiler = loadPackage(inputFile, 'vue-template-compiler', loadDefaultTemplateCompiler)
+      const templateCompilationResult = compiler.compile(compileResult.template, {
         id: vueId,
         warn: (message) => {
           const msg = `${inputFilePath}: ${message}`
@@ -617,6 +615,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
         staticRenderFns = `[${templateCompilationResult.staticRenderFns.map(toFunction).join(',')}]`
         let renderJs = `__vue_options__.render = ${render};\n`
         renderJs += `__vue_options__.staticRenderFns = ${staticRenderFns};\n`
+        const transpile = loadPackage(inputFile, 'vue-template-es2015-compiler', loadDefaultTranspiler)
         renderJs = transpile(renderJs)
         if (isDev) {
           renderJs += `__vue_options__.render._withStripped = true;\n`
@@ -697,5 +696,17 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
     templateHash,
     render,
     staticRenderFns,
+  }
+}
+
+function loadPackage(inputFile, packageName, loadDefaultPackage) {
+  try {
+    return inputFile.require(packageName)
+  } catch (err) {
+    // console.log(`Unable to locally load package ${packageName}: ${err.toString().substring(0,40)}`)
+    /**
+     * If the user doesn't have the package installed, fallback to the one bundled with this plugin.
+     **/
+    return loadDefaultPackage()
   }
 }
