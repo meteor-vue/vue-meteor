@@ -67,7 +67,7 @@ getFilePath = function (inputFile) {
 }
 
 isDevelopment = function () {
-  return Meteor.isDevelopment
+  return Meteor.isDevelopment && !process.env.NO_HMR
 }
 
 getLineNumber = function (contents, charIndex) {

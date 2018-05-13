@@ -5,8 +5,8 @@ import { Meteor } from 'meteor/meteor'
 import { Autoupdate } from 'meteor/autoupdate'
 import VueHot1 from './vue-hot'
 import VueHot2 from './vue2-hot'
-// Hack https://github.com/socketio/socket.io-client/issues/961
-import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response'
+
+if (__meteor_runtime_config__.VUE_NO_HMR) return
 
 const tagStyle = 'padding: 2px 4px 1px; background: #326ABC; color: white; border-radius: 3px; font-weight: bold;'
 const infoStyle = 'font-style: italic; color: #326ABC;'
@@ -83,13 +83,6 @@ if (ClientVersions) {
   })
 } else {
   console.warn('%cHRM', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
-}
-
-// Hack https://github.com/socketio/socket.io-client/issues/961
-if (!Response.prototype.setEncoding) {
-  Response.prototype.setEncoding = function (encoding) {
-    // do nothing
-  }
 }
 
 Meteor.startup(function () {

@@ -53,7 +53,7 @@ if (global._dev_server_http) {
   delete global._dev_server_http
 }
 
-if (Meteor.isDevelopment) {
+if (isDevelopment()) {
   var server = http.createServer()
   var io = SocketIo(server, {
     serveClient: false,
