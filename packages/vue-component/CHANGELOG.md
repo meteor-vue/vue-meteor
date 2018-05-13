@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.14.0 - 2018-05-13
+
+- Use postcss plugins #317 @mitar
+- Postcss custom context #316 @mitar
+- Load project locally installed vue-template-compiler #314 @nathantreid
+- `NO_HMR` env var support fix #309
+- Fix #307
+- Fix babel error
+
 ## 0.10.6 - 2017-08-24
 
  - #227 Initializes HMR dev server using the configuration specified in meteor server (thanks @gbisheimer)
