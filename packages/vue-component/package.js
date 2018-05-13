@@ -39,6 +39,7 @@ Package.registerBuildPlugin({
     'vue-template-compiler': '2.5.13',
     'vue-template-es2015-compiler': '1.6.0',
     'colors': '1.1.2',
+    'app-module-path': '2.2.0',
   },
 })
 

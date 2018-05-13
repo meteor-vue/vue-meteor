@@ -1,3 +1,7 @@
+// Makes sure we can load peer dependencies from app's directory.
+// See: https://github.com/meteor/meteor/issues/9865
+Npm.require('app-module-path/cwd')
+
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import load from 'postcss-load-config'
