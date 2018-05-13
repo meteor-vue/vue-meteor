@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component-dev-client',
-  version: '0.4.1',
+  version: '0.4.2',
   summary: 'Hot-reloading client for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md',
