@@ -8,7 +8,7 @@ let loaded
 loadPostcssConfig = Meteor.wrapAsync(function (cb) {
   let error = null
   if (!loaded) {
-    loaded = load().catch(err => {
+    loaded = load({'vue-meteor': true}).catch(err => {
       // postcss-load-config throws error when no config file is found,
       // but for us it's optional. only emit other errors
       if (err.message.indexOf('No PostCSS Config found') < 0) {
