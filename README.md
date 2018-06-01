@@ -5,7 +5,15 @@
 <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.13-brightgreen.svg"/></a>
 </p>
 
-<br/>
+<p align="center">
+  <a href="https://www.patreon.com/akryum" target="_blank">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
+  </a>
+</p>
+
+<br>
+<br>
+<br>
 
 vue+meteor is a set of packages to help you create awesome apps quickly and efficiently with two great web technologies:
 
