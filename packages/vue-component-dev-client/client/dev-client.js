@@ -14,7 +14,7 @@ const infoStyle = 'font-style: italic; color: #326ABC;'
 let VueHotReloadApi
 const vueVersion = parseInt(Vue.version.charAt(0))
 
-console.log('%cHRM%c You are using Vue %c' + Vue.version, tagStyle, 'color: #177D4F;', 'color: #177D4F; font-weight: bold;')
+console.log('%cHMR%c You are using Vue %c' + Vue.version, tagStyle, 'color: #177D4F;', 'color: #177D4F; font-weight: bold;')
 
 console.log('%cYou are currently in development mode. If the Hot-Module-Replacement system is enabled (`on` by default), the CSS will be injected to the page after the scripts are loaded. This may result in Flash Of Unstyled Contents. Those will not occur in production.', infoStyle)
 
@@ -54,14 +54,14 @@ Reload._reload = function (options) {
 
 // Custom reload method
 function reload (options) {
-  console.log('%cHRM', tagStyle, 'Reload request received')
+  console.log('%cHMR', tagStyle, 'Reload request received')
   if (_deferReload !== 0) {
     setTimeout(_reload, _deferReload)
-    console.log(`%cHRM`, tagStyle, `Client reload defered, will reload in ${_deferReload} ms`)
+    console.log(`%cHMR`, tagStyle, `Client reload defered, will reload in ${_deferReload} ms`)
   } else if (_suppressNextReload) {
-    console.log(`%cHRM%c ⥁ Client version changed, reload suppressed because of a recent HMR update. You may need to reload the page.`, tagStyle, 'color: #F36E00;')
+    console.log(`%cHMR%c ⥁ Client version changed, reload suppressed because of a recent HMR update. You may need to reload the page.`, tagStyle, 'color: #F36E00;')
   } else {
-    console.log(`%cHRM`, tagStyle, `Reloading app...`)
+    console.log(`%cHMR`, tagStyle, `Reloading app...`)
     _reload.call(Reload, options)
   }
   _suppressNextReload = false
@@ -82,14 +82,14 @@ if (ClientVersions) {
     changed: checkNewVersionDocument,
   })
 } else {
-  console.warn('%cHRM', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
 }
 
 Meteor.startup(function () {
   // Dev client
   let devUrl = __meteor_runtime_config__.VUE_DEV_SERVER_URL
 
-  console.log('%cHRM%c Dev server URL: %c' + devUrl, tagStyle, '', 'font-weight: bold;')
+  console.log('%cHMR%c Dev server URL: %c' + devUrl, tagStyle, '', 'font-weight: bold;')
 
   console.log(`%cIf you have issues connecting to the dev server, set the 'HMR_URL' env variable to the URL of the dev server displayed in the meteor console.`, infoStyle)
 
@@ -98,10 +98,10 @@ Meteor.startup(function () {
   window.__dev_client__ = _socket
 
   _socket.on('connect', function () {
-    console.log('%cHRM%c ⏺ Dev client connected', tagStyle, 'color: #177D4F;')
+    console.log('%cHMR%c ⏺ Dev client connected', tagStyle, 'color: #177D4F;')
   })
   _socket.on('disconnect', function () {
-    console.log('%cHRM%c ⏺ Dev client disconnected', tagStyle, 'color: #F36E00;')
+    console.log('%cHMR%c ⏺ Dev client disconnected', tagStyle, 'color: #F36E00;')
   })
 
   // JS
@@ -140,7 +140,7 @@ Meteor.startup(function () {
 
     let needsReload = false
     if (!error) {
-      console.log('%cHRM', tagStyle, 'Reloading ' + path)
+      console.log('%cHMR', tagStyle, 'Reloading ' + path)
       if (!result.default.render && !template) {
         error = true
       }
@@ -164,7 +164,7 @@ Meteor.startup(function () {
   // Template
   _socket.on('render', function ({hash, template, path}) {
     if (vueVersion === 2) {
-      console.log('%cHRM', tagStyle, 'Rerendering ' + path)
+      console.log('%cHMR', tagStyle, 'Rerendering ' + path)
       let error = false
       try {
         var obj
@@ -200,7 +200,7 @@ Meteor.startup(function () {
       // Refresh
       VueHotReloadApi.updateWatchers()
     }
-    console.log(`%cHRM`, tagStyle, `Updated locale ${lang}`)
+    console.log(`%cHMR`, tagStyle, `Updated locale ${lang}`)
     _suppressNextReload = true
   })
   _socket.on('langs.updated', function ({langs}) {
@@ -217,7 +217,7 @@ Meteor.startup(function () {
     } else {
       func = console.log
     }
-    func(`%cHRM`, tagStyle, message)
+    func(`%cHMR`, tagStyle, message)
   })
 
   // Reg
