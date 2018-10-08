@@ -15,7 +15,7 @@ function resolveImport (dependencyManager) {
     /* } else if (url.indexOf('{') === 0) {
       resolvedFilename = decodeFilePath(url) */
     } else {
-      let currentDirectory = path.dirname(this.options.outFile)
+      let currentDirectory = path.dirname(prev === 'stdin' ? this.options.outFile : prev)
       resolvedFilename = path.resolve(currentDirectory, url)
     }
 
