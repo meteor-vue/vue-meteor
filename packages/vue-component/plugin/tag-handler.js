@@ -119,7 +119,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       if (useBabel) {
         // Babel options
         this.babelOptions.babelrc = true
-        this.babelOptions.sourceMap = true
+        this.babelOptions.sourceMaps = true
         this.babelOptions.filename =
           this.babelOptions.sourceFileName = sfcBlock.module
 

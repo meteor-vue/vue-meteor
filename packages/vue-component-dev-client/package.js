@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-component-dev-client',
-  version: '0.4.2',
+  version: '0.4.3',
   summary: 'Hot-reloading client for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md',
@@ -8,7 +8,7 @@ Package.describe({
 })
 
 Package.onUse(function (api) {
-  api.use('ecmascript@0.10.0')
+  api.use('ecmascript@0.11.1')
   api.use('reload@1.2.0')
   api.use('autoupdate@1.4.0')
   api.use('reactive-var@1.0.11')
@@ -16,5 +16,5 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  'socket.io-client': '2.0.4',
+  'socket.io-client': '2.1.1',
 })

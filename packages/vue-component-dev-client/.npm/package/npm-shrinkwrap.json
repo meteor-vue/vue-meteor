@@ -57,14 +57,14 @@
       "integrity": "sha1-ZF/ErfWLcrZJ1crmUTVhnbJv8UM="
     },
     "debug": {
-      "version": "2.6.9",
-      "resolved": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz",
-      "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA=="
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz",
+      "integrity": "sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g=="
     },
     "engine.io-client": {
-      "version": "3.1.4",
-      "resolved": "https://registry.npmjs.org/engine.io-client/-/engine.io-client-3.1.4.tgz",
-      "integrity": "sha1-T88TcLRxY70s6b4nM5ckMDUNTqE="
+      "version": "3.2.1",
+      "resolved": "https://registry.npmjs.org/engine.io-client/-/engine.io-client-3.2.1.tgz",
+      "integrity": "sha512-y5AbkytWeM4jQr7m/koQLc5AxpRKC1hEVUb/s1FUAWEJq5AzJJ4NLvzuKPuxtDi5Mq755WuDvZ6Iv2rXj4PTzw=="
     },
     "engine.io-parser": {
       "version": "2.1.2",
@@ -72,9 +72,9 @@
       "integrity": "sha512-dInLFzr80RijZ1rGpx1+56/uFoH7/7InhH3kZt+Ms6hT8tNx3NGW/WNSA/f8As1WkOfkuyb3tnRyuXGxusclMw=="
     },
     "has-binary2": {
-      "version": "1.0.2",
-      "resolved": "https://registry.npmjs.org/has-binary2/-/has-binary2-1.0.2.tgz",
-      "integrity": "sha1-6D26SfC5vk0CbSc2U1DZ8D9Uvpg="
+      "version": "1.0.3",
+      "resolved": "https://registry.npmjs.org/has-binary2/-/has-binary2-1.0.3.tgz",
+      "integrity": "sha512-G1LWKhDSvhGeAQ8mPVQlqNcOB2sJdwATtZKl2pDKKHfpf/rYj24lkinxf69blJbnsvtqqNU+L3SL50vzZhXOnw=="
     },
     "has-cors": {
       "version": "1.1.0",
@@ -112,19 +112,19 @@
       "integrity": "sha1-gCBKUNTbt3m/3G6+J3jZDkvOMgo="
     },
     "safe-buffer": {
-      "version": "5.1.1",
-      "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.1.tgz",
-      "integrity": "sha512-kKvNJn6Mm93gAczWVJg7wH+wGYWNrDHdWvpUmHyEsgCtIwwo3bqPtV4tR5tuPaUhTOo/kvhVwd8XwwOllGYkbg=="
+      "version": "5.1.2",
+      "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz",
+      "integrity": "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g=="
     },
     "socket.io-client": {
-      "version": "2.0.4",
-      "resolved": "https://registry.npmjs.org/socket.io-client/-/socket.io-client-2.0.4.tgz",
-      "integrity": "sha1-CRilUkBtxeVAs4Dc2Xr8SmQzL44="
+      "version": "2.1.1",
+      "resolved": "https://registry.npmjs.org/socket.io-client/-/socket.io-client-2.1.1.tgz",
+      "integrity": "sha512-jxnFyhAuFxYfjqIgduQlhzqTcOEQSn+OHKVfAxWaNWa7ecP7xSNk2Dx/3UEsDcY7NcFafxvNvKPmmO7HTwTxGQ=="
     },
     "socket.io-parser": {
-      "version": "3.1.2",
-      "resolved": "https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-3.1.2.tgz",
-      "integrity": "sha1-28IoIVH8T6675Aru3Ady66YZ9/I="
+      "version": "3.2.0",
+      "resolved": "https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-3.2.0.tgz",
+      "integrity": "sha512-FYiBx7rc/KORMJlgsXysflWx/RIvtqZbyGLlHZvjfmPTPeuD/I8MaW7cfFrj5tRltICJdgwflhfZ3NVVbVLFQA=="
     },
     "to-array": {
       "version": "0.1.4",

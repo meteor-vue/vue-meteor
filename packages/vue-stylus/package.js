@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-stylus',
-  version: '0.1.0',
+  version: '0.1.1',
   summary: 'Add stylus support for vue components',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md',
@@ -9,7 +9,7 @@ Package.describe({
 Package.registerBuildPlugin({
   name: 'vue-component-stylus',
   use: [
-    'ecmascript@0.10.0',
+    'ecmascript@0.11.1',
   ],
   sources: [
     'vue-stylus.js',

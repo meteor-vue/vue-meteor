@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:npm-check',
-  version: '0.1.0',
+  version: '0.1.1',
   summary: 'Check npm peer-dependencies and auto-installs them.',
   git: 'https://github.com/Akryum/meteor-vue-component/tree/master/packages/npm-check',
   documentation: 'README.md',
@@ -9,7 +9,7 @@ Package.describe({
 Package.registerBuildPlugin({
   name: 'npm-check',
   use: [
-    'ecmascript@0.10.0',
+    'ecmascript@0.11.1',
   ],
   sources: [
     'lib.js',
