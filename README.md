@@ -64,7 +64,7 @@ It allows you to write your components in [this format](https://vuejs.org/v2/gui
 
 ### Routing ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
-Routing for Vue 2.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
+Routing for Vue 3.x and Meteor using [vue-router](https://github.com/vuejs/vue-router).
 
 [:package: See Installation & Usage in arkyum:vue-router2 package](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router2#installation)
 
