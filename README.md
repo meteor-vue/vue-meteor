@@ -30,7 +30,7 @@ Here is a list of recommended packages for developping a meteor+vue app:
 
 - [:package: `vue-meteor-tracker`](https://github.com/Akryum/vue-meteor-tracker) (meteor tracker integration)
 - [:package: `akryum:vue-component`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-component) (vue component files)
-- [:package: `akryum:vue-router2`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router2) (`vue-router` 2.x helpers)
+- [:package: `akryum:vue-router2`](https://github.com/Akryum/meteor-vue-component/tree/master/packages/vue-router2) (`vue-router` 3.x helpers)
 - [:package: `vue-apollo`](https://github.com/Akryum/vue-apollo) (apollo integration)
 - [:package: `vuejs:blaze-integration`](https://github.com/meteor-vue/blaze-integration) (integrate Vue and Blaze)
 - [:package: `vue-supply`](https://github.com/Akryum/vue-supply) (use reactive data & automatic subscriptions in components and vuex store)
