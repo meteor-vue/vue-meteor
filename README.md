@@ -11,6 +11,16 @@
   </a>
 </p>
 
+## Sponsors
+
+### Silver
+
+<p align="center">
+  <a href="https://vueschool.io/" target="_blank">
+    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" width="200px">
+  </a>
+</p>
+
 <br>
 <br>
 <br>
