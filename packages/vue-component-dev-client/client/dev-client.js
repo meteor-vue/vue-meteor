@@ -71,7 +71,7 @@ function reload (options) {
 // Reimplement client version check from autoupdate package
 function checkNewVersionDocument (doc) {
   if (doc._id === 'version' && doc.version !== autoupdateVersion) {
-    reload()
+    // reload()
   }
 }
 var autoupdateVersion = __meteor_runtime_config__.autoupdateVersion || `unknown`
