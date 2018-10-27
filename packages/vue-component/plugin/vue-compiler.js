@@ -328,22 +328,14 @@ class ComponentWatcher {
   }
 
   _watchPath (filePath) {
-    if (!this.watcher || filePath !== this.filePath) {
-      this.filePath = filePath
-      // Fast file change detection
-      this._closeWatcher()
-      this.watcher = fs.watch(filePath, {
-        persistent: false,
-      }, _.debounce(event => {
-        if (event === 'change') {
-          this.refresh()
-        }
-      }, 100, {
-        leading: false,
-        trailing: true,
-      }))
-      this.watcher.on('error', (error) => console.error(error))
-    }
+    this.filePath = filePath
+    // Fast file change detection
+    this._closeWatcher()
+    this.watcher = fs.watch(filePath, {
+      persistent: false,
+    })
+    this.watcher.on('change', () => this.refresh())
+    this.watcher.on('error', (error) => console.error(error))
   }
 }
 
