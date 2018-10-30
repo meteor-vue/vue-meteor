@@ -16,6 +16,9 @@ function toFunction (code) {
 // Cache
 global._vue_cache = global._vue_cache || {}
 
+// Babel cache directory
+process.env.BABEL_CACHE_DIR = process.env.BABEL_CACHE_DIR || '.cache'
+
 const babelOptions = Babel.getDefaultOptions()
 
 // Compiler

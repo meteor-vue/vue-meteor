@@ -8,7 +8,7 @@ Package.describe({
 })
 
 Package.onUse(function (api) {
-  api.use('ecmascript@0.11.1')
-  api.use('webapp@1.6.0')
+  api.use('ecmascript@0.12.1')
+  api.use('webapp@1.7.0')
   api.mainModule('server/main.js', 'server')
 })

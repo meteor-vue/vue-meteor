@@ -8,9 +8,9 @@ Package.describe({
 })
 
 Package.onUse(function (api) {
-  api.use('ecmascript@0.11.1')
+  api.use('ecmascript@0.12.1')
   api.use('reload@1.2.0')
-  api.use('autoupdate@1.4.0')
+  api.use('autoupdate@1.5.0')
   api.use('reactive-var@1.0.11')
   api.mainModule('client/dev-client.js', 'client')
 })
