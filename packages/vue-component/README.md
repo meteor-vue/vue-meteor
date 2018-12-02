@@ -13,6 +13,14 @@ meteor add akryum:vue-component
 
 ## Usage
 
+### Babel cache
+
+The babel cache folder defaults to `.cache`, but you can override it with the `BABEL_CACHE_DIR` environment variable:
+
+```
+cross-env BABEL_CACHE_DIR=cacheFolderName
+```
+
 ### Hot-reloading
 
 To enable component hot-reloading, make sure that you launch meteor in development mode (typically with `meteor` or `meteor run`). The server console should print this line:

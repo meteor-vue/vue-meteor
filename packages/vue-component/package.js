@@ -9,9 +9,9 @@ Package.describe({
 Package.registerBuildPlugin({
   name: 'vue-component',
   use: [
-    'ecmascript@0.11.1',
-    'caching-compiler@1.1.12',
-    'babel-compiler@7.1.1',
+    'ecmascript@0.12.1',
+    'caching-compiler@1.2.0',
+    'babel-compiler@7.2.1',
     'templating-tools@1.1.2',
   ],
   sources: [
