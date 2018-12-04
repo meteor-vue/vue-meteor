@@ -220,6 +220,7 @@ exports.reload = tryWrap((id, options) => {
       console.warn(
         'Root or manually mounted instance modified. Full reload required.'
       )
+      window.location.reload()
     }
   })
 })
