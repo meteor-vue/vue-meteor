@@ -36,7 +36,7 @@ Package.registerBuildPlugin({
     'source-map-merger': '0.2.0',
     'generate-source-map': '0.0.5',
     'autoprefixer': '7.2.5',
-    'vue-template-compiler': '2.5.17',
+    'vue-template-compiler': '2.5.18',
     'vue-template-es2015-compiler': '1.6.0',
     'colors': '1.1.2',
     'app-module-path': '2.2.0',

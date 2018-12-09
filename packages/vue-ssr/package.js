@@ -28,7 +28,7 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  'vue-server-renderer': '2.5.17',
+  'vue-server-renderer': '2.5.18',
   'vue-ssr-html-stream': '2.2.0',
   'cookie-parser': '1.4.3',
 })
