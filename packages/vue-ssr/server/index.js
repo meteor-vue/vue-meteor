@@ -3,6 +3,7 @@ import VueServerRenderer from 'vue-server-renderer/build.js'
 import { WebApp } from 'meteor/webapp'
 import cookieParser from 'cookie-parser'
 import { onPageLoad } from 'meteor/server-render'
+import { FastRender} from 'meteor/staringatlights:fast-render'
 
 import SsrContext from './context'
 import patchSubscribeData from './data'
