@@ -282,16 +282,6 @@ class Cache {
     }
     delete global._vue_cache[key]
   }
-
-  // static cleanCache (keptInputFiles) {
-  //   // TODO
-
-  //   const keptKeys = []
-
-  //   for (let key in global._vue_cache) {
-
-  //   }
-  // }
 }
 
 class ComponentWatcher {
@@ -331,16 +321,21 @@ class ComponentWatcher {
   }
 
   _watchPath (filePath) {
-    this.filePath = filePath
-    // Fast file change detection
-    this._closeWatcher()
-    this.watcher = fs.watch(filePath, {
-      persistent: false,
-    })
-    this.watcher.on('change', _.debounce(event => { // Refresh once
-      this.refresh()
-    }, 100))
-    this.watcher.on('error', (error) => console.error(error))
+    if (!this.watcher || filePath !== this.filePath) {
+      this.filePath = filePath
+      // Fast file change detection
+      this._closeWatcher()
+      this.watcher = fs.watch(filePath, {
+        persistent: false,
+      })
+      this.watcher.on('change', _.debounce(event => { // Refresh once
+        this.refresh()
+      }, 100, {
+        leading: false,
+        trailing: true,
+      }))
+      this.watcher.on('error', (error) => console.error(error))
+    }
   }
 }
 
