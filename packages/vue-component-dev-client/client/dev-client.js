@@ -198,7 +198,9 @@ Meteor.startup(function () {
       document.getElementsByTagName('head')[0].appendChild(style)
       _styleNodes[hash] = style
     }
-    style.textContent = css
+	style.textContent = css
+	
+	_suppressNextReload = true
   })
 
   // Locale
