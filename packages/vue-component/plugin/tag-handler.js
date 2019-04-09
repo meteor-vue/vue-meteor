@@ -358,9 +358,10 @@ VueComponentTagHandler = class VueComponentTagHandler {
                 if (cssModules === undefined) { cssModules = {} }
                 cssModules[moduleName] = { ...(cssModules[moduleName] || {}), ...json }
               },
-              generateScopedName (exportedName, filePath) {
-                return `vue-module-${Hash(filePath)}-${Hash(exportedName)}`
-              },
+              
+              // Generate a class name in the form of .<vue_component_name>__<local_class_name>___<hash>
+              // Ref.: https://github.com/css-modules/postcss-modules#generating-scoped-names
+              generateScopedName: '[name]__[local]___[hash:base64:5]'
             }))
             isAsync = true
           }
