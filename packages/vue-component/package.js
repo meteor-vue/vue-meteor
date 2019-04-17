@@ -46,5 +46,5 @@ Package.registerBuildPlugin({
 Package.onUse(function (api) {
   api.use('isobuild:compiler-plugin@1.0.0')
   api.use('akryum:vue-component-dev-server@0.1.3')
-  api.use('akryum:vue-component-dev-client@0.4.6')
+  api.use('akryum:vue-component-dev-client@0.4.5')
 })
