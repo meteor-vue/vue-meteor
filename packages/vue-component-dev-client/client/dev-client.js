@@ -99,7 +99,7 @@ Meteor.startup(function () {
 
   console.log('%cHMR%c Dev server URL: %c' + devUrl, tagStyle, '', 'font-weight: bold;')
 
-  console.log(`%cIf you have issues connecting to the dev server, set the 'HMR_URL' env letiable to the URL of the dev server displayed in the meteor console.`, infoStyle)
+  console.log(`%cIf you have issues connecting to the dev server, set the 'HMR_URL' env variable to the URL of the dev server displayed in the meteor console.`, infoStyle)
 
   // NOTE: Socket lib don't allow mix HTTP and HTTPS servers URLs on client!
   const _socket = require('socket.io-client')(devUrl)
