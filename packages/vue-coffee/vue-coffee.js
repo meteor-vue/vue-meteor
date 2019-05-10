@@ -21,6 +21,6 @@ global.vue.lang.coffee = Meteor.wrapAsync(function ({ source, inputFile }, callb
   callback(null, {
     script: sourceWithMap.source,
     map: sourceWithMap.sourceMap,
-    useBabel: false,
+    useBabel: true, // CoffeeScript 2.x output needs Babel transpilation.
   })
 })
