@@ -1,7 +1,7 @@
 // server/ssr_context.js
 // stolen from https://github.com/kadirahq/flow-router/blob/ssr/server/ssr_context.js
 
-import { FastRender} from 'meteor/staringatlights:fast-render'
+import { FastRender } from 'meteor/staringatlights:fast-render'
 
 export default class SsrContext {
   constructor () {

@@ -3,7 +3,7 @@ import { createRenderer } from 'vue-server-renderer'
 import { WebApp } from 'meteor/webapp'
 import cookieParser from 'cookie-parser'
 import { onPageLoad } from 'meteor/server-render'
-import { FastRender} from 'meteor/staringatlights:fast-render'
+import { FastRender } from 'meteor/staringatlights:fast-render'
 
 import SsrContext from './context'
 import patchSubscribeData from './data'
@@ -120,7 +120,7 @@ onPageLoad(sink => new Promise((resolve, reject) => {
               // // sink.appendToHead(`<script type="text/inject-data">${encodeURIComponent(injectData)}</script>`)
 
               let appendHtml
-              if (typeof context.appendHtml === "function") appendHtml = context.appendHtml()
+              if (typeof context.appendHtml === 'function') appendHtml = context.appendHtml()
 
               const head = ((appendHtml && appendHtml.head) || context.head) || ''
               const body = ((appendHtml && appendHtml.body) || context.body) || ''
