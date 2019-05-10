@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueServerRenderer from 'vue-server-renderer/build.js'
+import { createRenderer } from 'vue-server-renderer'
 import { WebApp } from 'meteor/webapp'
 import cookieParser from 'cookie-parser'
 import { onPageLoad } from 'meteor/server-render'
@@ -62,7 +62,7 @@ VueSSR.inSubscription = new Meteor.EnvironmentVariable() // <-- needed in data.j
 
 patchSubscribeData(VueSSR)
 
-const renderer = VueServerRenderer.createRenderer()
+const renderer = createRenderer()
 
 function writeServerError (sink) {
   sink.appendToBody('Server Error')
@@ -91,24 +91,19 @@ onPageLoad(sink => new Promise((resolve, reject) => {
         // }
 
         // Vue
+        const context = { url: req.url }
         let asyncResult
-        const result = VueSSR.createApp({ url: req.url })
+        const result = VueSSR.createApp(context)
         if (result && typeof result.then === 'function') {
           asyncResult = result
         } else {
           asyncResult = Promise.resolve(result)
         }
 
-        asyncResult.then(result => {
-          let app
-          if (result.app) {
-            app = result.app
-          } else {
-            app = result
-          }
-
+        asyncResult.then(app => {
           renderer.renderToString(
             app,
+            context,
             (error, html) => {
               if (error) {
                 console.error(error)
@@ -125,11 +120,11 @@ onPageLoad(sink => new Promise((resolve, reject) => {
               // // sink.appendToHead(`<script type="text/inject-data">${encodeURIComponent(injectData)}</script>`)
 
               let appendHtml
-              if (typeof result.appendHtml === "function") appendHtml = result.appendHtml()
+              if (typeof context.appendHtml === "function") appendHtml = context.appendHtml()
 
-              const head = ((appendHtml && appendHtml.head) || result.head) || ''
-              const body = ((appendHtml && appendHtml.body) || result.body) || ''
-              const js = ((appendHtml && appendHtml.js) || result.js) || ''
+              const head = ((appendHtml && appendHtml.head) || context.head) || ''
+              const body = ((appendHtml && appendHtml.body) || context.body) || ''
+              const js = ((appendHtml && appendHtml.js) || context.js) || ''
 
               const script = js && `<script type="text/javascript">${js}</script>`
 
