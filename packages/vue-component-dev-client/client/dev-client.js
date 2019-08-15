@@ -83,14 +83,20 @@ function checkNewVersionDocument (doc) {
   }
 }
 
-const ClientVersions = Autoupdate._ClientVersions
-if (ClientVersions) {
-  ClientVersions.find().observe({
-    added: checkNewVersionDocument,
-    changed: checkNewVersionDocument,
-  })
+if (Autoupdate._clientVersions) {
+  // logic for autoupdate since Meteor 1.8.1
+  Autoupdate._clientVersions.watch(checkNewVersionDocument)
 } else {
-  console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  // logic for autoupdate before Meteor 1.8.1
+  const ClientVersions = Autoupdate._ClientVersions
+  if (ClientVersions) {
+    ClientVersions.find().observe({
+      added: checkNewVersionDocument,
+      changed: checkNewVersionDocument,
+    })
+  } else {
+    console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  }
 }
 
 Meteor.startup(function () {
