@@ -536,7 +536,7 @@ function compileOneFileWithContents (inputFile, contents, parts, babelOptions) {
   try {
     const cache = Cache.getCache(inputFile)
     const compiler = loadPackage(inputFile, 'vue-template-compiler', loadDefaultTemplateCompiler)
-    const sfcDescriptor = compiler.parseComponent(contents, { pad: 'line' })
+    const sfcDescriptor = compiler.parseComponent(contents)
 
     return compileTags(inputFile, sfcDescriptor, parts, babelOptions, cache.dependencyManager)
   } catch (e) {
