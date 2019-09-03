@@ -199,6 +199,7 @@ throwCompileError = function throwCompileError (options) {
   err.message = output
   err.file = file
   err.line = lineNumber
+  console.error(err)
   throw err
 }
 
