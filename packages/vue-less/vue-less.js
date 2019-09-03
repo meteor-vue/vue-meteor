@@ -6,29 +6,18 @@ import {Meteor} from 'meteor/meteor'
 global.vue = global.vue || {}
 global.vue.lang = global.vue.lang || {}
 
-class MeteorImportLessPlugin {
-  constructor (dependencyManager) {
-    this.minVersion = [2, 5, 0]
-    // Fix cloning error in less
-    Object.defineProperty(this, 'dependencyManager', {
-      value: dependencyManager,
-      enumerable: false,
-    })
-  }
+function MeteorImportLessPlugin (dependencyManager) {
+  this.minVersion = [2, 5, 0]
 
-  install (less, pluginManager) {
-    pluginManager.addFileManager(new MeteorImportLessFileManager(this.dependencyManager))
+  this.install = (less, pluginManager) => {
+    pluginManager.addFileManager(new MeteorImportLessFileManager(dependencyManager))
   }
 }
 
 class MeteorImportLessFileManager extends less.AbstractFileManager {
   constructor (dependencyManager) {
     super()
-    // Fix cloning error in less
-    Object.defineProperty(this, 'dependencyManager', {
-      value: dependencyManager,
-      enumerable: false,
-    })
+    this.dependencyManager = dependencyManager
   }
 
   // We want to be the only active FileManager, so claim to support everything.
@@ -75,11 +64,7 @@ class MeteorImportLessFileManager extends less.AbstractFileManager {
         filename: resolvedFilename,
       })
 
-      if (this.dependencyManager) {
-        this.dependencyManager.addDependency(resolvedFilename)
-      } else {
-        console.error('this.dependencyManager undefined')
-      }
+      this.dependencyManager.addDependency(resolvedFilename)
     }
   }
 }
