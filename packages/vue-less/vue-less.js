@@ -48,6 +48,10 @@ class MeteorImportLessFileManager extends less.AbstractFileManager {
       resolvedFilename = path.resolve(currentDirectory, filename)
     }
 
+    if (!/\.less$/i.test(resolvedFilename)) {
+      resolvedFilename += '.less'
+    }
+
     if (!fs.existsSync(resolvedFilename)) {
       cb({
         type: 'File',
