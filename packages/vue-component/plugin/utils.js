@@ -195,11 +195,12 @@ throwCompileError = function throwCompileError (options) {
     })
   }
 
+  console.error(output)
+
   const err = new TemplatingTools.CompileError()
   err.message = output
   err.file = file
   err.line = lineNumber
-  console.error(err)
   throw err
 }
 
