@@ -9,7 +9,11 @@ global.vue.lang = global.vue.lang || {}
 class MeteorImportLessPlugin {
   constructor (dependencyManager) {
     this.minVersion = [2, 5, 0]
-    this.dependencyManager = dependencyManager
+    // Fix cloning error in less
+    Object.defineProperty(this, 'dependencyManager', {
+      value: dependencyManager,
+      enumerable: false,
+    })
   }
 
   install (less, pluginManager) {
@@ -20,7 +24,11 @@ class MeteorImportLessPlugin {
 class MeteorImportLessFileManager extends less.AbstractFileManager {
   constructor (dependencyManager) {
     super()
-    this.dependencyManager = dependencyManager
+    // Fix cloning error in less
+    Object.defineProperty(this, 'dependencyManager', {
+      value: dependencyManager,
+      enumerable: false,
+    })
   }
 
   // We want to be the only active FileManager, so claim to support everything.
