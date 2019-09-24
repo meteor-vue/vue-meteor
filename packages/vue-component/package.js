@@ -12,7 +12,6 @@ Package.registerBuildPlugin({
     'ecmascript@0.12.7',
     'caching-compiler@1.2.1',
     'babel-compiler@7.3.4',
-    'templating-tools@1.1.2',
   ],
   sources: [
     'plugin/regexps.js',

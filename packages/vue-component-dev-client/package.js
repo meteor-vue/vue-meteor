@@ -11,7 +11,6 @@ Package.onUse(function (api) {
   api.use('ecmascript@0.12.7')
   api.use('reload@1.3.0')
   api.use('autoupdate@1.6.0')
-  api.use('reactive-var@1.0.11')
   api.mainModule('client/dev-client.js', 'client')
 })
 
