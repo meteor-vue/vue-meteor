@@ -57,11 +57,25 @@ function discoverImportPath (importPath) {
     [].concat(potentialPaths).forEach(potentialPath => potentialPaths.push(`${path.dirname(potentialPath)}/_${path.basename(potentialPath)}`))
   }
 
-  for (let i = 0, potentialPath = potentialPaths[i]; i < potentialPaths.length; i++, potentialPath = potentialPaths[i]) {
-    if (fs.existsSync(potentialPaths[i]) && fs.lstatSync(potentialPaths[i]).isFile()) {
-      return potentialPath
+  potentialPaths.forEach((path) => {
+    if(fs.existsSync(path)) {
+      const stat = fs.lstatSync(path);
+
+      // if path is an symlink, check if the symlink points to a file
+      if(stat.isSymbolicLink()) {
+        try {
+          const realPath = fs.realpathSync(path);
+          if(fs.lstatSync(realPath).isFile()) {
+            return path;
+          }
+        } catch (e) {
+          // ignore errors
+        }
+      } else if(stat.isFile()) {
+        return path;
+      }
     }
-  }
+  });
 
   return null
 }
