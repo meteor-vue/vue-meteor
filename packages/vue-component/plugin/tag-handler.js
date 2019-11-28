@@ -109,6 +109,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             lang,
             error: e,
             showError: true,
+            showStack: true,
           })
         }
       }
@@ -220,6 +221,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             lang,
             error: e,
             showError: true,
+            showStack: true,
           })
         }
       }
@@ -280,6 +282,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
               lang,
               error: e,
               showError: true,
+              showStack: true,
             })
           }
         }
@@ -297,6 +300,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
             action: 'configuring PostCSS (custom configuration)',
             error: e,
             showError: true,
+            showStack: true,
           })
         }
         let postcssOptions = Object.assign({
@@ -349,6 +353,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
                 action: 'compiling css modules',
                 error: e,
                 showError: true,
+                showStack: true,
               })
             }
           } else {
@@ -358,9 +363,10 @@ VueComponentTagHandler = class VueComponentTagHandler {
                 if (cssModules === undefined) { cssModules = {} }
                 cssModules[moduleName] = { ...(cssModules[moduleName] || {}), ...json }
               },
-              generateScopedName (exportedName, filePath) {
-                return `vue-module-${Hash(filePath)}-${Hash(exportedName)}`
-              },
+
+              // Generate a class name in the form of .<vue_component_name>_<local_class_name>__<hash>
+              // Ref.: https://github.com/css-modules/postcss-modules#generating-scoped-names
+              generateScopedName: '[name]_[local]__[hash:base64:5]'
             }))
             isAsync = true
           }

@@ -1,8 +1,8 @@
 <p align="center"><img src="https://github.com/Akryum/vue-meteor/raw/master/vue%2Bmeteor.png"></p>
 
 <p align="center">
-<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.8.0.1-blue.svg"/></a>
-<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.18-brightgreen.svg"/></a>
+<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.8.1-blue.svg"/></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen.svg"/></a>
 </p>
 
 <p align="center">
@@ -13,19 +13,35 @@
 
 ## Sponsors
 
+### Gold
+
+<p align="center">
+  <a href="https://www.sumcumo.com/en/" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/258614093362102272/570728242399674380/logo-sumcumo.png" alt="sum.cumo logo" width="400px">
+  </a>
+</p>
+
 ### Silver
 
 <p align="center">
   <a href="https://vueschool.io/" target="_blank">
     <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" width="200px">
   </a>
+
+  <a href="https://www.vuemastery.com/" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267759130607630/Vue-Mastery-Big.png" alt="Vue Mastery logo" width="200px">
+  </a>
 </p>
 
 ### Bronze
 
 <p align="center">
-  <a href="https://vuetifyjs.com" target="_blank" title="Vuetify">
-    <img src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg" width="48" height="48">
+  <a href="https://vuetifyjs.com" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/537832759985700914/537832771691872267/Horizontal_Logo_-_Dark.png" width="100">
+  </a>
+
+  <a href="https://www.frontenddeveloperlove.com/" target="_blank" title="Frontend Developer Love">
+    <img src="https://cdn.discordapp.com/attachments/258614093362102272/557267744249085953/frontend_love-logo.png" width="56">
   </a>
 </p>
 

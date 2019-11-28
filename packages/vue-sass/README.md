@@ -39,6 +39,24 @@ You can import files with absolute or relative path:
 </style>
 ```
 
+## Config
+
+In project `package.json`, you can add more folders for the sass file resolution:
+
+```json
+{
+  "vue": {
+    "css": {
+      "sass": {
+        "includePaths": [
+          "node_modules"
+        ],
+      }
+    }
+  },
+}
+```
+
 ---
 
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)

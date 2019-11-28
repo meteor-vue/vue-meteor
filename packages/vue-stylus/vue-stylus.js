@@ -50,9 +50,7 @@ global.vue.lang.stylus = Meteor.wrapAsync(function ({
       if (!filePath) {
         return null
       }
-
       dependencyManager.addDependency(filePath)
-
       return [filePath]
     },
     readFile (filePath) {
@@ -70,18 +68,19 @@ global.vue.lang.stylus = Meteor.wrapAsync(function ({
     return sourcemap
   }
 
-  let style = stylus(source)
+  let renderer = stylus(source)
     .use(nib())
     .set('filename', basePath)
     .set('sourcemap', { inline: false, comment: false })
     .set('cache', true)
     .set('importer', importer)
 
-  style.render((err, css) => {
+  renderer.render((err, css) => {
     if (err) {
       cb(err, null)
     } else {
-      const map = processSourcemap(style.sourcemap)
+      renderer.deps(basePath).forEach(file => dependencyManager.addDependency(file))
+      const map = processSourcemap(renderer.sourcemap)
       cb(null, {
         css,
         map,

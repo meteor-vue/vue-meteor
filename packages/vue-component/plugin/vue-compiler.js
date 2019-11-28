@@ -6,8 +6,8 @@ import _ from 'lodash'
 import 'colors'
 
 let defaultTemplateCompiler, defaultTranspile
-const loadDefaultTemplateCompiler = () => defaultTemplateCompiler || (defaultTemplateCompiler = require('vue-template-compiler'));
-const loadDefaultTranspiler = () => defaultTranspile || (defaultTranspile = require('vue-template-es2015-compiler'));
+const loadDefaultTemplateCompiler = () => defaultTemplateCompiler || (defaultTemplateCompiler = require('vue-template-compiler'))
+const loadDefaultTranspiler = () => defaultTranspile || (defaultTranspile = require('vue-template-es2015-compiler'))
 
 function toFunction (code) {
   return 'function (){' + code + '}'
@@ -536,7 +536,7 @@ function compileOneFileWithContents (inputFile, contents, parts, babelOptions) {
   try {
     const cache = Cache.getCache(inputFile)
     const compiler = loadPackage(inputFile, 'vue-template-compiler', loadDefaultTemplateCompiler)
-    const sfcDescriptor = compiler.parseComponent(contents, { pad: 'line' })
+    const sfcDescriptor = compiler.parseComponent(contents)
 
     return compileTags(inputFile, sfcDescriptor, parts, babelOptions, cache.dependencyManager)
   } catch (e) {
@@ -691,7 +691,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
   }
 }
 
-function loadPackage(inputFile, packageName, loadDefaultPackage) {
+function loadPackage (inputFile, packageName, loadDefaultPackage) {
   try {
     return inputFile.require(packageName)
   } catch (err) {

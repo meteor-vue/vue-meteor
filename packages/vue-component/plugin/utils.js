@@ -185,7 +185,7 @@ throwCompileError = function throwCompileError (options) {
 
   // Stack
   if (showStack && error && error.stack) {
-    ouput += '\n' + error.stack
+    output += '\n' + error.stack
   }
 
   if (isDevelopment()) {
@@ -194,6 +194,8 @@ throwCompileError = function throwCompileError (options) {
       message: `${file}:${lineNumber}  ${output}`,
     })
   }
+
+  console.error(output)
 
   const err = new TemplatingTools.CompileError()
   err.message = output

@@ -6,14 +6,11 @@ import {Meteor} from 'meteor/meteor'
 global.vue = global.vue || {}
 global.vue.lang = global.vue.lang || {}
 
-class MeteorImportLessPlugin {
-  constructor (dependencyManager) {
-    this.minVersion = [2, 5, 0]
-    this.dependencyManager = dependencyManager
-  }
+function MeteorImportLessPlugin (dependencyManager) {
+  this.minVersion = [2, 5, 0]
 
-  install (less, pluginManager) {
-    pluginManager.addFileManager(new MeteorImportLessFileManager(this.dependencyManager))
+  this.install = (less, pluginManager) => {
+    pluginManager.addFileManager(new MeteorImportLessFileManager(dependencyManager))
   }
 }
 
@@ -48,6 +45,10 @@ class MeteorImportLessFileManager extends less.AbstractFileManager {
       resolvedFilename = path.resolve(currentDirectory, filename)
     }
 
+    if (!/\.less$/i.test(resolvedFilename)) {
+      resolvedFilename += '.less'
+    }
+
     if (!fs.existsSync(resolvedFilename)) {
       cb({
         type: 'File',
@@ -63,11 +64,7 @@ class MeteorImportLessFileManager extends less.AbstractFileManager {
         filename: resolvedFilename,
       })
 
-      if (this.dependencyManager) {
-        this.dependencyManager.addDependency(resolvedFilename)
-      } else {
-        console.error('this.dependencyManager undefined')
-      }
+      this.dependencyManager.addDependency(resolvedFilename)
     }
   }
 }

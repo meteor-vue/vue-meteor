@@ -63,10 +63,11 @@ function reload (options) {
       console.log(`%cHMR%c ⥁ Client version changed, reload suppressed because of a recent HMR update. You may need to reload the page.`, tagStyle, 'color: #F36E00;')
     }
     clearTimeout(_suppressTimer)
+    // Debounce reload with 1 sec. timer
     _suppressTimer = setTimeout(() => {
       _suppressNextReload = false
       _suppressTimer = undefined
-    })
+    }, 1000)
   } else {
     console.log(`%cHMR`, tagStyle, `Reloading app...`)
     _reload.call(Reload, options)
@@ -83,14 +84,20 @@ function checkNewVersionDocument (doc) {
   }
 }
 
-const ClientVersions = Autoupdate._ClientVersions
-if (ClientVersions) {
-  ClientVersions.find().observe({
-    added: checkNewVersionDocument,
-    changed: checkNewVersionDocument,
-  })
+if (Autoupdate._clientVersions) {
+  // logic for autoupdate since Meteor 1.8.1
+  Autoupdate._clientVersions.watch(checkNewVersionDocument)
 } else {
-  console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  // logic for autoupdate before Meteor 1.8.1
+  const ClientVersions = Autoupdate._ClientVersions
+  if (ClientVersions) {
+    ClientVersions.find().observe({
+      added: checkNewVersionDocument,
+      changed: checkNewVersionDocument,
+    })
+  } else {
+    console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  }
 }
 
 Meteor.startup(function () {
@@ -99,10 +106,10 @@ Meteor.startup(function () {
 
   console.log('%cHMR%c Dev server URL: %c' + devUrl, tagStyle, '', 'font-weight: bold;')
 
-  console.log(`%cIf you have issues connecting to the dev server, set the 'HMR_URL' env letiable to the URL of the dev server displayed in the meteor console.`, infoStyle)
+  console.log(`%cIf you have issues connecting to the dev server, set the 'HMR_URL' env variable to the URL of the dev server displayed in the meteor console.`, infoStyle)
 
   // NOTE: Socket lib don't allow mix HTTP and HTTPS servers URLs on client!
-  const _socket = require('socket.io-client')(devUrl)
+  const _socket = require('socket.io-client/dist/socket.io.dev.js')(devUrl)
   window.__dev_client__ = _socket
 
   _socket.on('connect', function () {
@@ -199,6 +206,8 @@ Meteor.startup(function () {
       _styleNodes[hash] = style
     }
     style.textContent = css
+
+    _suppressNextReload = true
   })
 
   // Locale

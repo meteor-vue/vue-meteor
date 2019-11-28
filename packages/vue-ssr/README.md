@@ -59,11 +59,14 @@ VueSSR.createApp = function (context) {
   const { app, router } = CreateApp()
   // Set the url in the router
   router.push(context.url)
-  return {
-    app,
+
+  // Called when Vue app has finished rendering
+  context.rendered = () => {
     // Inject some arbitrary JS
-    js: `console.log('hello')`,
+    context.js = `console.log('hello')`
   }
+
+  return app
 }
 ```
 
@@ -85,12 +88,14 @@ VueSSR.createApp = function (context) {
       }
 
       // Can use components prefetch here...
-
-      resolve({
-        app,
+      
+      // Called when Vue app has finished rendering
+      context.rendered = () => {
         // Inject some arbitrary JS
-        js: `console.log('hello')`,
-      })
+        context.js = `console.log('hello')`
+      }
+
+      resolve(app)
     })
   })
 }
@@ -124,26 +129,25 @@ VueSSR.createApp = function (context) {
 
     // ...
 
-    resolve({
-      app,
-      appendHtml() {
-        const {
-          title, link, style, script, noscript, meta
-        } = context.meta.inject()
+    context.appendHtml = () => {
+      const {
+        title, link, style, script, noscript, meta
+      } = context.meta.inject()
 
-        return {
-          head: `
-            ${meta.text()}
-            ${title.text()}
-            ${link.text()}
-            ${style.text()}
-            ${script.text()}
-            ${noscript.text()}
-          `,
-          body: script.text({ body: true })
-        }
+      return {
+        head: `
+          ${meta.text()}
+          ${title.text()}
+          ${link.text()}
+          ${style.text()}
+          ${script.text()}
+          ${noscript.text()}
+        `,
+        body: script.text({ body: true })
       }
-    })
+    }
+
+    resolve(app)
   })
 }
 ```
