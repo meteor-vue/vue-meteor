@@ -679,7 +679,8 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
     if (isOutsideImports || isGlobalName) {
       // Component registration
       js += `\nvar _Vue = require('vue').default;
-      _Vue.component(__vue_options__.name, __vue_script__);`
+      if (!_Vue) _Vue = require('vue');
+      _Vue.component(__vue_options__.name, __vue_script__);\n`
     }
   }
 
