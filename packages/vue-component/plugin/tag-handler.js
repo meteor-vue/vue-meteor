@@ -179,7 +179,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       map.names = lastMap.names
       map.file = this.inputFile.getPathInPackage()
 
-      js += 'module.exportDefault = function(value) { __vue_script__ = value; }; (function(){ if (!module.watch) {console.log(\'module\', module);} ' + script + '\n})();'
+      js += 'module.exportDefault = function(value) { __vue_script__ = value; }; (function(){' + script + '\n})();'
     }
 
     // Template
