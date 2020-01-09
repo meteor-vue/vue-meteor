@@ -56,11 +56,21 @@ function discoverImportPath (importPath) {
   }
 
   for (let i = 0, potentialPath = potentialPaths[i]; i < potentialPaths.length; i++, potentialPath = potentialPaths[i]) {
-    if (fs.existsSync(potentialPaths[i])) {
-      const stats = fs.lstatSync(potentialPaths[i]);
-      if (stats.isFile() || stats.isSymbolicLink()) {
-        // TODO: isSymbolicLink will return also true if the symlink points to an directory.
-        return potentialPath
+    if(fs.existsSync(potentialPath)) {
+      const stat = fs.lstatSync(potentialPath);
+
+      // if path is an symlink, check if the symlink points to a file
+      if(stat.isSymbolicLink()) {
+        try {
+          const realPath = fs.realpathSync(potentialPath);
+          if(fs.lstatSync(realPath).isFile()) {
+            return potentialPath;
+          }
+        } catch (e) {
+          // ignore errors
+        }
+      } else if(stat.isFile()) {
+        return potentialPath;
       }
     }
   }
