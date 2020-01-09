@@ -23,7 +23,7 @@ function resolveImport (dependencyManager) {
 
     try {
       // get the package.json config option and create paths for the requested file.
-      pkg.vue.css.sass.includePaths.forEach( (str) => {
+      pkg.vue.css.sass.includePaths.forEach((str) => {
         importPaths.push(path.resolve(str, url))
       })
     } catch (e) {
