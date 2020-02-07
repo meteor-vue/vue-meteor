@@ -24,7 +24,7 @@ function resolveImport (dependencyManager) {
     try {
       // get the package.json config option and create paths for the requested file.
       pkg.vue.css.sass.includePaths.forEach((str) => {
-        importPaths.push(path.resolve(str, url))
+        importPaths.push(path.resolve(str, resolvedFilename))
       })
     } catch (e) {
       // Ignore error. package.json option is not set.
