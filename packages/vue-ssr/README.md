@@ -84,7 +84,7 @@ VueSSR.createApp = function (context) {
 
       // no matched routes
       if (!matchedComponents.length) {
-        reject({ code: 404 })
+        reject({ code: 404, message: 'Not found' })
       }
 
       // Can use components prefetch here...

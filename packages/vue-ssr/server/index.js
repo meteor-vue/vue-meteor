@@ -64,8 +64,9 @@ patchSubscribeData(VueSSR)
 
 const renderer = createRenderer()
 
-function writeServerError (sink) {
-  sink.appendToBody('Server Error')
+function writeServerError (sink, { code = 500, message = 'Server Error' } = {}) {
+  sink.setStatusCode(code)
+  sink.appendToBody(message)
 }
 
 WebApp.rawConnectHandlers.use(cookieParser())
@@ -137,7 +138,7 @@ onPageLoad(sink => new Promise((resolve, reject) => {
           )
         }).catch(e => {
           console.error(e)
-          writeServerError(sink)
+          writeServerError(sink, e)
           resolve()
         })
       } catch (error) {
