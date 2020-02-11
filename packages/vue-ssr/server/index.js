@@ -126,9 +126,11 @@ onPageLoad(sink => new Promise((resolve, reject) => {
               const head = ((appendHtml && appendHtml.head) || context.head) || ''
               const body = ((appendHtml && appendHtml.body) || context.body) || ''
               const js = ((appendHtml && appendHtml.js) || context.js) || ''
+              const statusCode = ((appendHtml && appendHtml.statusCode) || context.statusCode) || 200
 
               const script = js && `<script type="text/javascript">${js}</script>`
 
+              sink.setStatusCode(statusCode)
               sink.renderIntoElementById(VueSSR.outlet, html)
               sink.appendToHead(head)
               sink.appendToBody([body, script])

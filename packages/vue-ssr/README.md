@@ -152,6 +152,60 @@ VueSSR.createApp = function (context) {
 }
 ```
 
+### Set status code for custom 404 error template
+
+`NotFound.vue`
+
+```vue
+<template>
+  <h1>404</h1>
+</template>
+
+<script>
+  export default {
+    name: 'NotFound',
+  };
+</script>
+```
+
+`routes.js`
+
+```javascript
+import NotFound from '/imports/ui/views/NotFound';
+
+export default [
+  // ...
+  {
+    path: '*',
+    name: 'not-found',
+    component: NotFound,
+  },
+];
+```
+
+`vue-ssr.js`
+
+```javascript
+VueSSR.createApp = function (context) {
+  return new Promise((resolve, reject) => {
+    const { app, router } = CreateApp()
+    // Set the URL in the router
+    router.push(context.url)
+
+    router.onReady(() => {
+      // name of wildcard route
+      if (router.currentRoute.name === 'not-found') {
+        context.statusCode = 404;
+      }
+      
+      // ...
+
+      resolve(app)
+    })
+  })
+}
+```
+
 ---
 
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)
