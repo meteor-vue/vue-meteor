@@ -2,6 +2,7 @@
   "dependencies": {
     "vue": "2.2.4",
     "vue-router": "^2.3.0",
-    "vue-meteor-tracker": "^1.2.0"
+    "vue-meteor-tracker": "^1.2.0",
+    "vue-server-renderer": "^2.6.10"
   }
 }
