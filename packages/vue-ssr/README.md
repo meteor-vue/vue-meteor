@@ -152,6 +152,143 @@ VueSSR.createApp = function (context) {
 }
 ```
 
+### Request headers for the internationalization with meta tags
+
+You can use `context.headers` for access to request headers from the server.
+ 
+Example usage with `vue-i18n` and `vue-meta` packages:
+
+`/imports/startup/server/vue-ssr.js`
+
+```js
+VueSSR.createApp = function (context) {
+  return new Promise((resolve, reject) => {
+    const { app, router, store } = createApp({
+      ssr: true,
+      headers: context.headers,
+    })
+  })
+}
+```
+
+`/imports/startup/html-attr.js`
+
+```js
+import { WebApp } from 'meteor/webapp';
+import { getHtmlLang } from '/imports/ui/i18n';
+
+WebApp.addHtmlAttributeHook((req) => ({
+  lang: getHtmlLang(req.headers),
+  // @see https://vue-meta.nuxtjs.org/faq/prevent-initial.html
+  'data-vue-meta-server-rendered': '',
+}));
+```
+
+`/imports/ui/i18n.js`
+
+```js
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
+
+const messages = {
+  en: {
+    hello: 'Hello',  
+  },
+  ru: {
+    hello: 'Здравствуйте',
+  }
+};
+
+Vue.use(VueI18n);
+
+const fallbackLocale = 'en'
+const availableLocales = Object.keys(messages)
+
+function getLanguage({ ssr, headers }) {
+  return (
+    !ssr
+      ? (typeof navigator.languages !== 'undefined' // Client-side
+        ? navigator.languages[0]
+        : navigator.language // Fallback for old browsers
+      ) : headers['accept-language'].split(',')[0] // Server-side
+  ).toLocaleLowerCase().substring(0, 2)
+}
+
+export function createI18n({ ssr, headers }) {
+  return new VueI18n({
+    locale: getLanguage({ ssr, headers }),
+    fallbackLocale,
+    messages,
+  });
+}
+
+export function getHtmlLang(headers) {
+  const locale = getLanguage({
+    ssr: true,
+    headers,
+  });
+  return availableLocales.includes(locale)
+    ? locale
+    : fallbackLocale
+}
+```
+
+`/imports/ui/createApp.js`
+
+```js
+function createApp(context) {
+  /*
+    https://ssr.vuejs.org/guide/structure.html#avoid-stateful-singletons
+   */
+  const store = createStore()
+  const router = createRouter()
+  const i18n = createI18n(context)
+
+  // sync the router with the vuex store.
+  // this registers `store.state.route`
+  sync(store, router);
+
+  // Vuex state restoration
+  if (!context.ssr && window.__INITIAL_STATE__) {
+    // We initialize the store state with the data injected from the server
+    store.replaceState(window.__INITIAL_STATE__)
+  }
+
+  const app = new Vue({
+    el: '#app',
+    router,
+    store,
+    i18n,
+    ...App,
+  })
+
+  return {
+    app,
+    router,
+    store,
+  }
+}
+```
+
+`/imports/ui/App.vue`
+
+```vue
+<template>
+  <h1>{{ $t("title")}}</h1>
+</template>
+
+<script>
+  export default {
+    name: 'App',
+    metaInfo() {
+      return {
+        title: this.$t('title'),
+      }
+    },
+  }
+</script>
+```
+
 ---
 
 LICENCE ISC - Created by Guillaume CHAU (@Akryum)
