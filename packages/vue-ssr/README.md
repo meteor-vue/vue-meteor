@@ -210,8 +210,11 @@ function getLanguage({ ssr, headers }) {
       ? (typeof navigator.languages !== 'undefined' // Client-side
         ? navigator.languages[0]
         : navigator.language // Fallback for old browsers
-      ) : headers['accept-language'].split(',')[0] // Server-side
-  ).toLocaleLowerCase().substring(0, 2)
+      ) : (headers && typeof headers['accept-language'] === 'string'  // Server-side
+        ? headers['accept-language'].split(',')[0]
+        : fallbackLocale
+      )
+  ).toLocaleLowerCase().substring(0, 2);
 }
 
 export function createI18n({ ssr, headers }) {
