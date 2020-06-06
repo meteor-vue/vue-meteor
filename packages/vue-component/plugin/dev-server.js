@@ -1,6 +1,5 @@
 import http from 'http'
 import SocketIo from 'socket.io'
-import {Meteor} from 'meteor/meteor'
 
 function getMeteorBinding () {
   const argv = this.process.argv

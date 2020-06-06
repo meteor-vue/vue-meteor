@@ -42,9 +42,10 @@ if (window.__vue_hot_pending__) {
 }
 
 // Reload override
-var _suppressNextReload = false
+let _suppressNextReload = false
+let _suppressTimer
 let _deferReload = 0
-var _reload = Reload._reload
+const _reload = Reload._reload
 Reload._reload = function (options) {
   // Disable original reload for autoupdate package
   if (Reload._reload.caller.name !== '' && Reload._reload.caller.name !== 'checkNewVersionDocument') {
@@ -54,17 +55,23 @@ Reload._reload = function (options) {
 
 // Custom reload method
 function reload (options) {
-  console.log('%cHMR', tagStyle, 'Reload request received')
   if (_deferReload !== 0) {
     setTimeout(_reload, _deferReload)
     console.log(`%cHMR`, tagStyle, `Client reload defered, will reload in ${_deferReload} ms`)
   } else if (_suppressNextReload) {
-    console.log(`%cHMR%c ⥁ Client version changed, reload suppressed because of a recent HMR update. You may need to reload the page.`, tagStyle, 'color: #F36E00;')
+    if (!_suppressTimer) {
+      console.log(`%cHMR%c ⥁ Client version changed, reload suppressed because of a recent HMR update. You may need to reload the page.`, tagStyle, 'color: #F36E00;')
+    }
+    clearTimeout(_suppressTimer)
+    // Debounce reload with 1 sec. timer
+    _suppressTimer = setTimeout(() => {
+      _suppressNextReload = false
+      _suppressTimer = undefined
+    }, 1000)
   } else {
     console.log(`%cHMR`, tagStyle, `Reloading app...`)
     _reload.call(Reload, options)
   }
-  _suppressNextReload = false
   _deferReload = 0
 }
 
@@ -77,26 +84,32 @@ function checkNewVersionDocument (doc) {
   }
 }
 
-var ClientVersions = Autoupdate._ClientVersions
-if (ClientVersions) {
-  ClientVersions.find().observe({
-    added: checkNewVersionDocument,
-    changed: checkNewVersionDocument,
-  })
+if (Autoupdate._clientVersions) {
+  // logic for autoupdate since Meteor 1.8.1
+  Autoupdate._clientVersions.watch(checkNewVersionDocument)
 } else {
-  console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  // logic for autoupdate before Meteor 1.8.1
+  const ClientVersions = Autoupdate._ClientVersions
+  if (ClientVersions) {
+    ClientVersions.find().observe({
+      added: checkNewVersionDocument,
+      changed: checkNewVersionDocument,
+    })
+  } else {
+    console.warn('%cHMR', tagStyle, 'ClientVersions collection is not available, the app may full reload.')
+  }
 }
 
 Meteor.startup(function () {
   // Dev client
-  let devUrl = __meteor_runtime_config__.VUE_DEV_SERVER_URL
+  const devUrl = __meteor_runtime_config__.VUE_DEV_SERVER_URL
 
   console.log('%cHMR%c Dev server URL: %c' + devUrl, tagStyle, '', 'font-weight: bold;')
 
   console.log(`%cIf you have issues connecting to the dev server, set the 'HMR_URL' env variable to the URL of the dev server displayed in the meteor console.`, infoStyle)
 
   // NOTE: Socket lib don't allow mix HTTP and HTTPS servers URLs on client!
-  let _socket = require('socket.io-client')(devUrl)
+  const _socket = require('socket.io-client/dist/socket.io.dev.js')(devUrl)
   window.__dev_client__ = _socket
 
   _socket.on('connect', function () {
@@ -124,7 +137,7 @@ Meteor.startup(function () {
       }
     })
 
-    let id = `${path + Math.round(new Date().getTime())}.js`
+    const id = `${path + Math.round(new Date().getTime())}.js`
     const files = id.split('/')
     const fileObj = {}
     let currentObj = fileObj
@@ -137,8 +150,8 @@ Meteor.startup(function () {
       }
     })
 
-    let require = meteorInstall(fileObj)
-    let result = require('./' + id)
+    const require = meteorInstall(fileObj)
+    const result = require('./' + id)
 
     let needsReload = false
     if (!error) {
@@ -169,7 +182,7 @@ Meteor.startup(function () {
       console.log('%cHMR', tagStyle, 'Rerendering ' + path)
       let error = false
       try {
-        var obj
+        let obj
         // eslint-disable-next-line no-eval
         eval(`obj = ${template};`)
         // console.log(obj)
@@ -182,7 +195,7 @@ Meteor.startup(function () {
   })
 
   // CSS
-  let _styleNodes = {}
+  const _styleNodes = {}
   _socket.on('css', function ({hash, css, path}) {
     // console.log('css', hash, css.length)
     let style = _styleNodes[hash]
@@ -193,6 +206,8 @@ Meteor.startup(function () {
       _styleNodes[hash] = style
     }
     style.textContent = css
+
+    _suppressNextReload = true
   })
 
   // Locale

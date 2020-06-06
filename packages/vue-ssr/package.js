@@ -1,6 +1,6 @@
 Package.describe({
   name: 'akryum:vue-ssr',
-  version: '0.3.2',
+  version: '0.4.0',
   summary: 'Render Vue server-side',
   git: 'https://github.com/Akryum/meteor-vue-component',
   documentation: 'README.md',
@@ -19,7 +19,7 @@ Package.onUse(function (api) {
     'routepolicy',
     'url',
     'akryum:npm-check@0.1.1',
-    'staringatlights:fast-render@2.16.5',
+    'staringatlights:fast-render@3.2.0',
     'ejson',
     'server-render',
   ])
@@ -28,7 +28,6 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  'vue-server-renderer': '2.5.17',
-  'vue-ssr-html-stream': '2.2.0',
-  'cookie-parser': '1.4.3',
+  'vue-server-renderer': '2.6.10',
+  'cookie-parser': '1.4.4',
 })

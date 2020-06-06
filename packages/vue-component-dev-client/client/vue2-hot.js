@@ -1,7 +1,11 @@
 let Vue // late bind
 let version
-const map = (window.__VUE_HOT_MAP__ = Object.create(null))
+const map = Object.create(null)
+if (typeof window !== 'undefined') {
+  window.__VUE_HOT_MAP__ = map
+}
 let installed = false
+let isBrowserify = false
 let initHookName = 'beforeCreate'
 
 exports.install = (vue, browserify) => {
@@ -10,6 +14,7 @@ exports.install = (vue, browserify) => {
 
   Vue = vue.__esModule ? vue.default : vue
   version = Vue.version.split('.').map(Number)
+  isBrowserify = browserify
 
   // compat with < 2.0.0-alpha.7
   if (Vue.config._lifecycleHooks.indexOf('init') > -1) {
@@ -20,8 +25,9 @@ exports.install = (vue, browserify) => {
   if (!exports.compatible) {
     console.warn(
       '[HMR] You are using a version of vue-hot-reload-api that is ' +
-        'only compatible with Vue.js core ^2.0.0.'
+      'only compatible with Vue.js core ^2.0.0.'
     )
+    return
   }
 }
 
@@ -34,6 +40,8 @@ exports.install = (vue, browserify) => {
  */
 
 exports.createRecord = (id, options) => {
+  if (map[id]) return
+
   let Ctor = null
   if (typeof options === 'function') {
     Ctor = options
@@ -43,8 +51,18 @@ exports.createRecord = (id, options) => {
   map[id] = {
     Ctor,
     options,
-    instances: [],
+    instances: []
   }
+}
+
+/**
+ * Check if module is recorded
+ *
+ * @param {String} id
+ */
+
+exports.isRecorded = (id) => {
+  return typeof map[id] !== 'undefined'
 }
 
 /**
@@ -137,7 +155,7 @@ exports.rerender = tryWrap((id, options) => {
       instance.$options.render = options.render
       instance.$options.staticRenderFns = options.staticRenderFns
       // reset static trees
-      // pre 2.5, all static trees are cahced together on the instance
+      // pre 2.5, all static trees are cached together on the instance
       if (instance._staticTrees) {
         instance._staticTrees = []
       }
@@ -149,10 +167,16 @@ exports.rerender = tryWrap((id, options) => {
       if (Array.isArray(instance.$options.cached)) {
         instance.$options.cached = []
       }
+
       // post 2.5.4: v-once trees are cached on instance._staticTrees.
       // Pure static trees are cached on the staticRenderFns array
       // (both already reset above)
+
+      // 2.6: temporarily mark rendered scoped slots as unstable so that
+      // child components can be forced to update
+      const restore = patchScopedSlots(instance)
       instance.$forceUpdate()
+      instance.$nextTick(restore)
     })
   } else {
     // functional or no instance created yet
@@ -201,7 +225,7 @@ exports.reload = tryWrap((id, options) => {
         // preserve pre 2.2 behavior for global mixin handling
         record.Ctor.extendOptions = options
       }
-      const newCtor = (record.Ctor.super || record.Ctor).extend(options)
+      const newCtor = record.Ctor.super.extend(options)
       record.Ctor.options = newCtor.options
       record.Ctor.cid = newCtor.cid
       record.Ctor.prototype = newCtor.prototype
@@ -223,3 +247,25 @@ exports.reload = tryWrap((id, options) => {
     }
   })
 })
+
+// 2.6 optimizes template-compiled scoped slots and skips updates if child
+// only uses scoped slots. We need to patch the scoped slots resolving helper
+// to temporarily mark all scoped slots as unstable in order to force child
+// updates.
+function patchScopedSlots (instance) {
+  if (!instance._u) return
+  // https://github.com/vuejs/vue/blob/dev/src/core/instance/render-helpers/resolve-scoped-slots.js
+  const original = instance._u
+  instance._u = slots => {
+    try {
+      // 2.6.4 ~ 2.6.6
+      return original(slots, true)
+    } catch (e) {
+      // 2.5 / >= 2.6.7
+      return original(slots, null, true)
+    }
+  }
+  return () => {
+    instance._u = original
+  }
+}

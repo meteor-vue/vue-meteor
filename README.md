@@ -1,8 +1,8 @@
 <p align="center"><img src="https://github.com/Akryum/vue-meteor/raw/master/vue%2Bmeteor.png"></p>
 
 <p align="center">
-<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.7.0.5-blue.svg"/></a>
-<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.5.17-brightgreen.svg"/></a>
+<a href="https://meteor.com/"><img src="https://img.shields.io/badge/meteor-1.8.1-blue.svg"/></a>
+<a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-1.x-green.svg"/> <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen.svg"/></a>
 </p>
 
 <p align="center">
@@ -13,13 +13,7 @@
 
 ## Sponsors
 
-### Silver
-
-<p align="center">
-  <a href="https://vueschool.io/" target="_blank">
-    <img src="https://vueschool.io/img/logo/vueschool_logo_multicolor.svg" alt="VueSchool logo" width="200px">
-  </a>
-</p>
+[![sponsors logos](https://guillaume-chau.info/sponsors.png)](https://guillaume-chau.info/sponsors)
 
 <br>
 <br>

@@ -6,8 +6,8 @@ import _ from 'lodash'
 import 'colors'
 
 let defaultTemplateCompiler, defaultTranspile
-const loadDefaultTemplateCompiler = () => defaultTemplateCompiler || (defaultTemplateCompiler = require('vue-template-compiler'));
-const loadDefaultTranspiler = () => defaultTranspile || (defaultTranspile = require('vue-template-es2015-compiler'));
+const loadDefaultTemplateCompiler = () => defaultTemplateCompiler || (defaultTemplateCompiler = require('vue-template-compiler'))
+const loadDefaultTranspiler = () => defaultTranspile || (defaultTranspile = require('vue-template-es2015-compiler'))
 
 function toFunction (code) {
   return 'function (){' + code + '}'
@@ -282,16 +282,6 @@ class Cache {
     }
     delete global._vue_cache[key]
   }
-
-  // static cleanCache (keptInputFiles) {
-  //   // TODO
-
-  //   const keptKeys = []
-
-  //   for (let key in global._vue_cache) {
-
-  //   }
-  // }
 }
 
 class ComponentWatcher {
@@ -337,10 +327,9 @@ class ComponentWatcher {
       this._closeWatcher()
       this.watcher = fs.watch(filePath, {
         persistent: false,
-      }, _.debounce(event => {
-        if (event === 'change') {
-          this.refresh()
-        }
+      })
+      this.watcher.on('change', _.debounce(event => { // Refresh once
+        this.refresh()
       }, 100, {
         leading: false,
         trailing: true,
@@ -547,7 +536,7 @@ function compileOneFileWithContents (inputFile, contents, parts, babelOptions) {
   try {
     const cache = Cache.getCache(inputFile)
     const compiler = loadPackage(inputFile, 'vue-template-compiler', loadDefaultTemplateCompiler)
-    const sfcDescriptor = compiler.parseComponent(contents, { pad: 'line' })
+    const sfcDescriptor = compiler.parseComponent(contents)
 
     return compileTags(inputFile, sfcDescriptor, parts, babelOptions, cache.dependencyManager)
   } catch (e) {
@@ -689,8 +678,9 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
     let isOutsideImports = inputFilePath.split('/').indexOf('imports') === -1
     if (isOutsideImports || isGlobalName) {
       // Component registration
-      js += `\nvar _Vue = require('vue');
-      _Vue.component(__vue_options__.name, __vue_script__);`
+      js += `\nvar _Vue = require('vue').default;
+      if (!_Vue) _Vue = require('vue');
+      _Vue.component(__vue_options__.name, __vue_script__);\n`
     }
   }
 
@@ -702,7 +692,7 @@ function generateJs (vueId, inputFile, compileResult, isHotReload = false) {
   }
 }
 
-function loadPackage(inputFile, packageName, loadDefaultPackage) {
+function loadPackage (inputFile, packageName, loadDefaultPackage) {
   try {
     return inputFile.require(packageName)
   } catch (err) {
