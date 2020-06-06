@@ -91,7 +91,7 @@ onPageLoad(sink => new Promise((resolve, reject) => {
         // }
 
         // Vue
-        const context = { url: req.url }
+        const context = { url: req.url, headers }
         let asyncResult
         const result = VueSSR.createApp(context)
         if (result && typeof result.then === 'function') {
