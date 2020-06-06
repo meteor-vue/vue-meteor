@@ -86,7 +86,7 @@ Use apollo in your vue component!
 
 ### Server-side rendering ![vue](https://img.shields.io/badge/vue-2.x-brightgreen.svg)
 
-Very easy way to render your fonrtend on the server automatically when a user first loads the app.
+Very easy way to render your frontend on the server automatically when a user first loads the app.
 
 [:package: See Installation & Usage in the akryum:vue-ssr package](https://github.com/meteor-vue/vue-meteor/tree/master/packages/vue-ssr#installation)
 
