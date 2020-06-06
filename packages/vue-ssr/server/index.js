@@ -64,8 +64,9 @@ patchSubscribeData(VueSSR)
 
 const renderer = createRenderer()
 
-function writeServerError (sink) {
-  sink.appendToBody('Server Error')
+function writeServerError (sink, { code = 500, message = 'Server Error' } = {}) {
+  sink.setStatusCode(code)
+  sink.appendToBody(message)
 }
 
 WebApp.rawConnectHandlers.use(cookieParser())
@@ -125,9 +126,11 @@ onPageLoad(sink => new Promise((resolve, reject) => {
               const head = ((appendHtml && appendHtml.head) || context.head) || ''
               const body = ((appendHtml && appendHtml.body) || context.body) || ''
               const js = ((appendHtml && appendHtml.js) || context.js) || ''
+              const statusCode = ((appendHtml && appendHtml.statusCode) || context.statusCode) || 200
 
               const script = js && `<script type="text/javascript">${js}</script>`
 
+              sink.setStatusCode(statusCode)
               sink.renderIntoElementById(VueSSR.outlet, html)
               sink.appendToHead(head)
               sink.appendToBody([body, script])
@@ -137,7 +140,7 @@ onPageLoad(sink => new Promise((resolve, reject) => {
           )
         }).catch(e => {
           console.error(e)
-          writeServerError(sink)
+          writeServerError(sink, e)
           resolve()
         })
       } catch (error) {
