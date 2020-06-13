@@ -2,7 +2,7 @@ import { createRenderer } from 'vue-server-renderer'
 import { WebApp } from 'meteor/webapp'
 import cookieParser from 'cookie-parser'
 import { onPageLoad } from 'meteor/server-render'
-import { FastRender } from 'meteor/staringatlights:fast-render'
+import { FastRender } from 'meteor/cloudspider:fast-render'
 
 import defaultAppTemplate from './lib/defaultAppTemplate'
 import createDefaultApp from './lib/createDefaultApp'

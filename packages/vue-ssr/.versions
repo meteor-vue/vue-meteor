@@ -51,7 +51,7 @@ routepolicy@1.0.12
 server-render@0.3.0
 service-configuration@1.0.11
 socket-stream-client@0.1.0
-staringatlights:fast-render@2.16.5
+cloudspider:fast-render@3.2.1
 staringatlights:inject-data@2.0.5
 tracker@1.1.3
 underscore@1.0.10

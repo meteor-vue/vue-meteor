@@ -19,7 +19,7 @@ Package.onUse(function (api) {
     'routepolicy',
     'url',
     'akryum:npm-check@0.1.1',
-    'thespider:fast-render@3.2.1',
+    'cloudspider:fast-render@3.2.1',
     'ejson',
     'server-render',
   ])
