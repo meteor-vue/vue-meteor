@@ -1,62 +1,22 @@
-import Vue from 'vue'
 import { createRenderer } from 'vue-server-renderer'
 import { WebApp } from 'meteor/webapp'
 import cookieParser from 'cookie-parser'
 import { onPageLoad } from 'meteor/server-render'
 import { FastRender } from 'meteor/staringatlights:fast-render'
 
+import defaultAppTemplate from './lib/defaultAppTemplate'
+import createDefaultApp from './lib/createDefaultApp'
+
 import SsrContext from './context'
 import patchSubscribeData from './data'
 
-function IsAppUrl (req) {
-  var url = req.url
-  if (url === '/favicon.ico' || url === '/robots.txt') {
-    return false
-  }
+export { default as IsAppUrl } from './lib/isAppUrl'
 
-  if (url === '/app.manifest') {
-    return false
-  }
-
-  // Avoid serving app HTML for declared routes such as /sockjs/.
-  if (RoutePolicy.classify(url)) {
-    return false
-  }
-  return true
-}
-
-VueSSR = {}
+const VueSSR = {}
 
 VueSSR.outlet = process.env.VUE_OUTLET || 'app'
-
-VueSSR.defaultAppTemplate = `
-<div id="not-the-app" style="font-family: sans-serif;">
-  <h1>This is not what you expected</h1>
-  <p>
-    You need to tell <code>vue-ssr</code> how to create your app by setting the <code>VueSSR.createApp</code> function. It should return a new Vue instance.
-  </p>
-  <p>
-    Here is an example of server-side code:
-  </p>
-  <pre style="background: #ddd; padding: 12px; border-radius: 3px; font-family: monospace;">import Vue from 'vue'
-import { VueSSR } from 'meteor/akryum:vue-ssr'
-
-function createApp () {
-  return new Vue({
-    render: h => h('div', 'Hello world'),
-  })
-}
-
-VueSSR.createApp = createApp</pre>
-</div>
-`
-
-VueSSR.createApp = function () {
-  return new Vue({
-    template: VueSSR.defaultAppTemplate,
-  })
-}
-
+VueSSR.defaultAppTemplate = defaultAppTemplate
+VueSSR.createApp = createDefaultApp()
 VueSSR.ssrContext = new Meteor.EnvironmentVariable()
 VueSSR.inSubscription = new Meteor.EnvironmentVariable() // <-- needed in data.js
 
@@ -64,7 +24,7 @@ patchSubscribeData(VueSSR)
 
 const renderer = createRenderer()
 
-function writeServerError (sink) {
+function writeServerError(sink) {
   sink.appendToBody('Server Error')
 }
 
@@ -83,63 +43,42 @@ onPageLoad(sink => new Promise((resolve, reject) => {
     // https://github.com/kadirahq/flow-router/blob/ssr/server/route.js#L61
     const ssrContext = new SsrContext()
 
-    VueSSR.ssrContext.withValue(ssrContext, () => {
+    VueSSR.ssrContext.withValue(ssrContext, async () => {
       try {
-        // const frData = InjectData.getData(res, 'fast-render-data')
-        // if (frData) {
-        //   ssrContext.addData(frData.collectionData)
-        // }
-
         // Vue
         const context = { url: req.url }
-        let asyncResult
+
         const result = VueSSR.createApp(context)
-        if (result && typeof result.then === 'function') {
-          asyncResult = result
-        } else {
-          asyncResult = Promise.resolve(result)
-        }
 
-        asyncResult.then(app => {
-          renderer.renderToString(
-            app,
-            context,
-            (error, html) => {
-              if (error) {
-                console.error(error)
-                writeServerError(sink)
-                return
-              }
+        const asyncResult = typeof result.then === 'function' ? result : Promise.resolve(result)
 
-              // const frContext = FastRender.frContext.get()
-              // const data = frContext.getData()
-              // // InjectData.pushData(res, 'fast-render-data', data)
-              // const injectData = EJSON.stringify({
-              //   'fast-render-data': data,
-              // })
-              // // sink.appendToHead(`<script type="text/inject-data">${encodeURIComponent(injectData)}</script>`)
+        const app = await asyncResult
 
-              let appendHtml
-              if (typeof context.appendHtml === 'function') appendHtml = context.appendHtml()
+        renderer.renderToString(
+          app,
+          context,
+          (error, html) => {
+            if (error) {
+              console.error(error)
+              writeServerError(sink)
+              return
+            }
 
-              const head = ((appendHtml && appendHtml.head) || context.head) || ''
-              const body = ((appendHtml && appendHtml.body) || context.body) || ''
-              const js = ((appendHtml && appendHtml.js) || context.js) || ''
+            const appendHtml = typeof context.appendHtml === 'function' && context.appendHtml()
 
-              const script = js && `<script type="text/javascript">${js}</script>`
+            const head = ((appendHtml && appendHtml.head) || context.head) || ''
+            const body = ((appendHtml && appendHtml.body) || context.body) || ''
+            const js = ((appendHtml && appendHtml.js) || context.js) || ''
 
-              sink.renderIntoElementById(VueSSR.outlet, html)
-              sink.appendToHead(head)
-              sink.appendToBody([body, script])
+            const script = js && `<script type="text/javascript">${js}</script>`
 
-              resolve()
-            },
-          )
-        }).catch(e => {
-          console.error(e)
-          writeServerError(sink)
-          resolve()
-        })
+            sink.renderIntoElementById(VueSSR.outlet, html)
+            sink.appendToHead(head)
+            sink.appendToBody([body, script])
+
+            resolve()
+          }
+        )
       } catch (error) {
         console.error(error)
         writeServerError(sink)
@@ -149,19 +88,4 @@ onPageLoad(sink => new Promise((resolve, reject) => {
   })
 }))
 
-return
-
-/* eslint-disable */
-
-Meteor.bindEnvironment(function () {
-  WebApp.rawConnectHandlers.use(cookieParser())
-
-  WebApp.connectHandlers.use((req, res, next) => {
-    if (!IsAppUrl(req)) {
-      next()
-      return
-    }
-
-
-  })
-})()
+export { VueSSR }

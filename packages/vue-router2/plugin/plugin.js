@@ -38,9 +38,7 @@ class VueRouterCompiler extends CachingCompiler {
     let map = ''
 
     let babelOptions = Babel.getDefaultOptions()
-    babelOptions.sourceMap = true
     babelOptions.filename = babelOptions.sourceFileName = sourcePath
-    babelOptions.sourceMapTarget = babelOptions.filename + '.map'
 
     // Babel compilation
     let output = Babel.compile(code, babelOptions)

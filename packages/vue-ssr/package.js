@@ -19,7 +19,7 @@ Package.onUse(function (api) {
     'routepolicy',
     'url',
     'akryum:npm-check@0.1.1',
-    'staringatlights:fast-render@3.2.0',
+    'thespider:fast-render@3.2.1',
     'ejson',
     'server-render',
   ])
@@ -28,6 +28,6 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  'vue-server-renderer': '2.6.10',
+  'vue-server-renderer': '2.6.11',
   'cookie-parser': '1.4.4',
 })
