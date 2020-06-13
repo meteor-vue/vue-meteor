@@ -5,7 +5,6 @@ export default function patchSubscribeData (VueSSR) {
   const originalSubscribe = Meteor.subscribe
 
   Meteor.subscribe = function (pubName, ...params) {
-    console.log('SUBSCRIBE TO', pubName)
     const ssrContext = VueSSR.ssrContext.get()
     if (ssrContext) {
       VueSSR.inSubscription.withValue(true, () => {
@@ -38,7 +37,6 @@ export default function patchSubscribeData (VueSSR) {
 
       const collection = ssrContext.getCollection(collName)
       const cursor = collection.find(selector, options)
-      console.log('SSR LOCAL COLLECTION WAS USED')
       return cursor
     }
 
