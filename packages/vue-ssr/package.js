@@ -19,7 +19,7 @@ Package.onUse(function (api) {
     'routepolicy',
     'url',
     'akryum:npm-check@0.1.1',
-    'staringatlights:fast-render@3.2.0',
+    'staringatlights:fast-render@3.3.0',
     'ejson',
     'server-render',
   ])
