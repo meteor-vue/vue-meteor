@@ -27,7 +27,6 @@ import router from './router'
 function createApp () {
   return {
     app: new Vue({
-      el: '#app',
       router,
       ...App,
     }),
@@ -38,14 +37,14 @@ function createApp () {
 export default createApp
 ```
 
-In your client code, start the app as usual:
+In your client code, start the app, then mount it manually:
 
 ```javascript
 import { Meteor } from 'meteor/meteor'
 import CreateApp from './app'
 
 Meteor.startup(() => {
-  CreateApp()
+  CreateApp().app.$mount('#app');
 })
 ```
 
