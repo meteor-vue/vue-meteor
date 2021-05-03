@@ -57,7 +57,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
     let inputFilePath = this.inputFile.getPathInPackage()
     let fullInputFilePath = packageName ? '/packages/' + packageName + '/' + inputFilePath : '/' + inputFilePath
     let hash = 'data-v-' + Hash(fullInputFilePath)
-
+    
     let js = ''
     let styles = []
 
@@ -72,9 +72,16 @@ VueComponentTagHandler = class VueComponentTagHandler {
 
       maps.push(generateSourceMap(inputFilePath, source, script, getLineNumber(source, sfcBlock.start)))
 
-      // Lang
-      if (sfcBlock.lang !== undefined) {
-        let lang = sfcBlock.lang
+      // Lang or compiler
+
+      // cpl is a custom compiler defined by another package
+      // Specially useful when using vscode+vetur, as the dev experience
+      // with vetur is affected is not optimal when using lang attr
+      // in script tag
+      const cpl = sfcBlock.attrs?.cpl
+      let lang = sfcBlock.lang || cpl
+
+      if (lang !== undefined) {
         try {
           let compile = global.vue.lang[lang]
           if (!compile) {
