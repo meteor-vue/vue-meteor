@@ -28,6 +28,6 @@ Package.onUse(function (api) {
 })
 
 Npm.depends({
-  'vue-server-renderer': '2.6.10',
+  'vue-server-renderer': '2.6.12',
   'cookie-parser': '1.4.4',
 })
