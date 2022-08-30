@@ -2,8 +2,7 @@ import Vue from 'vue'
 import { createRenderer } from 'vue-server-renderer'
 import { WebApp } from 'meteor/webapp'
 import cookieParser from 'cookie-parser'
-import { onPageLoad } from 'meteor/server-render'
-import { FastRender } from 'meteor/staringatlights:fast-render'
+import { FastRender } from 'meteor/communitypackages:fast-render'
 
 import SsrContext from './context'
 import patchSubscribeData from './data'
@@ -70,98 +69,59 @@ function writeServerError (sink) {
 
 WebApp.rawConnectHandlers.use(cookieParser())
 
-onPageLoad(sink => new Promise((resolve, reject) => {
+FastRender.onPageLoad(sink => new Promise(async (resolve, reject) => {
   const req = sink.request
 
-  // Fast render
-  const loginToken = req.cookies['meteor_login_token']
-  const headers = req.headers
-  const frLoginContext = new FastRender._Context(loginToken, { headers })
+  const ssrContext = new SsrContext()
 
-  FastRender.frContext.withValue(frLoginContext, function () {
-    // we're stealing all the code from FlowRouter SSR
-    // https://github.com/kadirahq/flow-router/blob/ssr/server/route.js#L61
-    const ssrContext = new SsrContext()
+  await VueSSR.ssrContext.withValue(ssrContext, () => {
+    try {
+      // Vue
+      const context = { url: req.url }
+      let asyncResult
+      const result = VueSSR.createApp(context)
+      if (result && typeof result.then === 'function') {
+        asyncResult = result
+      } else {
+        asyncResult = Promise.resolve(result)
+      }
 
-    VueSSR.ssrContext.withValue(ssrContext, () => {
-      try {
-        // const frData = InjectData.getData(res, 'fast-render-data')
-        // if (frData) {
-        //   ssrContext.addData(frData.collectionData)
-        // }
+      asyncResult.then(app => {
+        renderer.renderToString(
+          app,
+          context,
+          (error, html) => {
+            if (error) {
+              console.error(error)
+              writeServerError(sink)
+              return
+            }
 
-        // Vue
-        const context = { url: req.url }
-        let asyncResult
-        const result = VueSSR.createApp(context)
-        if (result && typeof result.then === 'function') {
-          asyncResult = result
-        } else {
-          asyncResult = Promise.resolve(result)
-        }
+            let appendHtml
+            if (typeof context.appendHtml === 'function') appendHtml = context.appendHtml()
 
-        asyncResult.then(app => {
-          renderer.renderToString(
-            app,
-            context,
-            (error, html) => {
-              if (error) {
-                console.error(error)
-                writeServerError(sink)
-                return
-              }
+            const head = ((appendHtml && appendHtml.head) || context.head) || ''
+            const body = ((appendHtml && appendHtml.body) || context.body) || ''
+            const js = ((appendHtml && appendHtml.js) || context.js) || ''
 
-              // const frContext = FastRender.frContext.get()
-              // const data = frContext.getData()
-              // // InjectData.pushData(res, 'fast-render-data', data)
-              // const injectData = EJSON.stringify({
-              //   'fast-render-data': data,
-              // })
-              // // sink.appendToHead(`<script type="text/inject-data">${encodeURIComponent(injectData)}</script>`)
+            const script = js && `<script type="text/javascript">${js}</script>`
 
-              let appendHtml
-              if (typeof context.appendHtml === 'function') appendHtml = context.appendHtml()
+            sink.renderIntoElementById(VueSSR.outlet, html)
+            sink.appendToHead(head)
+            sink.appendToBody([body, script])
 
-              const head = ((appendHtml && appendHtml.head) || context.head) || ''
-              const body = ((appendHtml && appendHtml.body) || context.body) || ''
-              const js = ((appendHtml && appendHtml.js) || context.js) || ''
-
-              const script = js && `<script type="text/javascript">${js}</script>`
-
-              sink.renderIntoElementById(VueSSR.outlet, html)
-              sink.appendToHead(head)
-              sink.appendToBody([body, script])
-
-              resolve()
-            },
-          )
-        }).catch(e => {
-          console.error(e)
-          writeServerError(sink)
-          resolve()
-        })
-      } catch (error) {
-        console.error(error)
+            resolve()
+          },
+        )
+      }).catch(e => {
+        console.error(e)
         writeServerError(sink)
         resolve()
-      }
-    })
+      })
+    } catch (error) {
+      console.error(error)
+      writeServerError(sink)
+      resolve()
+    }
   })
 }))
-
-return
-
-/* eslint-disable */
-
-Meteor.bindEnvironment(function () {
-  WebApp.rawConnectHandlers.use(cookieParser())
-
-  WebApp.connectHandlers.use((req, res, next) => {
-    if (!IsAppUrl(req)) {
-      next()
-      return
-    }
-
-
-  })
-})()
