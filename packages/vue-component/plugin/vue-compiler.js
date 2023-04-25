@@ -1,5 +1,4 @@
 import fs from 'fs'
-import Future from 'fibers/future'
 import async from 'async'
 import { Meteor } from 'meteor/meteor'
 import _ from 'lodash'
@@ -30,14 +29,16 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
     })
   }
 
-  processFilesForTarget (inputFiles) {
+  async processFilesForTarget (inputFiles) {
     const cacheMisses = []
 
     this.updateIgnoredConfig(inputFiles)
 
     // console.log(`Found ${inputFiles.length} files.`)
 
-    const future = new Future()
+    let resolver;
+    const promise = new Promise(r => resolver = r);
+
     async.eachLimit(inputFiles, this._maxParallelism, (inputFile, cb) => {
       if (!this.isIgnored(inputFile)) {
         let error = null
@@ -76,8 +77,9 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       } else {
         cb()
       }
-    }, future.resolver())
-    future.wait()
+    }, resolver)
+
+    await promise;
 
     if (this._cacheDebugEnabled) {
       cacheMisses.sort()

@@ -77,8 +77,7 @@ if (isDevelopment()) {
       socket.emit('css', io.__styles[hash])
     }
   })
-
-  const binding = getMeteorBinding()
+  const binding = getMeteorBinding.call(this);
   PORT = parseInt(process.env.HMR_PORT) || parseInt(process.env.VUE_DEV_SERVER_PORT) || binding.port + 3 || 3003
   INTERFACE = binding.networkInterface
 
