@@ -36,8 +36,8 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
 
     // console.log(`Found ${inputFiles.length} files.`)
 
-    let resolver;
-    const promise = new Promise(r => resolver = r);
+    let resolver
+    const promise = new Promise(r => resolver = r)
 
     async.eachLimit(inputFiles, this._maxParallelism, (inputFile, cb) => {
       if (!this.isIgnored(inputFile)) {
@@ -79,7 +79,7 @@ VueComponentCompiler = class VueCompo extends CachingCompiler {
       }
     }, resolver)
 
-    await promise;
+    await promise
 
     if (this._cacheDebugEnabled) {
       cacheMisses.sort()
