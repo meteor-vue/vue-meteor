@@ -101,6 +101,11 @@ if (Autoupdate._clientVersions) {
 }
 
 Meteor.startup(function () {
+  if (Meteor.isCordova) {
+    const root = new URL(__meteor_runtime_config__.ROOT_URL)
+    __meteor_runtime_config__.VUE_DEV_SERVER_URL = root.protocol + '//' + root.hostname + ':' + (parseInt(root.port) + 3) + '/'
+  }
+
   // Dev client
   const devUrl = __meteor_runtime_config__.VUE_DEV_SERVER_URL
 
