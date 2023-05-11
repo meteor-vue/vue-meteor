@@ -79,7 +79,7 @@ VueComponentTagHandler = class VueComponentTagHandler {
       }
       
       // Lang
-      if (sfcBlock.lang !== undefined) {
+      if (sfcBlock.lang !== undefined && sfcBlock.lang !== 'js') {
         let lang = sfcBlock.lang
         try {
           let compile = global.vue.lang[lang]
