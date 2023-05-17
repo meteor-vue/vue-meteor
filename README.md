@@ -1,3 +1,5 @@
+## This package is just temporary as fix for my apps in meteor 2.12 and vue2. It wont be maintained once its fixed upstream. 
+
 <p align="center"><img src="https://github.com/Akryum/vue-meteor/raw/master/vue%2Bmeteor.png"></p>
 
 <p align="center">
